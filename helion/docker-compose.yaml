@@ -7,7 +7,16 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-    # volumes:
-    #   - /var/syncthing:/var/syncthing
+    volumes:
+      - ~/.config/syncthing:/var/syncthing
+    network_mode: host
+    restart: unless-stopped
+
+  ipfs:
+    image: ipfs/kubo
+    container_name: ipfs
+    hostname: helion
+    volumes:
+      - ~/.ipfs:/data/ipfs
     network_mode: host
     restart: unless-stopped
