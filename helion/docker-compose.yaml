@@ -8,7 +8,18 @@ services:
       - PUID=1000
       - PGID=1000
     volumes:
-      - ~/.config/syncthing:/var/syncthing
+      - ~/.config/syncthing:/var/syncthing/config
+      - ~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher:/var/syncthing/PrismLauncher
+
+      - ~/Desktop:/var/syncthing/Desktop
+      - ~/Documents:/var/syncthing/Documents
+      - ~/Downloads:/var/syncthing/Downloads
+      - ~/Minecraft:/var/syncthing/Minecraft
+      - ~/Music:/var/syncthing/Music
+      - ~/Pictures:/var/syncthing/Pictures
+      - ~/Sync:/var/syncthing/Sync
+      - ~/Templates:/var/syncthing/Templates
+      - ~/Videos:/var/syncthing/Videos
     network_mode: host
     restart: unless-stopped
 
