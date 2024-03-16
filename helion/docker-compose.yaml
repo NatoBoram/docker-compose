@@ -3,10 +3,14 @@ version: "3"
 services:
   syncthing:
     container_name: syncthing
+    environment:
+      - PUID=1000
+      - PGID=1000
     hostname: helion
     image: syncthing/syncthing
     network_mode: host
-    restart: unless-stopped
+    restart: always
+    user: 1000:1000
     volumes:
       - ~/.config/syncthing:/var/syncthing/config
       - ~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher:/var/syncthing/PrismLauncher
@@ -26,6 +30,7 @@ services:
     hostname: helion
     image: ipfs/kubo
     network_mode: host
-    restart: unless-stopped
+    restart: always
+    user: 1000:1000
     volumes:
       - ~/.ipfs:/data/ipfs
