@@ -1,0 +1,4 @@
+natoboram.duckdns.org
+
+reverse_proxy /ipfs/* localhost:8080
+reverse_proxy /ipns/* localhost:8080
