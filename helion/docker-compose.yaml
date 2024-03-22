@@ -6,7 +6,11 @@ services:
       - PGID=1000
     hostname: helion
     image: syncthing/syncthing
-    network_mode: host
+    ports:
+      - 8384:8384 # Web UI
+      - 22000:22000/tcp # TCP file transfers
+      - 22000:22000/udp # QUIC file transfers
+      - 21027:21027/udp # Receive local discovery broadcasts
     restart: always
     user: 1000:1000
     volumes:
@@ -27,18 +31,27 @@ services:
     container_name: ipfs
     hostname: helion
     image: ipfs/kubo
-    network_mode: host
+    ports:
+      - 4001:4001/tcp # ipfs swarm
+      - 4001:4001/udp # ipfs swarm
+      - 127.0.0.1:5001:5001 # ipfs api
+      - 8080:8080 # ipfs gateway
     restart: always
     user: 1000:1000
     volumes:
       - ~/.ipfs:/data/ipfs
 
   caddy:
+    cap_add:
+      - NET_ADMIN
     container_name: caddy
     depends_on:
       - ipfs
     image: caddy
-    network_mode: host
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
     restart: always
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
