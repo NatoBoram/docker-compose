@@ -1,3 +1,7 @@
+!.env
+.env.local
+.env.*.local
+
 # Created by https://www.toptal.com/developers/gitignore/api/linux,macos,windows,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,macos,windows,visualstudiocode
 
@@ -24,7 +28,6 @@
 
 # Icon must end with two \r
 Icon
-
 
 # Thumbnails
 ._*
