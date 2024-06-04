@@ -47,6 +47,7 @@ services:
     container_name: caddy
     depends_on:
       - ipfs
+      - send
     image: caddy
     ports:
       - 80:80
@@ -57,3 +58,25 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - ~/.config/caddy:/config/caddy
       - ~/.local/share/caddy:/data/caddy
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: always
+    volumes:
+      - send-redis:/data
+
+  send:
+    container_name: send
+    depends_on:
+      - redis
+    environment:
+      - BASE_URL=https://natoboram-send.duckdns.org
+      - REDIS_HOST=redis
+    image: registry.gitlab.com/timvisee/send:latest
+    ports:
+      - 1443:1443
+    restart: always
+
+volumes:
+  send-redis:
