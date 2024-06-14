@@ -1,52 +1,11 @@
 services:
-  syncthing:
-    container_name: syncthing
-    environment:
-      - PUID=1000
-      - PGID=1000
-    hostname: helion
-    image: syncthing/syncthing
-    ports:
-      - 8384:8384 # Web UI
-      - 22000:22000/tcp # TCP file transfers
-      - 22000:22000/udp # QUIC file transfers
-      - 21027:21027/udp # Receive local discovery broadcasts
-    restart: always
-    user: 1000:1000
-    volumes:
-      - ~/.config/syncthing:/var/syncthing/config
-      - ~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher:/var/syncthing/PrismLauncher
-
-      - ~/Desktop:/var/syncthing/Desktop
-      - ~/Documents:/var/syncthing/Documents
-      - ~/Downloads:/var/syncthing/Downloads
-      - ~/Minecraft:/var/syncthing/Minecraft
-      - ~/Music:/var/syncthing/Music
-      - ~/Pictures:/var/syncthing/Pictures
-      - ~/Sync:/var/syncthing/Sync
-      - ~/Templates:/var/syncthing/Templates
-      - ~/Videos:/var/syncthing/Videos
-
-  ipfs:
-    container_name: ipfs
-    hostname: helion
-    image: ipfs/kubo
-    ports:
-      - 4001:4001/tcp # ipfs swarm
-      - 4001:4001/udp # ipfs swarm
-      - 127.0.0.1:5001:5001 # ipfs api
-      - 8080:8080 # ipfs gateway
-    restart: always
-    user: 1000:1000
-    volumes:
-      - ~/.ipfs:/data/ipfs
-
   caddy:
     cap_add:
       - NET_ADMIN
     container_name: caddy
     depends_on:
       - ipfs
+      - leanish
       - send
     image: caddy
     ports:
@@ -58,6 +17,27 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - ~/.config/caddy:/config/caddy
       - ~/.local/share/caddy:/data/caddy
+
+  ipfs:
+    container_name: ipfs
+    hostname: helion
+    image: ipfs/kubo
+    ports:
+      - 127.0.0.1:5001:5001
+      - 4001:4001/tcp
+      - 4001:4001/udp
+      - 8080:8080
+    restart: always
+    user: 1000:1000
+    volumes:
+      - ~/.ipfs:/data/ipfs
+
+  leanish:
+    container_name: leanish
+    image: natoboram/leanish
+    ports:
+      - 3000:3000
+    restart: always
 
   redis:
     container_name: redis
@@ -77,6 +57,34 @@ services:
     ports:
       - 1443:1443
     restart: always
+
+  syncthing:
+    container_name: syncthing
+    environment:
+      - PGID=1000
+      - PUID=1000
+    hostname: helion
+    image: syncthing/syncthing
+    ports:
+      - 8384:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    restart: always
+    user: 1000:1000
+    volumes:
+      - ~/.config/syncthing:/var/syncthing/config
+      - ~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher:/var/syncthing/PrismLauncher
+
+      - ~/Desktop:/var/syncthing/Desktop
+      - ~/Documents:/var/syncthing/Documents
+      - ~/Downloads:/var/syncthing/Downloads
+      - ~/Minecraft:/var/syncthing/Minecraft
+      - ~/Music:/var/syncthing/Music
+      - ~/Pictures:/var/syncthing/Pictures
+      - ~/Sync:/var/syncthing/Sync
+      - ~/Templates:/var/syncthing/Templates
+      - ~/Videos:/var/syncthing/Videos
 
 volumes:
   send-redis:

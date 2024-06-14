@@ -3,6 +3,10 @@ natoboram.duckdns.org {
 	reverse_proxy /ipns/* ipfs:8080
 }
 
+natoboram-leanish.duckdns.org {
+	reverse_proxy leanish:3000
+}
+
 natoboram-send.duckdns.org {
 	reverse_proxy send:1443
 }
