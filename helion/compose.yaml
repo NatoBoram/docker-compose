@@ -1,13 +1,19 @@
 services:
   caddy:
+    build:
+      dockerfile: ./caddy.Dockerfile
     cap_add:
       - NET_ADMIN
     container_name: caddy
     depends_on:
-      - ipfs
+      - kubo
       - leanish
       - send
-    image: caddy
+    env_file:
+      - path: .env.caddy
+        required: true
+      - path: .env.caddy.local
+        required: false
     ports:
       - 80:80
       - 443:443
@@ -18,8 +24,8 @@ services:
       - ~/.config/caddy:/config/caddy
       - ~/.local/share/caddy:/data/caddy
 
-  ipfs:
-    container_name: ipfs
+  kubo:
+    container_name: kubo
     hostname: helion
     image: ipfs/kubo
     ports:
@@ -51,9 +57,9 @@ services:
     depends_on:
       - redis
     environment:
-      - BASE_URL=https://natoboram-send.duckdns.org
+      - BASE_URL=https://send.natoboram.duckdns.org
       - REDIS_HOST=redis
-    image: registry.gitlab.com/timvisee/send:latest
+    image: registry.gitlab.com/timvisee/send
     ports:
       - 1443:1443
     restart: always

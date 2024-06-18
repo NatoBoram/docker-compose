@@ -1,12 +1,22 @@
-natoboram.duckdns.org {
-	reverse_proxy /ipfs/* ipfs:8080
-	reverse_proxy /ipns/* ipfs:8080
-}
+*.natoboram.duckdns.org *.ipfs.kubo.natoboram.duckdns.org *.ipns.kubo.natoboram.duckdns.org {
+	tls {
+		dns duckdns {env.DUCKDNS_API_TOKEN}
+		protocols tls1.3
+		resolvers 1.1.1.1 1.0.0.1 8.8.8.8 8.8.4.4
+	}
 
-natoboram-leanish.duckdns.org {
-	reverse_proxy leanish:3000
-}
+	@kubo host kubo.natoboram.duckdns.org *.ipfs.kubo.natoboram.duckdns.org *.ipns.kubo.natoboram.duckdns.org
+	handle @kubo {
+		reverse_proxy kubo:8080
+	}
 
-natoboram-send.duckdns.org {
-	reverse_proxy send:1443
+	@leanish host leanish.natoboram.duckdns.org
+	handle @leanish {
+		reverse_proxy leanish:3000
+	}
+
+	@send host send.natoboram.duckdns.org
+	handle @send {
+		reverse_proxy send:1443
+	}
 }
