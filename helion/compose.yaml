@@ -3,7 +3,7 @@ networks:
   caddy-leanish:
   caddy-nextcloud:
   caddy-send:
-  nextcloud-localai:
+  nextcloud-ollama:
   nextcloud-postgres:
   nextcloud-redis:
   send-redis:
@@ -73,40 +73,17 @@ services:
       - caddy-leanish
     restart: always
 
-  localai:
-    container_name: localai
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    healthcheck:
-      interval: 1m
-      retries: 5
-      test: ["CMD", "curl", "-f", "http://localhost:8080/readyz"]
-      timeout: 20m
-    image: localai/localai:latest-aio-gpu-nvidia-cuda-11
-    networks:
-      - nextcloud-localai
-    ports:
-      - 11434:8080
-    restart: always
-    volumes:
-      - localai:/build/models
-
   nextcloud:
     container_name: nextcloud
     depends_on:
       - clamav
-      - localai
       - nextcloud-postgres
       - nextcloud-redis
+      - ollama
     image: nextcloud:fpm
     networks:
       - caddy-nextcloud
-      - nextcloud-localai
+      - nextcloud-ollama
       - nextcloud-postgres
       - nextcloud-redis
     restart: always
@@ -150,6 +127,24 @@ services:
     restart: always
     volumes:
       - nextcloud-postgres:/var/lib/postgresql/data
+
+  ollama:
+    container_name: ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    image: ollama/ollama
+    networks:
+      - nextcloud-ollama
+    ports:
+      - 11434:11434
+    volumes:
+      - ollama:/root/.ollama
+    restart: always
 
   send:
     container_name: send
@@ -204,8 +199,8 @@ services:
 volumes:
   clamav-lib:
   clamav-run:
-  localai:
   nextcloud:
   nextcloud-postgres:
   nextcloud-redis:
+  ollama:
   send-redis:
