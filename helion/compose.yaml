@@ -1,3 +1,11 @@
+networks:
+  leanish:
+  nextcloud:
+  nextcloud-postgres:
+  nextcloud-redis:
+  send:
+  send-redis:
+
 services:
   caddy:
     build:
@@ -8,21 +16,28 @@ services:
     depends_on:
       - kubo
       - leanish
+      - nextcloud
       - send
     env_file:
       - path: .env.caddy
         required: true
       - path: .env.caddy.local
-        required: false
+        required: true
+    networks:
+      - leanish
+      - nextcloud
+      - send
     ports:
       - 80:80
       - 443:443
       - 443:443/udp
     restart: always
+    user: 1000:1000
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - ~/.config/caddy:/config/caddy
       - ~/.local/share/caddy:/data/caddy
+      - nextcloud:/var/www/nextcloud:ro
 
   kubo:
     container_name: kubo
@@ -41,28 +56,80 @@ services:
   leanish:
     container_name: leanish
     image: natoboram/leanish
-    ports:
-      - 3000:3000
+    networks:
+      - leanish
     restart: always
 
-  redis:
-    container_name: redis
-    image: redis:alpine
+  nextcloud:
+    container_name: nextcloud
+    depends_on:
+      - nextcloud-postgres
+      - nextcloud-redis
+    image: nextcloud:fpm
+    networks:
+      - nextcloud
+      - nextcloud-postgres
+      - nextcloud-redis
     restart: always
     volumes:
-      - send-redis:/data
+      - /var/log/nextcloud.log:/var/www/html/data/nextcloud.log
+      - nextcloud:/var/www/html
+    environment:
+      - POSTGRES_HOST=nextcloud-postgres
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+
+      - REDIS_HOST=nextcloud-redis
+
+      - TZ=America/Toronto
+
+  nextcloud-redis:
+    container_name: nextcloud-redis
+    image: redis:alpine
+    networks:
+      - nextcloud-redis
+    restart: always
+    volumes:
+      - nextcloud-redis:/data
+
+  nextcloud-postgres:
+    container_name: nextcloud-postgres
+    env_file:
+      - path: .env.nextcloud-postgres
+        required: true
+      - path: .env.nextcloud-postgres.local
+        required: true
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+    image: postgres
+    networks:
+      - nextcloud-postgres
+    restart: always
+    volumes:
+      - nextcloud-postgres:/var/lib/postgresql/data
 
   send:
     container_name: send
     depends_on:
-      - redis
+      - send-redis
     environment:
       - BASE_URL=https://send.natoboram.duckdns.org
       - REDIS_HOST=redis
     image: registry.gitlab.com/timvisee/send
-    ports:
-      - 1443:1443
+    networks:
+      - send
+      - send-redis
     restart: always
+
+  send-redis:
+    container_name: send-redis
+    image: redis:alpine
+    networks:
+      - send-redis
+    restart: always
+    volumes:
+      - send-redis:/data
 
   syncthing:
     container_name: syncthing
@@ -93,4 +160,7 @@ services:
       - ~/Videos:/var/syncthing/Videos
 
 volumes:
+  nextcloud:
+  nextcloud-postgres:
+  nextcloud-redis:
   send-redis:

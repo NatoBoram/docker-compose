@@ -1,4 +1,5 @@
 *.natoboram.duckdns.org *.ipfs.kubo.natoboram.duckdns.org *.ipns.kubo.natoboram.duckdns.org {
+	header Strict-Transport-Security "max-age=63072000"
 	tls {
 		dns duckdns {env.DUCKDNS_API_TOKEN}
 		protocols tls1.3
@@ -13,6 +14,20 @@
 	@leanish host leanish.natoboram.duckdns.org
 	handle @leanish {
 		reverse_proxy leanish:3000
+	}
+
+	@nextcloud host nextcloud.natoboram.duckdns.org
+	handle @nextcloud {
+		encode gzip
+		file_server
+
+		php_fastcgi nextcloud:9000 {
+			root /var/www/html
+		}
+
+		redir /.well-known/caldav /remote.php/dav/ 301
+		redir /.well-known/carddav /remote.php/dav/ 301
+		root /var/www/nextcloud
 	}
 
 	@send host send.natoboram.duckdns.org
