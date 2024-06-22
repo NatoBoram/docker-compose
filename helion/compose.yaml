@@ -1,9 +1,11 @@
 networks:
-  leanish:
-  nextcloud:
+  caddy-kubo:
+  caddy-leanish:
+  caddy-nextcloud:
+  caddy-send:
+  nextcloud-localai:
   nextcloud-postgres:
   nextcloud-redis:
-  send:
   send-redis:
 
 services:
@@ -24,9 +26,10 @@ services:
       - path: .env.caddy.local
         required: true
     networks:
-      - leanish
-      - nextcloud
-      - send
+      - caddy-kubo
+      - caddy-leanish
+      - caddy-nextcloud
+      - caddy-send
     ports:
       - 80:80
       - 443:443
@@ -39,10 +42,20 @@ services:
       - ~/.local/share/caddy:/data/caddy
       - nextcloud:/var/www/nextcloud:ro
 
+  clamav:
+    container_name: clamav
+    image: clamav/clamav:stable_base
+    volumes:
+      - clamav-lib:/var/lib/clamav
+      - clamav-run:/tmp
+    restart: always
+
   kubo:
     container_name: kubo
     hostname: helion
     image: ipfs/kubo
+    networks:
+      - caddy-kubo
     ports:
       - 127.0.0.1:5001:5001
       - 4001:4001/tcp
@@ -57,24 +70,51 @@ services:
     container_name: leanish
     image: natoboram/leanish
     networks:
-      - leanish
+      - caddy-leanish
     restart: always
+
+  localai:
+    container_name: localai
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      interval: 1m
+      retries: 5
+      test: ["CMD", "curl", "-f", "http://localhost:8080/readyz"]
+      timeout: 20m
+    image: localai/localai:latest-aio-gpu-nvidia-cuda-11
+    networks:
+      - nextcloud-localai
+    restart: always
+    volumes:
+      - localai:/build/models
 
   nextcloud:
     container_name: nextcloud
     depends_on:
+      - clamav
+      - localai
       - nextcloud-postgres
       - nextcloud-redis
     image: nextcloud:fpm
     networks:
-      - nextcloud
+      - caddy-nextcloud
+      - nextcloud-localai
       - nextcloud-postgres
       - nextcloud-redis
     restart: always
     volumes:
       - /var/log/nextcloud.log:/var/www/html/data/nextcloud.log
+      - clamav-run:/var/run/clamav:ro
       - nextcloud:/var/www/html
     environment:
+      - NC_ALLOW_LOCAL_REMOTE_SERVERS=true
+
       - POSTGRES_HOST=nextcloud-postgres
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
@@ -118,7 +158,7 @@ services:
       - REDIS_HOST=redis
     image: registry.gitlab.com/timvisee/send
     networks:
-      - send
+      - caddy-send
       - send-redis
     restart: always
 
@@ -160,6 +200,9 @@ services:
       - ~/Videos:/var/syncthing/Videos
 
 volumes:
+  clamav-lib:
+  clamav-run:
+  localai:
   nextcloud:
   nextcloud-postgres:
   nextcloud-redis:
