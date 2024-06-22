@@ -90,6 +90,8 @@ services:
     image: localai/localai:latest-aio-gpu-nvidia-cuda-11
     networks:
       - nextcloud-localai
+    ports:
+      - 11434:8080
     restart: always
     volumes:
       - localai:/build/models
