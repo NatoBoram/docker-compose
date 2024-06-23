@@ -15,6 +15,15 @@
 		resolvers 1.1.1.1 1.0.0.1 8.8.8.8 8.8.4.4
 	}
 
+	@collabora host collabora.natoboram.duckdns.org
+	handle @collabora {
+		reverse_proxy collabora:9980 {
+			transport http {
+				tls_insecure_skip_verify
+			}
+		}
+	}
+
 	@kubo host kubo.natoboram.duckdns.org *.ipfs.kubo.natoboram.duckdns.org *.ipns.kubo.natoboram.duckdns.org
 	handle @kubo {
 		reverse_proxy kubo:8080

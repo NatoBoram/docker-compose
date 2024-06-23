@@ -1,8 +1,10 @@
 networks:
+  caddy-collabora:
   caddy-kubo:
   caddy-leanish:
   caddy-nextcloud:
   caddy-send:
+  nextcloud-collabora:
   nextcloud-ollama:
   nextcloud-postgres:
   nextcloud-redis:
@@ -26,6 +28,7 @@ services:
       - path: .env.caddy.local
         required: true
     networks:
+      - caddy-collabora
       - caddy-kubo
       - caddy-leanish
       - caddy-nextcloud
@@ -48,6 +51,27 @@ services:
     volumes:
       - clamav-lib:/var/lib/clamav
       - clamav-run:/tmp
+    restart: always
+
+  collabora:
+    cap_add:
+      - MKNOD
+    container_name: collabora
+    env_file:
+      - path: .env.collabora
+        required: true
+      - path: .env.collabora.local
+        required: true
+    environment:
+      - aliasgroup1=https://nextcloud.natoboram.duckdns.org:443
+      - dictionaries=fr_CA en_CA
+      - domain=nextcloud.natoboram.duckdns.org
+      - server_name=collabora.natoboram.duckdns.org
+      - TZ=America/Toronto
+    image: collabora/code
+    networks:
+      - caddy-collabora
+      - nextcloud-collabora
     restart: always
 
   kubo:
@@ -77,12 +101,14 @@ services:
     container_name: nextcloud
     depends_on:
       - clamav
+      - collabora
       - nextcloud-postgres
       - nextcloud-redis
       - ollama
     image: nextcloud:fpm
     networks:
       - caddy-nextcloud
+      - nextcloud-collabora
       - nextcloud-ollama
       - nextcloud-postgres
       - nextcloud-redis
@@ -99,6 +125,10 @@ services:
       - POSTGRES_USER=nextcloud
 
       - REDIS_HOST=nextcloud-redis
+
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_SECURE=ssl
+      - SMTP_PORT=465
 
       - TZ=America/Toronto
 
