@@ -48,10 +48,10 @@ services:
   clamav:
     container_name: clamav
     image: clamav/clamav:stable_base
+    restart: always
     volumes:
       - clamav-lib:/var/lib/clamav
       - clamav-run:/tmp
-    restart: always
 
   collabora:
     cap_add:
@@ -105,18 +105,11 @@ services:
       - nextcloud-postgres
       - nextcloud-redis
       - ollama
-    image: nextcloud:fpm
-    networks:
-      - caddy-nextcloud
-      - nextcloud-collabora
-      - nextcloud-ollama
-      - nextcloud-postgres
-      - nextcloud-redis
-    restart: always
-    volumes:
-      - /var/log/nextcloud.log:/var/www/html/data/nextcloud.log
-      - clamav-run:/var/run/clamav:ro
-      - nextcloud:/var/www/html
+    env_file:
+      - path: .env.nextcloud
+        required: true
+      - path: .env.nextcloud.local
+        required: true
     environment:
       - NC_ALLOW_LOCAL_REMOTE_SERVERS=true
 
@@ -131,15 +124,30 @@ services:
       - SMTP_PORT=465
 
       - TZ=America/Toronto
-
-  nextcloud-redis:
-    container_name: nextcloud-redis
-    image: redis:alpine
+    image: nextcloud:fpm
     networks:
+      - caddy-nextcloud
+      - nextcloud-collabora
+      - nextcloud-ollama
+      - nextcloud-postgres
       - nextcloud-redis
     restart: always
     volumes:
-      - nextcloud-redis:/data
+      - /var/log/nextcloud.log:/var/www/html/data/nextcloud.log
+      - clamav-run:/var/run/clamav:ro
+      - nextcloud:/var/www/html
+
+  nextcloud-cron:
+    container_name: nextcloud-cron
+    depends_on:
+      - nextcloud
+    entrypoint: /cron.sh
+    extends: nextcloud
+    networks:
+      - nextcloud-collabora
+      - nextcloud-ollama
+      - nextcloud-postgres
+      - nextcloud-redis
 
   nextcloud-postgres:
     container_name: nextcloud-postgres
@@ -158,23 +166,33 @@ services:
     volumes:
       - nextcloud-postgres:/var/lib/postgresql/data
 
+  nextcloud-redis:
+    container_name: nextcloud-redis
+    image: redis:alpine
+    networks:
+      - nextcloud-redis
+    restart: always
+    volumes:
+      - nextcloud-redis:/data
+
   ollama:
     container_name: ollama
     deploy:
       resources:
         reservations:
           devices:
-            - driver: nvidia
+            - capabilities:
+                - gpu
               count: all
-              capabilities: [gpu]
+              driver: nvidia
     image: ollama/ollama
     networks:
       - nextcloud-ollama
     ports:
       - 11434:11434
+    restart: always
     volumes:
       - ollama:/root/.ollama
-    restart: always
 
   send:
     container_name: send
