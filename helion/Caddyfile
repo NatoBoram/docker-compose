@@ -1,3 +1,12 @@
+{
+	dynamic_dns {
+		provider duckdns {env.DUCKDNS_API_TOKEN}
+		domains {
+			duckdns.org natoboram
+		}
+	}
+}
+
 *.natoboram.duckdns.org *.ipfs.kubo.natoboram.duckdns.org *.ipns.kubo.natoboram.duckdns.org {
 	header Strict-Transport-Security "max-age=63072000"
 	tls {
