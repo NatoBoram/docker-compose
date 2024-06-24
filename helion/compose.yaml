@@ -4,11 +4,15 @@ networks:
   caddy-leanish:
   caddy-nextcloud:
   caddy-send:
+  grafana-victoria-metrics:
   nextcloud-collabora:
   nextcloud-ollama:
   nextcloud-postgres:
   nextcloud-redis:
   send-redis:
+  vmagent-caddy:
+  vmagent-collabora:
+  vmagent-victoria-metrics:
 
 services:
   caddy:
@@ -31,6 +35,7 @@ services:
       - caddy-leanish
       - caddy-nextcloud
       - caddy-send
+      - vmagent-caddy
     ports:
       - 80:80
       - 443:443
@@ -65,6 +70,24 @@ services:
     networks:
       - caddy-collabora
       - nextcloud-collabora
+    ports:
+      - 9980:9980
+    restart: always
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    depends_on:
+      - victoria-metrics
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - grafana-victoria-metrics
     restart: always
 
   kubo:
@@ -243,11 +266,53 @@ services:
       - ~/Templates:/var/syncthing/Templates
       - ~/Videos:/var/syncthing/Videos
 
+  vmagent:
+    command:
+      - --promscrape.config=/etc/prometheus/prometheus.yaml
+      - --remoteWrite.url=http://victoria-metrics:8428/api/v1/write
+    container_name: vmagent
+    depends_on:
+      - caddy
+      - collabora
+      - victoria-metrics
+    env_file:
+      - path: .env.vmagent
+      - path: .env.vmagent.local
+    networks:
+      - vmagent-caddy
+      - vmagent-collabora
+      - vmagent-victoria-metrics
+    image: victoriametrics/vmagent
+    restart: always
+    volumes:
+      - vmagent:/vmagentdata
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+
+  victoria-metrics:
+    container_name: victoria-metrics
+    image: victoriametrics/victoria-metrics
+    networks:
+      - grafana-victoria-metrics
+      - vmagent-victoria-metrics
+    ports:
+      - 8428:8428
+      - 8089:8089
+      - 8089:8089/udp
+      - 2003:2003
+      - 2003:2003/udp
+      - 4242:4242
+    restart: always
+    volumes:
+      - victoria-metrics:/storage
+
 volumes:
   clamav-lib:
   clamav-run:
+  grafana:
   nextcloud:
   nextcloud-postgres:
   nextcloud-redis:
   ollama:
   send-redis:
+  victoria-metrics:
+  vmagent:
