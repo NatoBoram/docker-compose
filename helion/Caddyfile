@@ -5,6 +5,11 @@
 			duckdns.org natoboram
 		}
 	}
+
+	servers {
+		trusted_proxies static private_ranges
+		trusted_proxies_strict
+	}
 }
 
 *.natoboram.duckdns.org *.ipfs.kubo.natoboram.duckdns.org *.ipns.kubo.natoboram.duckdns.org {
