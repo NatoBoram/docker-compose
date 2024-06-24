@@ -2,7 +2,7 @@
 	dynamic_dns {
 		provider duckdns {env.DUCKDNS_API_TOKEN}
 		domains {
-			duckdns.org natoboram
+			duckdns.org {$DUCKDNS_DOMAIN}
 		}
 	}
 
@@ -12,7 +12,7 @@
 	}
 }
 
-*.natoboram.duckdns.org *.ipfs.kubo.natoboram.duckdns.org *.ipns.kubo.natoboram.duckdns.org {
+*.{$DUCKDNS_DOMAIN}.duckdns.org *.ipfs.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipns.kubo.{$DUCKDNS_DOMAIN}.duckdns.org {
 	header Strict-Transport-Security "max-age=63072000"
 	tls {
 		dns duckdns {env.DUCKDNS_API_TOKEN}
@@ -20,7 +20,7 @@
 		resolvers 1.1.1.1 1.0.0.1 8.8.8.8 8.8.4.4
 	}
 
-	@collabora host collabora.natoboram.duckdns.org
+	@collabora host collabora.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @collabora {
 		reverse_proxy collabora:9980 {
 			transport http {
@@ -29,17 +29,17 @@
 		}
 	}
 
-	@kubo host kubo.natoboram.duckdns.org *.ipfs.kubo.natoboram.duckdns.org *.ipns.kubo.natoboram.duckdns.org
+	@kubo host kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipfs.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipns.kubo.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @kubo {
 		reverse_proxy kubo:8080
 	}
 
-	@leanish host leanish.natoboram.duckdns.org
+	@leanish host leanish.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @leanish {
 		reverse_proxy leanish:3000
 	}
 
-	@nextcloud host nextcloud.natoboram.duckdns.org
+	@nextcloud host nextcloud.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @nextcloud {
 		encode gzip
 		file_server
@@ -53,7 +53,7 @@
 		root /var/www/nextcloud
 	}
 
-	@send host send.natoboram.duckdns.org
+	@send host send.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @send {
 		reverse_proxy send:1443
 	}
