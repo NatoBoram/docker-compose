@@ -305,6 +305,12 @@ services:
     volumes:
       - victoria-metrics:/storage
 
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
 volumes:
   clamav-lib:
   clamav-run:
