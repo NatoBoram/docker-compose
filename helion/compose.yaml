@@ -222,12 +222,14 @@ services:
       - path: .env.send
       - path: .env.send.local
     environment:
-      - REDIS_HOST=redis
+      - REDIS_HOST=send-redis
     image: registry.gitlab.com/timvisee/send
     networks:
       - caddy-send
       - send-redis
     restart: always
+    volumes:
+      - send:/uploads
 
   send-redis:
     container_name: send-redis
@@ -320,6 +322,7 @@ volumes:
   nextcloud-postgres:
   nextcloud-redis:
   ollama:
+  send:
   send-redis:
   victoria-metrics:
   vmagent:
