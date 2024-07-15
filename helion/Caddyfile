@@ -23,6 +23,10 @@
 
 	@collabora host collabora.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @collabora {
+		basic_auth {
+			Nextcloud {$COLLABORA_NEXTCLOUD_PASSWORD}
+		}
+
 		reverse_proxy collabora:9980 {
 			transport http {
 				tls_insecure_skip_verify
