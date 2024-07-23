@@ -1,4 +1,6 @@
 networks:
+  caddy:
+    enable_ipv6: true
   caddy-collabora:
   caddy-kubo:
   caddy-leanish:
@@ -30,6 +32,7 @@ services:
       - path: .env.caddy
       - path: .env.caddy.local
     networks:
+      - caddy
       - caddy-collabora
       - caddy-kubo
       - caddy-leanish

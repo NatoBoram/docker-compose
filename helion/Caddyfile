@@ -18,7 +18,7 @@
 	tls {
 		dns duckdns {env.DUCKDNS_API_TOKEN}
 		protocols tls1.3
-		resolvers 1.1.1.1 1.0.0.1 8.8.8.8 8.8.4.4
+		resolvers 2606:4700:4700::1111 1.1.1.1 2606:4700:4700::1001 1.0.0.1 2001:4860:4860::8888 8.8.8.8 2001:4860:4860::8844 8.8.4.4
 	}
 
 	@collabora host collabora.{$DUCKDNS_DOMAIN}.duckdns.org
