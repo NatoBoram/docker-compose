@@ -1,0 +1,141 @@
+networks:
+  nextcloud-collabora:
+  nextcloud-ollama:
+  nextcloud-postgres:
+  nextcloud-redis:
+
+services:
+  clamav:
+    container_name: clamav
+    image: clamav/clamav:stable_base
+    restart: always
+    volumes:
+      - clamav-lib:/var/lib/clamav
+      - clamav-run:/tmp
+
+  collabora:
+    cap_add:
+      - MKNOD
+    container_name: collabora
+    env_file:
+      - path: .env.collabora
+      - path: .env.collabora.local
+    environment:
+      - dictionaries=fr_CA en_CA
+      - TZ=America/Toronto
+    image: collabora/code
+    networks:
+      - caddy-collabora
+      - nextcloud-collabora
+    ports:
+      - 9980:9980
+    restart: always
+
+  nextcloud:
+    container_name: nextcloud
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+              count: all
+              driver: nvidia
+    depends_on:
+      - clamav
+      - collabora
+      - nextcloud-postgres
+      - nextcloud-redis
+      - ollama
+    env_file:
+      - path: .env.nextcloud
+      - path: .env.nextcloud.local
+    environment:
+      - NC_ALLOW_LOCAL_REMOTE_SERVERS=true
+
+      - POSTGRES_HOST=nextcloud-postgres
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+
+      - REDIS_HOST=nextcloud-redis
+
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_SECURE=ssl
+      - SMTP_PORT=465
+
+      - TZ=America/Toronto
+    image: nextcloud:fpm
+    networks:
+      - caddy-nextcloud
+      - nextcloud-collabora
+      - nextcloud-ollama
+      - nextcloud-postgres
+      - nextcloud-redis
+    restart: always
+    volumes:
+      - /var/log/nextcloud.log:/var/www/html/data/nextcloud.log
+      - clamav-run:/var/run/clamav:ro
+      - nextcloud:/var/www/html
+
+  nextcloud-cron:
+    container_name: nextcloud-cron
+    depends_on:
+      - nextcloud
+    entrypoint: /cron.sh
+    extends: nextcloud
+    networks:
+      - nextcloud-collabora
+      - nextcloud-ollama
+      - nextcloud-postgres
+      - nextcloud-redis
+
+  nextcloud-postgres:
+    container_name: nextcloud-postgres
+    env_file:
+      - path: .env.nextcloud-postgres
+      - path: .env.nextcloud-postgres.local
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+    image: postgres
+    networks:
+      - nextcloud-postgres
+    restart: always
+    volumes:
+      - nextcloud-postgres:/var/lib/postgresql/data
+
+  nextcloud-redis:
+    container_name: nextcloud-redis
+    image: redis:alpine
+    networks:
+      - nextcloud-redis
+    restart: always
+    volumes:
+      - nextcloud-redis:/data
+
+  ollama:
+    container_name: ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+              count: all
+              driver: nvidia
+    image: ollama/ollama
+    networks:
+      - nextcloud-ollama
+    ports:
+      - 11434:11434
+    restart: always
+    volumes:
+      - ollama:/root/.ollama
+
+volumes:
+  clamav-lib:
+  clamav-run:
+  nextcloud:
+  nextcloud-postgres:
+  nextcloud-redis:
+  ollama:
