@@ -314,7 +314,10 @@ services:
     container_name: watchtower
     image: containrrr/watchtower
     restart: always
+    environment:
+      - WATCHTOWER_CLEANUP=true
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
