@@ -46,6 +46,7 @@ services:
     user: 1000:1000
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
+      - /var/log/caddy:/var/log/caddy
       - ~/.config/caddy:/config/caddy
       - ~/.local/share/caddy:/data/caddy
       - nextcloud:/var/www/nextcloud:ro

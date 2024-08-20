@@ -17,6 +17,13 @@
 
 *.{$DUCKDNS_DOMAIN}.duckdns.org *.ipfs.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipns.kubo.{$DUCKDNS_DOMAIN}.duckdns.org {
 	header Strict-Transport-Security "max-age=63072000"
+
+	log {$DUCKDNS_DOMAIN}.duckdns.org {
+		output file /var/log/caddy/{$DUCKDNS_DOMAIN}.duckdns.org.log {
+			roll_local_time
+		}
+	}
+
 	tls {
 		dns duckdns {env.DUCKDNS_API_TOKEN}
 		protocols tls1.3
