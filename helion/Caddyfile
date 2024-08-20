@@ -6,6 +6,8 @@
 		}
 	}
 
+	email {env.EMAIL}
+
 	servers {
 		metrics
 		trusted_proxies static private_ranges
