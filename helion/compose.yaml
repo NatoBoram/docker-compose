@@ -10,6 +10,7 @@ networks:
   caddy-kubo:
   caddy-leanish:
   caddy-nextcloud:
+  caddy-send:
   grafana-victoria-metrics:
   vmagent-caddy:
   vmagent-collabora:
