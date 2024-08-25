@@ -5,6 +5,7 @@ networks:
   caddy:
     enable_ipv6: true
   caddy-collabora:
+  caddy-glances:
   caddy-kubo:
   caddy-leanish:
   caddy-nextcloud:
@@ -23,6 +24,7 @@ services:
       - NET_ADMIN
     container_name: caddy
     depends_on:
+      - glances
       - kubo
       - leanish
       - nextcloud
@@ -33,6 +35,7 @@ services:
     networks:
       - caddy
       - caddy-collabora
+      - caddy-glances
       - caddy-kubo
       - caddy-leanish
       - caddy-nextcloud
@@ -50,6 +53,28 @@ services:
       - ~/.config/caddy:/config/caddy
       - ~/.local/share/caddy:/data/caddy
       - nextcloud:/var/www/nextcloud:ro
+
+  glances:
+    container_name: glances
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+              count: all
+              driver: nvidia
+    env_file:
+      - path: .env.glances
+      - path: .env.glances.local
+    image: nicolargo/glances:latest-full
+    networks:
+      - caddy-glances
+    restart: always
+    volumes:
+      - ./glances:/root/.config/glances:ro
+      - /etc/os-release:/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   grafana:
     container_name: grafana
