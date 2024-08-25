@@ -1,0 +1,34 @@
+networks:
+  caddy-send:
+  send-redis:
+
+services:
+  send:
+    container_name: send
+    depends_on:
+      - send-redis
+    env_file:
+      - path: .env.send
+      - path: .env.send.local
+    environment:
+      - REDIS_HOST=send-redis
+    image: registry.gitlab.com/timvisee/send
+    networks:
+      - caddy-send
+      - send-redis
+    restart: always
+    volumes:
+      - send:/uploads
+
+  send-redis:
+    container_name: send-redis
+    image: redis:alpine
+    networks:
+      - send-redis
+    restart: always
+    volumes:
+      - send-redis:/data
+
+volumes:
+  send:
+  send-redis:

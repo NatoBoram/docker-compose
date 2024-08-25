@@ -1,5 +1,6 @@
 include:
   - path: nextcloud.compose.yaml
+  - path: send.compose.yaml
 
 networks:
   caddy:
@@ -9,9 +10,7 @@ networks:
   caddy-kubo:
   caddy-leanish:
   caddy-nextcloud:
-  caddy-send:
   grafana-victoria-metrics:
-  send-redis:
   vmagent-caddy:
   vmagent-collabora:
   vmagent-victoria-metrics:
@@ -115,32 +114,6 @@ services:
       - caddy-leanish
     restart: always
 
-  send:
-    container_name: send
-    depends_on:
-      - send-redis
-    env_file:
-      - path: .env.send
-      - path: .env.send.local
-    environment:
-      - REDIS_HOST=send-redis
-    image: registry.gitlab.com/timvisee/send
-    networks:
-      - caddy-send
-      - send-redis
-    restart: always
-    volumes:
-      - send:/uploads
-
-  send-redis:
-    container_name: send-redis
-    image: redis:alpine
-    networks:
-      - send-redis
-    restart: always
-    volumes:
-      - send-redis:/data
-
   syncthing:
     container_name: syncthing
     environment:
@@ -220,7 +193,5 @@ services:
 
 volumes:
   grafana:
-  send:
-  send-redis:
   victoria-metrics:
   vmagent:
