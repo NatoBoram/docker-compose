@@ -1,5 +1,6 @@
 include:
   - path: nextcloud.compose.yaml
+  - path: ollama.compose.yaml
   - path: send.compose.yaml
 
 networks:
@@ -10,6 +11,7 @@ networks:
   caddy-kubo:
   caddy-leanish:
   caddy-nextcloud:
+  caddy-ollama:
   caddy-send:
   grafana-victoria-metrics:
   vmagent-caddy:
@@ -23,12 +25,6 @@ services:
     cap_add:
       - NET_ADMIN
     container_name: caddy
-    depends_on:
-      - glances
-      - kubo
-      - leanish
-      - nextcloud
-      - send
     env_file:
       - path: .env.caddy
       - path: .env.caddy.local
@@ -39,6 +35,7 @@ services:
       - caddy-kubo
       - caddy-leanish
       - caddy-nextcloud
+      - caddy-ollama
       - caddy-send
       - vmagent-caddy
     ports:
@@ -56,6 +53,8 @@ services:
 
   glances:
     container_name: glances
+    depends_on:
+      - caddy
     deploy:
       resources:
         reservations:
@@ -80,6 +79,7 @@ services:
     container_name: grafana
     image: grafana/grafana
     depends_on:
+      - caddy
       - victoria-metrics
     ports:
       - 3000:3000
@@ -96,6 +96,8 @@ services:
     container_name: kubo
     hostname: helion
     image: ipfs/kubo
+    depends_on:
+      - caddy
     networks:
       - caddy-kubo
     ports:
@@ -111,6 +113,8 @@ services:
   leanish:
     container_name: leanish
     image: natoboram/leanish
+    depends_on:
+      - caddy
     networks:
       - caddy-leanish
     restart: always

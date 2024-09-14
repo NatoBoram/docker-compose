@@ -73,6 +73,7 @@ services:
     restart: always
     volumes:
       - /var/log/nextcloud.log:/var/www/html/data/nextcloud.log
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - clamav-run:/var/run/clamav:ro
       - nextcloud:/var/www/html
 
@@ -112,29 +113,9 @@ services:
     volumes:
       - nextcloud-redis:/data
 
-  ollama:
-    container_name: ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities:
-                - gpu
-              count: all
-              driver: nvidia
-    image: ollama/ollama
-    networks:
-      - nextcloud-ollama
-    ports:
-      - 11434:11434
-    restart: always
-    volumes:
-      - ollama:/root/.ollama
-
 volumes:
   clamav-lib:
   clamav-run:
   nextcloud:
   nextcloud-postgres:
   nextcloud-redis:
-  ollama:

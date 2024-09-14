@@ -1,0 +1,23 @@
+services:
+  ollama:
+    container_name: ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+              count: all
+              driver: nvidia
+    image: ollama/ollama
+    networks:
+      - caddy-ollama
+      - nextcloud-ollama
+    ports:
+      - 11434:11434
+    restart: always
+    volumes:
+      - ollama:/root/.ollama
+
+volumes:
+  ollama:

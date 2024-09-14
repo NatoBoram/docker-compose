@@ -72,6 +72,16 @@
 		root /var/www/nextcloud
 	}
 
+	@ollama host ollama.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @ollama {
+		basic_auth {
+			LAME {$OLLAMA_LAME_PASSWORD}
+			Nextcloud {$OLLAMA_NEXTCLOUD_PASSWORD}
+		}
+
+		reverse_proxy ollama:11434
+	}
+
 	@send host send.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @send {
 		reverse_proxy send:1443
