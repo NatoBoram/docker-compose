@@ -59,7 +59,6 @@ services:
 
       - REDIS_HOST=nextcloud-redis
 
-      - SMTP_HOST=smtp.gmail.com
       - SMTP_SECURE=ssl
       - SMTP_PORT=465
 

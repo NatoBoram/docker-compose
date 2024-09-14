@@ -163,7 +163,7 @@ services:
     restart: always
     volumes:
       - vmagent:/vmagentdata
-      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - ./vmagent/prometheus.yaml:/etc/prometheus/prometheus.yaml
 
   victoria-metrics:
     container_name: victoria-metrics
