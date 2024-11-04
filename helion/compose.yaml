@@ -14,10 +14,6 @@ networks:
   caddy-nextcloud:
   caddy-ollama:
   caddy-send:
-  grafana-victoria-metrics:
-  vmagent-caddy:
-  vmagent-collabora:
-  vmagent-victoria-metrics:
 
 services:
   caddy:
@@ -38,7 +34,6 @@ services:
       - caddy-nextcloud
       - caddy-ollama
       - caddy-send
-      - vmagent-caddy
     ports:
       - 80:80
       - 443:443
@@ -51,23 +46,6 @@ services:
       - ~/.config/caddy:/config/caddy
       - ~/.local/share/caddy:/data/caddy
       - nextcloud:/var/www/nextcloud:ro
-
-  grafana:
-    container_name: grafana
-    image: grafana/grafana
-    depends_on:
-      - caddy
-      - victoria-metrics
-    ports:
-      - 3000:3000
-    volumes:
-      - grafana:/var/lib/grafana
-      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
-      - ./grafana/datasources:/etc/grafana/provisioning/datasources
-    networks:
-      - grafana-victoria-metrics
-    restart: always
 
   kubo:
     container_name: kubo
@@ -124,45 +102,6 @@ services:
       - ~/Templates:/var/syncthing/Templates
       - ~/Videos:/var/syncthing/Videos
 
-  vmagent:
-    command:
-      - --promscrape.config=/etc/prometheus/prometheus.yaml
-      - --remoteWrite.url=http://victoria-metrics:8428/api/v1/write
-    container_name: vmagent
-    depends_on:
-      - caddy
-      - collabora
-      - victoria-metrics
-    env_file:
-      - path: .env.vmagent
-      - path: .env.vmagent.local
-    networks:
-      - vmagent-caddy
-      - vmagent-collabora
-      - vmagent-victoria-metrics
-    image: victoriametrics/vmagent
-    restart: always
-    volumes:
-      - vmagent:/vmagentdata
-      - ./vmagent/prometheus.yaml:/etc/prometheus/prometheus.yaml
-
-  victoria-metrics:
-    container_name: victoria-metrics
-    image: victoriametrics/victoria-metrics
-    networks:
-      - grafana-victoria-metrics
-      - vmagent-victoria-metrics
-    ports:
-      - 8428:8428
-      - 8089:8089
-      - 8089:8089/udp
-      - 2003:2003
-      - 2003:2003/udp
-      - 4242:4242
-    restart: always
-    volumes:
-      - victoria-metrics:/storage
-
   watchtower:
     container_name: watchtower
     image: containrrr/watchtower
@@ -172,8 +111,3 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-
-volumes:
-  grafana:
-  victoria-metrics:
-  vmagent:

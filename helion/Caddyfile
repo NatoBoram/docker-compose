@@ -9,7 +9,6 @@
 	email {env.EMAIL}
 
 	servers {
-		metrics
 		trusted_proxies static private_ranges
 		trusted_proxies_strict
 	}
