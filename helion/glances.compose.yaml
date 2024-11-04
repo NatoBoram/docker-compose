@@ -1,0 +1,24 @@
+services:
+  glances:
+    container_name: glances
+    depends_on:
+      - caddy
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+              count: all
+              driver: nvidia
+    env_file:
+      - path: .env.glances
+      - path: .env.glances.local
+    image: nicolargo/glances:latest-full
+    networks:
+      - caddy-glances
+    restart: always
+    volumes:
+      - ./glances:/root/.config/glances:ro
+      - /etc/os-release:/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro

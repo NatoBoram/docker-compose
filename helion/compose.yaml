@@ -1,4 +1,5 @@
 include:
+  - path: glances.compose.yaml
   - path: nextcloud.compose.yaml
   - path: ollama.compose.yaml
   - path: send.compose.yaml
@@ -50,30 +51,6 @@ services:
       - ~/.config/caddy:/config/caddy
       - ~/.local/share/caddy:/data/caddy
       - nextcloud:/var/www/nextcloud:ro
-
-  glances:
-    container_name: glances
-    depends_on:
-      - caddy
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities:
-                - gpu
-              count: all
-              driver: nvidia
-    env_file:
-      - path: .env.glances
-      - path: .env.glances.local
-    image: nicolargo/glances:latest-full
-    networks:
-      - caddy-glances
-    restart: always
-    volumes:
-      - ./glances:/root/.config/glances:ro
-      - /etc/os-release:/etc/os-release:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   grafana:
     container_name: grafana
