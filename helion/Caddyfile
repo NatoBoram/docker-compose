@@ -29,19 +29,6 @@
 		resolvers 2606:4700:4700::1111 1.1.1.1 2606:4700:4700::1001 1.0.0.1 2001:4860:4860::8888 8.8.8.8 2001:4860:4860::8844 8.8.4.4
 	}
 
-	@collabora host collabora.{$DUCKDNS_DOMAIN}.duckdns.org
-	handle @collabora {
-		basic_auth {
-			Nextcloud {$COLLABORA_NEXTCLOUD_PASSWORD}
-		}
-
-		reverse_proxy collabora:9980 {
-			transport http {
-				tls_insecure_skip_verify
-			}
-		}
-	}
-
 	@glances host glances.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @glances {
 		reverse_proxy glances:61208

@@ -7,7 +7,6 @@ include:
 networks:
   caddy:
     enable_ipv6: true
-  caddy-collabora:
   caddy-glances:
   caddy-kubo:
   caddy-leanish:
@@ -27,7 +26,6 @@ services:
       - path: .env.caddy.local
     networks:
       - caddy
-      - caddy-collabora
       - caddy-glances
       - caddy-kubo
       - caddy-leanish

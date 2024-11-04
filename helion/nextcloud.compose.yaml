@@ -1,5 +1,4 @@
 networks:
-  nextcloud-collabora:
   nextcloud-ollama:
   nextcloud-postgres:
   nextcloud-redis:
@@ -13,24 +12,6 @@ services:
       - clamav-lib:/var/lib/clamav
       - clamav-run:/tmp
 
-  collabora:
-    cap_add:
-      - MKNOD
-    container_name: collabora
-    env_file:
-      - path: .env.collabora
-      - path: .env.collabora.local
-    environment:
-      - dictionaries=fr_CA en_CA
-      - TZ=America/Toronto
-    image: collabora/code
-    networks:
-      - caddy-collabora
-      - nextcloud-collabora
-    ports:
-      - 9980:9980
-    restart: always
-
   nextcloud:
     container_name: nextcloud
     deploy:
@@ -43,7 +24,6 @@ services:
               driver: nvidia
     depends_on:
       - clamav
-      - collabora
       - nextcloud-postgres
       - nextcloud-redis
       - ollama
@@ -66,7 +46,6 @@ services:
     image: nextcloud:fpm
     networks:
       - caddy-nextcloud
-      - nextcloud-collabora
       - nextcloud-ollama
       - nextcloud-postgres
       - nextcloud-redis
@@ -84,7 +63,6 @@ services:
     entrypoint: /cron.sh
     extends: nextcloud
     networks:
-      - nextcloud-collabora
       - nextcloud-ollama
       - nextcloud-postgres
       - nextcloud-redis
