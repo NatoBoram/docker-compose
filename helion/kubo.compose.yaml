@@ -1,0 +1,21 @@
+services:
+  kubo:
+    container_name: kubo
+    hostname: helion
+    image: ipfs/kubo
+    depends_on:
+      - caddy
+    networks:
+      - caddy-kubo
+    ports:
+      - 127.0.0.1:5001:5001
+      - 4001:4001/tcp
+      - 4001:4001/udp
+      - 8080:8080
+    restart: always
+    user: 1000:1000
+    volumes:
+      - ~/.ipfs:/data/ipfs
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro

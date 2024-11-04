@@ -1,0 +1,3 @@
+services:
+  kubo:
+    user: 1000:1000
