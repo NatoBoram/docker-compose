@@ -12,6 +12,9 @@ services:
       - clamav-lib:/var/lib/clamav
       - clamav-run:/tmp
 
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
   nextcloud:
     container_name: nextcloud
     deploy:
@@ -41,8 +44,6 @@ services:
 
       - SMTP_SECURE=ssl
       - SMTP_PORT=465
-
-      - TZ=America/Toronto
     image: nextcloud:fpm
     networks:
       - caddy-nextcloud
@@ -51,10 +52,15 @@ services:
       - nextcloud-redis
     restart: always
     volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - /var/log/nextcloud.log:/var/www/html/data/nextcloud.log
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - clamav-run:/var/run/clamav:ro
       - nextcloud:/var/www/html
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
   nextcloud-cron:
     container_name: nextcloud-cron
@@ -82,6 +88,9 @@ services:
     volumes:
       - nextcloud-postgres:/var/lib/postgresql/data
 
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
   nextcloud-redis:
     container_name: nextcloud-redis
     image: redis:alpine
@@ -90,6 +99,9 @@ services:
     restart: always
     volumes:
       - nextcloud-redis:/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
 volumes:
   clamav-lib:

@@ -19,6 +19,9 @@ services:
     volumes:
       - send:/uploads
 
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
   send-redis:
     container_name: send-redis
     image: redis:alpine
@@ -27,6 +30,9 @@ services:
     restart: always
     volumes:
       - send-redis:/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
 volumes:
   send:

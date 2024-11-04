@@ -22,3 +22,6 @@ services:
       - ./glances:/root/.config/glances:ro
       - /etc/os-release:/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro

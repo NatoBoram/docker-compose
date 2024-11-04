@@ -45,6 +45,9 @@ services:
       - ~/.local/share/caddy:/data/caddy
       - nextcloud:/var/www/nextcloud:ro
 
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
   kubo:
     container_name: kubo
     hostname: helion
@@ -62,6 +65,9 @@ services:
     user: 1000:1000
     volumes:
       - ~/.ipfs:/data/ipfs
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
   leanish:
     container_name: leanish
@@ -100,6 +106,9 @@ services:
       - ~/Templates:/var/syncthing/Templates
       - ~/Videos:/var/syncthing/Videos
 
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
   watchtower:
     container_name: watchtower
     image: containrrr/watchtower
@@ -107,5 +116,7 @@ services:
     environment:
       - WATCHTOWER_CLEANUP=true
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
