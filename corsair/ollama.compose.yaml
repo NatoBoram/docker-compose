@@ -1,0 +1,20 @@
+services:
+  ollama:
+    container_name: ollama
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/kfd:/dev/kfd
+    environment:
+      - HSA_OVERRIDE_GFX_VERSION=${HSA_OVERRIDE_GFX_VERSION-10.3.0}
+    image: ollama/ollama:rocm
+    ports:
+      - 11434:11434
+    restart: always
+    volumes:
+      - ollama:/root/.ollama
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  ollama:
