@@ -1,5 +1,9 @@
 {
 	"explorer.fileNesting.patterns": {
 		".env.*": ".env.${capture}.local"
+	},
+	"files.associations": {
+		"*.compose.override.yaml": "dockercompose",
+		"*.compose.yaml": "dockercompose"
 	}
 }
