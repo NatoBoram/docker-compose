@@ -4,6 +4,7 @@ include:
   - path: nextcloud.compose.yaml
   - path: ollama.compose.yaml
   - path: send.compose.yaml
+  #- path: ocis.compose.yaml
 
 networks:
   caddy:
