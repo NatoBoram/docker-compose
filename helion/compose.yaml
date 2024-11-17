@@ -3,6 +3,7 @@ include:
   - path: kubo.compose.yaml
   - path: nextcloud.compose.yaml
   - path: ollama.compose.yaml
+  - path: planka.compose.yaml
   - path: send.compose.yaml
   - path: tandoor.compose.yaml
   #- path: ocis.compose.yaml
@@ -34,6 +35,7 @@ services:
       - caddy-leanish
       - caddy-nextcloud
       - caddy-ollama
+      - caddy-planka
       - caddy-send
       - caddy-tandoor
     ports:
