@@ -1,0 +1,49 @@
+networks:
+  caddy-tandoor:
+  tandoor-postgres:
+
+services:
+  tandoor:
+    container_name: tandoor
+    depends_on:
+      - tandoor-postgres
+    environment:
+      - DB_ENGINE=django.db.backends.postgresql
+      - POSTGRES_HOST=tandoor-postgres
+      - POSTGRES_DB=tandoor
+      - POSTGRES_USER=tandoor
+    env_file:
+      - path: .env.tandoor
+      - path: .env.tandoor.local
+    image: vabene1111/recipes
+    networks:
+      - caddy-tandoor
+      - tandoor-postgres
+    restart: always
+    volumes:
+      - tandoor:/opt/recipes
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  tandoor-postgres:
+    container_name: tandoor-postgres
+    environment:
+      - POSTGRES_DB=tandoor
+      - POSTGRES_USER=tandoor
+    env_file:
+      - path: .env.tandoor-postgres
+      - path: .env.tandoor-postgres.local
+    image: postgres:16-alpine
+    networks:
+      - tandoor-postgres
+    restart: always
+    volumes:
+      - tandoor-postgres:/var/lib/postgresql/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  tandoor:
+  tandoor-postgres:

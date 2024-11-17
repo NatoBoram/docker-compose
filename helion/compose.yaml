@@ -4,6 +4,7 @@ include:
   - path: nextcloud.compose.yaml
   - path: ollama.compose.yaml
   - path: send.compose.yaml
+  - path: tandoor.compose.yaml
   #- path: ocis.compose.yaml
 
 networks:
@@ -34,6 +35,7 @@ services:
       - caddy-nextcloud
       - caddy-ollama
       - caddy-send
+      - caddy-tandoor
     ports:
       - 80:80
       - 443:443

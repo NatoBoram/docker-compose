@@ -72,4 +72,9 @@
 	handle @send {
 		reverse_proxy send:1443
 	}
+
+	@tandoor host tandoor.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @tandoor {
+		reverse_proxy tandoor:8080
+	}
 }
