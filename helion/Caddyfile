@@ -70,7 +70,7 @@
 
 	@planka host planka.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @planka {
-		reverse_proxy planka:3000
+		reverse_proxy planka:1337
 	}
 
 	@send host send.{$DUCKDNS_DOMAIN}.duckdns.org
