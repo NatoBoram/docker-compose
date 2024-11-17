@@ -68,6 +68,11 @@
 		reverse_proxy ollama:11434
 	}
 
+	@planka host planka.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @planka {
+		reverse_proxy planka:1337
+	}
+
 	@send host send.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @send {
 		reverse_proxy send:1443

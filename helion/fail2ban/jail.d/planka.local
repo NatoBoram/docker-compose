@@ -1,0 +1,7 @@
+[planka]
+enabled = true
+port = http,https
+filter = planka
+logpath = /var/log/planka.log
+maxretry = 5
+bantime = 900

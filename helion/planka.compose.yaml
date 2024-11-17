@@ -1,0 +1,60 @@
+networks:
+  caddy-planka:
+  planka-postgres:
+
+services:
+  planka:
+    container_name: planka
+    depends_on:
+      planka-postgres:
+        condition: service_healthy
+    env_file:
+      - path: .env.planka
+      - path: .env.planka.local
+    environment:
+      - KNEX_REJECT_UNAUTHORIZED_SSL_CERTIFICATE=false
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+      - TRUST_PROXY=1
+    image: ghcr.io/plankanban/planka
+    networks:
+      - caddy-planka
+      - planka-postgres
+    restart: always
+    volumes:
+      - planka-user-avatars:/app/public/user-avatars
+      - planka-project-background-images:/app/public/project-background-images
+      - planka-attachments:/app/private/attachments
+      - /var/log/planka.log:/app/logs/planka.log
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  planka-postgres:
+    container_name: planka-postgres
+    image: postgres:16-alpine
+    networks:
+      - planka-postgres
+    environment:
+      - POSTGRES_DB=planka
+      - POSTGRES_USER=planka
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    env_file:
+      - path: .env.planka-postgres
+      - path: .env.planka-postgres.local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U planka -d planka"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    volumes:
+      - planka-postgres:/var/lib/postgresql/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  planka-attachments:
+  planka-project-background-images:
+  planka-user-avatars:
+  planka-postgres:
