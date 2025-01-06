@@ -29,9 +29,15 @@
 		resolvers 2606:4700:4700::1111 1.1.1.1 2606:4700:4700::1001 1.0.0.1 2001:4860:4860::8888 8.8.8.8 2001:4860:4860::8844 8.8.4.4
 	}
 
+	@authentik host authentik.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @authentik {
+		reverse_proxy authentik-server:9000
+	}
+
 	@glances host glances.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @glances {
-		reverse_proxy glances:61208
+		# reverse_proxy glances:61208
+		reverse_proxy authentik-server:9000
 	}
 
 	@kubo host kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipfs.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipns.kubo.{$DUCKDNS_DOMAIN}.duckdns.org
@@ -46,12 +52,8 @@
 
 	@metube host metube.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @metube {
-		basic_auth {
-			Nato {$METUBE_NATO_PASSWORD}
-			Inoxydable {$METUBE_INOXYDABLE_PASSWORD}
-		}
-
-		reverse_proxy metube:8081
+		# reverse_proxy metube:8081
+		reverse_proxy authentik-server:9000
 	}
 
 	@nextcloud host nextcloud.{$DUCKDNS_DOMAIN}.duckdns.org

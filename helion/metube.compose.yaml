@@ -2,12 +2,12 @@ services:
   metube:
     container_name: metube
     depends_on:
-      - caddy
+      - authentik-server
     environment:
       - YTDL_OPTIONS_FILE=/yt-dlp.json
     image: ghcr.io/alexta69/metube
     networks:
-      - caddy-metube
+      - authentik-metube
     restart: always
     volumes:
       - metube:/downloads

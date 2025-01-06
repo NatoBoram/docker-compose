@@ -2,7 +2,7 @@ services:
   glances:
     container_name: glances
     depends_on:
-      - caddy
+      - authentik-server
     deploy:
       resources:
         reservations:
@@ -16,7 +16,7 @@ services:
       - path: .env.glances.local
     image: nicolargo/glances:latest-full
     networks:
-      - caddy-glances
+      - authentik-glances
     restart: always
     volumes:
       - ./glances:/root/.config/glances:ro

@@ -1,4 +1,5 @@
 include:
+  - path: authentik.compose.yaml
   - path: glances.compose.yaml
   - path: kubo.compose.yaml
   - path: metube.compose.yaml
@@ -12,10 +13,9 @@ include:
 networks:
   caddy:
     enable_ipv6: true
-  caddy-glances:
+  caddy-authentik:
   caddy-kubo:
   caddy-leanish:
-  caddy-metube:
   caddy-nextcloud:
   caddy-ollama:
   caddy-send:
@@ -32,10 +32,9 @@ services:
       - path: .env.caddy.local
     networks:
       - caddy
-      - caddy-glances
+      - caddy-authentik
       - caddy-kubo
       - caddy-leanish
-      - caddy-metube
       - caddy-nextcloud
       - caddy-ollama
       - caddy-planka
