@@ -3,6 +3,7 @@ networks:
   authentik-metube:
   authentik-postgres:
   authentik-redis:
+  authentik-uptime-kuma:
 
 services:
   authentik-server:
@@ -15,9 +16,6 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__USER: authentik
       AUTHENTIK_POSTGRESQL__NAME: authentik
-    volumes:
-      - ./authentik/templates:/templates
-      - authentik-media:/media
     env_file:
       - .env.authentik-server
       - .env.authentik-server.local
@@ -36,7 +34,14 @@ services:
       - authentik-metube
       - authentik-postgres
       - authentik-redis
+      - authentik-uptime-kuma
       - caddy-authentik
+    volumes:
+      - ./authentik/templates:/templates
+      - authentik-media:/media
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
   authentik-worker:
     container_name: authentik-worker
@@ -49,11 +54,6 @@ services:
       AUTHENTIK_POSTGRESQL__USER: authentik
       AUTHENTIK_POSTGRESQL__NAME: authentik
     user: root
-    volumes:
-      - ./authentik/certs:/certs
-      - ./authentik/templates:/templates
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - authentik-media:/media
     env_file:
       - .env.authentik-worker
       - .env.authentik-worker.local
@@ -65,6 +65,14 @@ services:
     networks:
       - authentik-postgres
       - authentik-redis
+    volumes:
+      - ./authentik/certs:/certs
+      - ./authentik/templates:/templates
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - authentik-media:/media
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
   authentik-postgres:
     container_name: authentik-postgres
@@ -76,8 +84,6 @@ services:
       interval: 30s
       retries: 5
       timeout: 5s
-    volumes:
-      - authentik-postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: authentik
       POSTGRES_DB: authentik
@@ -86,6 +92,11 @@ services:
       - .env.authentik-postgres.local
     networks:
       - authentik-postgres
+    volumes:
+      - authentik-postgres:/var/lib/postgresql/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
   authentik-redis:
     container_name: authentik-redis
@@ -98,10 +109,13 @@ services:
       interval: 30s
       retries: 5
       timeout: 3s
-    volumes:
-      - authentik-redis:/data
     networks:
       - authentik-redis
+    volumes:
+      - authentik-redis:/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
 volumes:
   authentik-postgres:
