@@ -1,6 +1,7 @@
 networks:
   authentik-glances:
   authentik-metube:
+  authentik-myspeed:
   authentik-postgres:
   authentik-redis:
   authentik-uptime-kuma:
@@ -32,6 +33,7 @@ services:
     networks:
       - authentik-glances
       - authentik-metube
+      - authentik-myspeed
       - authentik-postgres
       - authentik-redis
       - authentik-uptime-kuma
