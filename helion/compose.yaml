@@ -1,6 +1,7 @@
 include:
   - path: glances.compose.yaml
   - path: kubo.compose.yaml
+  - path: metube.compose.yaml
   - path: nextcloud.compose.yaml
   - path: ollama.compose.yaml
   - path: planka.compose.yaml
@@ -14,6 +15,7 @@ networks:
   caddy-glances:
   caddy-kubo:
   caddy-leanish:
+  caddy-metube:
   caddy-nextcloud:
   caddy-ollama:
   caddy-send:
@@ -33,6 +35,7 @@ services:
       - caddy-glances
       - caddy-kubo
       - caddy-leanish
+      - caddy-metube
       - caddy-nextcloud
       - caddy-ollama
       - caddy-planka

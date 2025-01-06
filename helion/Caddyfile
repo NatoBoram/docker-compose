@@ -44,6 +44,16 @@
 		reverse_proxy leanish:3000
 	}
 
+	@metube host metube.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @metube {
+		basic_auth {
+			Nato {$METUBE_NATO_PASSWORD}
+			Inoxydable {$METUBE_INOXYDABLE_PASSWORD}
+		}
+
+		reverse_proxy metube:8081
+	}
+
 	@nextcloud host nextcloud.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @nextcloud {
 		encode gzip
