@@ -94,4 +94,10 @@
 	handle @tandoor {
 		reverse_proxy tandoor:8080
 	}
+
+	@uptime-kuma host uptime-kuma.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @uptime-kuma {
+		# reverse_proxy uptime-kuma:3001
+		reverse_proxy authentik-server:9000
+	}
 }
