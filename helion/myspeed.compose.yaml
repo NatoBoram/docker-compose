@@ -1,0 +1,17 @@
+services:
+  myspeed:
+    container_name: myspeed
+    image: germannewsmaker/myspeed
+    networks:
+      - authentik-myspeed
+    # ports:
+    #   - 5216:5216
+    restart: always
+    volumes:
+      - myspeed:/myspeed/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  myspeed:

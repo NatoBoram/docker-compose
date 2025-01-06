@@ -56,6 +56,12 @@
 		reverse_proxy authentik-server:9000
 	}
 
+	@myspeed host myspeed.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @myspeed {
+		# reverse_proxy myspeed:5216
+		reverse_proxy authentik-server:9000
+	}
+
 	@nextcloud host nextcloud.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @nextcloud {
 		encode gzip

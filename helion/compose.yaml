@@ -3,6 +3,7 @@ include:
   - path: glances.compose.yaml
   - path: kubo.compose.yaml
   - path: metube.compose.yaml
+  - path: myspeed.compose.yaml
   - path: nextcloud.compose.yaml
   - path: ollama.compose.yaml
   - path: planka.compose.yaml
