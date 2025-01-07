@@ -1,0 +1,26 @@
+services:
+  jellyfin:
+    container_name: jellyfin
+    depends_on:
+      - authentik-server
+    env_file:
+      - .env.jellyfin
+      - .env.jellyfin.local
+    image: jellyfin/jellyfin
+    networks:
+      - caddy-jellyfin
+    volumes:
+      - ./jellyfin/fonts:/usr/local/share/fonts/custom:ro
+      - jellyfin-cache:/cache
+      - jellyfin-config:/config
+      - jellyfin-media:/media
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: always
+    user: 1000:1000
+
+volumes:
+  jellyfin-cache:
+  jellyfin-config:
+  jellyfin-media:
