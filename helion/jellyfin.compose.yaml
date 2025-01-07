@@ -3,6 +3,14 @@ services:
     container_name: jellyfin
     depends_on:
       - authentik-server
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+              count: all
+              driver: nvidia
     env_file:
       - .env.jellyfin
       - .env.jellyfin.local
@@ -14,6 +22,13 @@ services:
       - jellyfin-cache:/cache
       - jellyfin-config:/config
       - jellyfin-media:/media
+
+      - /dev/nvidia-caps:/dev/nvidia-caps:ro
+      - /dev/nvidia-modeset:/dev/nvidia-modeset:ro
+      - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools:ro
+      - /dev/nvidia-uvm:/dev/nvidia-uvm:ro
+      - /dev/nvidia0:/dev/nvidia0:ro
+      - /dev/nvidiactl:/dev/nvidiactl:ro
 
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
