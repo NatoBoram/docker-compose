@@ -40,6 +40,11 @@
 		reverse_proxy authentik-server:9000
 	}
 
+	@jellyfin host jellyfin.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @jellyfin {
+		reverse_proxy jellyfin:8096
+	}
+
 	@kubo host kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipfs.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipns.kubo.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @kubo {
 		reverse_proxy kubo:8080

@@ -1,6 +1,7 @@
 include:
   - path: authentik.compose.yaml
   - path: glances.compose.yaml
+  - path: jellyfin.compose.yaml
   - path: kubo.compose.yaml
   - path: metube.compose.yaml
   - path: myspeed.compose.yaml
@@ -16,6 +17,7 @@ networks:
   caddy:
     enable_ipv6: true
   caddy-authentik:
+  caddy-jellyfin:
   caddy-kubo:
   caddy-leanish:
   caddy-nextcloud:
@@ -35,6 +37,7 @@ services:
     networks:
       - caddy
       - caddy-authentik
+      - caddy-jellyfin
       - caddy-kubo
       - caddy-leanish
       - caddy-nextcloud
