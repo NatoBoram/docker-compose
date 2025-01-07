@@ -13,5 +13,8 @@ services:
       - metube:/downloads
       - ./metube/yt-dlp.json:/yt-dlp.json:ro
 
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
 volumes:
   metube:
