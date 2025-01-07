@@ -19,6 +19,7 @@ services:
       - caddy-jellyfin
     volumes:
       - ./jellyfin/fonts:/usr/local/share/fonts/custom:ro
+      - /var/log/jellyfin:/config/log
       - jellyfin-cache:/cache
       - jellyfin-config:/config
       - jellyfin-media:/media
@@ -33,7 +34,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     restart: always
-    user: 1000:1000
 
 volumes:
   jellyfin-cache:
