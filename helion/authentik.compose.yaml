@@ -3,6 +3,7 @@ networks:
   authentik-metube:
   authentik-myspeed:
   authentik-postgres:
+  authentik-qbittorrent:
   authentik-redis:
   authentik-uptime-kuma:
 
@@ -35,6 +36,7 @@ services:
       - authentik-metube
       - authentik-myspeed
       - authentik-postgres
+      - authentik-qbittorrent
       - authentik-redis
       - authentik-uptime-kuma
       - caddy-authentik
