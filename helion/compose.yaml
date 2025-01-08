@@ -15,17 +15,5 @@ include:
   - path: syncthing.compose.yaml
   - path: tandoor.compose.yaml
   - path: uptime-kuma.compose.yaml
+  - path: watchtower.compose.yaml
   #- path: ocis.compose.yaml
-
-services:
-  watchtower:
-    container_name: watchtower
-    image: containrrr/watchtower
-    restart: always
-    environment:
-      - WATCHTOWER_CLEANUP=true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
