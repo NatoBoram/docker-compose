@@ -4,6 +4,7 @@ include:
   - path: glances.compose.yaml
   - path: jellyfin.compose.yaml
   - path: kubo.compose.yaml
+  - path: leanish.compose.yaml
   - path: metube.compose.yaml
   - path: myspeed.compose.yaml
   - path: nextcloud.compose.yaml
@@ -16,15 +17,6 @@ include:
   #- path: ocis.compose.yaml
 
 services:
-  leanish:
-    container_name: leanish
-    image: natoboram/leanish
-    depends_on:
-      - caddy
-    networks:
-      - caddy-leanish
-    restart: always
-
   syncthing:
     container_name: syncthing
     environment:
