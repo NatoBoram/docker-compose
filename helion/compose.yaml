@@ -1,5 +1,6 @@
 include:
   - path: authentik.compose.yaml
+  - path: caddy.compose.yaml
   - path: glances.compose.yaml
   - path: jellyfin.compose.yaml
   - path: kubo.compose.yaml
@@ -14,54 +15,7 @@ include:
   - path: uptime-kuma.compose.yaml
   #- path: ocis.compose.yaml
 
-networks:
-  caddy:
-    enable_ipv6: true
-  caddy-authentik:
-  caddy-jellyfin:
-  caddy-kubo:
-  caddy-leanish:
-  caddy-nextcloud:
-  caddy-ollama:
-  caddy-send:
-
 services:
-  caddy:
-    build:
-      dockerfile: ./caddy.Dockerfile
-    cap_add:
-      - NET_ADMIN
-    container_name: caddy
-    env_file:
-      - path: .env.caddy
-      - path: .env.caddy.local
-    networks:
-      - caddy
-      - caddy-authentik
-      - caddy-jellyfin
-      - caddy-kubo
-      - caddy-leanish
-      - caddy-nextcloud
-      - caddy-ollama
-      - caddy-planka
-      - caddy-send
-      - caddy-tandoor
-    ports:
-      - 80:80
-      - 443:443
-      - 443:443/udp
-    restart: always
-    user: 1000:1000
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - /var/log/caddy:/var/log/caddy
-      - ~/.config/caddy:/config/caddy
-      - ~/.local/share/caddy:/data/caddy
-      - nextcloud:/var/www/nextcloud:ro
-
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-
   leanish:
     container_name: leanish
     image: natoboram/leanish
