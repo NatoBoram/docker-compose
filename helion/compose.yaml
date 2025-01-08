@@ -12,42 +12,12 @@ include:
   - path: planka.compose.yaml
   - path: qbittorrent.compose.yaml
   - path: send.compose.yaml
+  - path: syncthing.compose.yaml
   - path: tandoor.compose.yaml
   - path: uptime-kuma.compose.yaml
   #- path: ocis.compose.yaml
 
 services:
-  syncthing:
-    container_name: syncthing
-    environment:
-      - PGID=1000
-      - PUID=1000
-    hostname: helion
-    image: syncthing/syncthing
-    ports:
-      - 8384:8384
-      - 22000:22000/tcp
-      - 22000:22000/udp
-      - 21027:21027/udp
-    restart: always
-    user: 1000:1000
-    volumes:
-      - ~/.config/syncthing:/var/syncthing/config
-      - ~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher:/var/syncthing/PrismLauncher
-
-      - ~/Desktop:/var/syncthing/Desktop
-      - ~/Documents:/var/syncthing/Documents
-      - ~/Downloads:/var/syncthing/Downloads
-      - ~/Minecraft:/var/syncthing/Minecraft
-      - ~/Music:/var/syncthing/Music
-      - ~/Pictures:/var/syncthing/Pictures
-      - ~/Sync:/var/syncthing/Sync
-      - ~/Templates:/var/syncthing/Templates
-      - ~/Videos:/var/syncthing/Videos
-
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-
   watchtower:
     container_name: watchtower
     image: containrrr/watchtower
