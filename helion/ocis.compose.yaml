@@ -1,7 +1,0 @@
-services:
-  ocis:
-    container_name: ocis
-    image: owncloud/ocis
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro

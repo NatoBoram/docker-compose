@@ -16,4 +16,3 @@ include:
   - path: tandoor.compose.yaml
   - path: uptime-kuma.compose.yaml
   - path: watchtower.compose.yaml
-  #- path: ocis.compose.yaml
