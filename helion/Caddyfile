@@ -96,6 +96,12 @@
 		reverse_proxy planka:1337
 	}
 
+	@qbittorrent host qbittorrent.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @qbittorrent {
+		# reverse_proxy qbittorrent:8080
+		reverse_proxy authentik-server:9000
+	}
+
 	@send host send.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @send {
 		reverse_proxy send:1443

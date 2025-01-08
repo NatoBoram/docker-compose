@@ -23,6 +23,7 @@ services:
       - jellyfin-cache:/cache
       - jellyfin-config:/config
       - jellyfin-media:/media
+      - qbittorrent-downloads:/qbittorrent
 
       - /dev/nvidia-caps:/dev/nvidia-caps:ro
       - /dev/nvidia-modeset:/dev/nvidia-modeset:ro
