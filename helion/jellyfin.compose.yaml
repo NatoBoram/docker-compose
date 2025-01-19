@@ -24,6 +24,7 @@ services:
       - jellyfin-config:/config
       - jellyfin-media:/media
       - qbittorrent-downloads:/qbittorrent
+      - syncthing-jellyfin:/syncthing
 
       - /dev/nvidia-caps:/dev/nvidia-caps:ro
       - /dev/nvidia-modeset:/dev/nvidia-modeset:ro

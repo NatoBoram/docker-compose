@@ -27,5 +27,10 @@ services:
       - ~/Templates:/var/syncthing/Templates
       - ~/Videos:/var/syncthing/Videos
 
+      - syncthing-jellyfin:/var/syncthing/Jellyfin
+
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  syncthing-jellyfin:
