@@ -37,6 +37,7 @@ services:
     image: postgres:16-alpine
     networks:
       - tandoor-postgres
+      - uptime-kuma-tandoor-postgres
     restart: always
     volumes:
       - tandoor-postgres:/var/lib/postgresql/data

@@ -43,6 +43,7 @@ services:
     image: postgres:16-alpine
     networks:
       - planka-postgres
+      - uptime-kuma-planka-postgres
     restart: always
     volumes:
       - planka-postgres:/var/lib/postgresql/data

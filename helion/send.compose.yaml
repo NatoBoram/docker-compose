@@ -27,6 +27,7 @@ services:
     image: redis:alpine
     networks:
       - send-redis
+      - uptime-kuma-send-redis
     restart: always
     volumes:
       - send-redis:/data

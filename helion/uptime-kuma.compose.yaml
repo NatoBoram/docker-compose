@@ -1,3 +1,13 @@
+networks:
+  uptime-kuma-authentik-postgres:
+  uptime-kuma-nextcloud-postgres:
+  uptime-kuma-planka-postgres:
+  uptime-kuma-tandoor-postgres:
+
+  uptime-kuma-authentik-redis:
+  uptime-kuma-nextcloud-redis:
+  uptime-kuma-send-redis:
+
 services:
   uptime-kuma:
     container_name: uptime-kuma
@@ -6,6 +16,16 @@ services:
     image: louislam/uptime-kuma
     networks:
       - authentik-uptime-kuma
+
+      - uptime-kuma-authentik-postgres
+      - uptime-kuma-nextcloud-postgres
+      - uptime-kuma-planka-postgres
+      - uptime-kuma-tandoor-postgres
+
+      - uptime-kuma-authentik-redis
+      - uptime-kuma-nextcloud-redis
+      - uptime-kuma-send-redis
+
     # ports:
     #   - 3001:3001
     restart: always
