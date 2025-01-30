@@ -4,6 +4,7 @@ Some services require a logo to be displayed in the UI. This directory contains 
 
 Below are the currently available logos.
 
+<img src="authentik.png" height="64px" alt="Authentik Logo" />
 <img src="docker.png" height="64px" alt="Docker Logo" />
 <img src="glances.png" height="64px" alt="Glances Logo" />
 <img src="jellyfin.png" height="64px" alt="Jellyfin Logo" />
