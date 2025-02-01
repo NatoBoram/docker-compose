@@ -34,6 +34,11 @@
 		reverse_proxy authentik-server:9000
 	}
 
+	@beszel host beszel.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @beszel {
+		reverse_proxy beszel:8090
+	}
+
 	@glances host glances.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @glances {
 		# reverse_proxy glances:61208

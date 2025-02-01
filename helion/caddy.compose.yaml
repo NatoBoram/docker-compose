@@ -2,6 +2,7 @@ networks:
   caddy:
     enable_ipv6: true
   caddy-authentik:
+  caddy-beszel:
   caddy-jellyfin:
   caddy-kubo:
   caddy-leanish:
@@ -22,6 +23,7 @@ services:
     networks:
       - caddy
       - caddy-authentik
+      - caddy-beszel
       - caddy-jellyfin
       - caddy-kubo
       - caddy-leanish

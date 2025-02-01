@@ -1,5 +1,6 @@
 include:
   - path: authentik.compose.yaml
+  - path: beszel.compose.yaml
   - path: caddy.compose.yaml
   - path: glances.compose.yaml
   - path: jellyfin.compose.yaml
