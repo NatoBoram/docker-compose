@@ -17,6 +17,7 @@ services:
     image: nicolargo/glances:latest-full
     networks:
       - authentik-glances
+      - caddy-glances
     restart: always
     volumes:
       - ./glances:/root/.config/glances:ro

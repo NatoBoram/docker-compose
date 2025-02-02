@@ -8,6 +8,7 @@ services:
     image: qbittorrentofficial/qbittorrent-nox
     networks:
       - authentik-qbittorrent
+      - caddy-qbittorrent
     # ports:
     #   - 8080:8080
     restart: always

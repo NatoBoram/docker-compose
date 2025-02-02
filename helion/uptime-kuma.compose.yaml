@@ -16,6 +16,7 @@ services:
     image: louislam/uptime-kuma
     networks:
       - authentik-uptime-kuma
+      - caddy-uptime-kuma
 
       - uptime-kuma-authentik-postgres
       - uptime-kuma-nextcloud-postgres

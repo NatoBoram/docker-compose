@@ -14,6 +14,20 @@
 	}
 }
 
+(authentik) {
+	route {
+		reverse_proxy /outpost.goauthentik.io/* authentik-server:9000
+
+		forward_auth authentik-server:9000 {
+			uri /outpost.goauthentik.io/auth/caddy
+			copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version
+			trusted_proxies private_ranges
+		}
+
+		reverse_proxy {args[0]}
+	}
+}
+
 *.{$DUCKDNS_DOMAIN}.duckdns.org *.ipfs.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipns.kubo.{$DUCKDNS_DOMAIN}.duckdns.org {
 	header Strict-Transport-Security "max-age=63072000"
 
@@ -41,8 +55,7 @@
 
 	@glances host glances.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @glances {
-		# reverse_proxy glances:61208
-		reverse_proxy authentik-server:9000
+		import authentik glances:61208
 	}
 
 	@jellyfin host jellyfin.{$DUCKDNS_DOMAIN}.duckdns.org
@@ -62,14 +75,12 @@
 
 	@metube host metube.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @metube {
-		# reverse_proxy metube:8081
-		reverse_proxy authentik-server:9000
+		import authentik metube:8081
 	}
 
 	@myspeed host myspeed.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @myspeed {
-		# reverse_proxy myspeed:5216
-		reverse_proxy authentik-server:9000
+		import authentik myspeed:5216
 	}
 
 	@nextcloud host nextcloud.{$DUCKDNS_DOMAIN}.duckdns.org
@@ -103,8 +114,7 @@
 
 	@qbittorrent host qbittorrent.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @qbittorrent {
-		# reverse_proxy qbittorrent:8080
-		reverse_proxy authentik-server:9000
+		import authentik qbittorrent:8080
 	}
 
 	@send host send.{$DUCKDNS_DOMAIN}.duckdns.org
@@ -119,7 +129,6 @@
 
 	@uptime-kuma host uptime-kuma.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @uptime-kuma {
-		# reverse_proxy uptime-kuma:3001
-		reverse_proxy authentik-server:9000
+		import authentik uptime-kuma:3001
 	}
 }

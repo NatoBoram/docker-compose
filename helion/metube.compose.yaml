@@ -8,6 +8,7 @@ services:
     image: ghcr.io/alexta69/metube
     networks:
       - authentik-metube
+      - caddy-metube
     restart: always
     volumes:
       - metube:/downloads
