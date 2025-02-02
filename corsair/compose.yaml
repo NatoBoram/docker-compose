@@ -1,2 +1,4 @@
 include:
+  - path: beszel-agent.compose.yaml
+  - path: kubo.compose.yaml
   - path: ollama.compose.yaml

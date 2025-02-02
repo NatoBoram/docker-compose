@@ -1,0 +1,14 @@
+services:
+  beszel-agent:
+    container_name: beszel-agent
+    env_file:
+      - .env.beszel-agent
+      - .env.beszel-agent.local
+    image: henrygd/beszel-agent
+    network_mode: host
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
