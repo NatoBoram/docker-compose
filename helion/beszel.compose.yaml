@@ -4,6 +4,9 @@ services:
     depends_on:
       - authentik-server
       - caddy
+    env_file:
+      - .env.beszel
+      - .env.beszel.local
     extra_hosts:
       - host.docker.internal:host-gateway
     image: henrygd/beszel
