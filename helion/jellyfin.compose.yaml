@@ -1,5 +1,7 @@
 services:
   jellyfin:
+    build:
+      dockerfile: ./jellyfin.Dockerfile
     container_name: jellyfin
     depends_on:
       - authentik-server
@@ -14,7 +16,6 @@ services:
     env_file:
       - .env.jellyfin
       - .env.jellyfin.local
-    image: jellyfin/jellyfin
     networks:
       - caddy-jellyfin
     volumes:
@@ -23,6 +24,7 @@ services:
       - jellyfin-cache:/cache
       - jellyfin-config:/config
       - jellyfin-media:/media
+      - metube:/metube:ro
       - qbittorrent-downloads:/qbittorrent
       - syncthing-jellyfin:/syncthing
 
