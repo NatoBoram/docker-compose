@@ -2,5 +2,5 @@
 enabled = true
 port = http,https
 filter = caddy
-logpath = /var/log/caddy/natoboram.duckdns.org.log
+logpath = /var/log/caddy/*.log
 maxretry = 10
