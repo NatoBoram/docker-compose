@@ -1,4 +1,20 @@
 {
+	acme_dns porkbun {
+		api_key {env.PORKBUN_API_KEY}
+		api_secret_key {env.PORKBUN_API_SECRET_KEY}
+	}
+
+	dynamic_dns {
+		provider porkbun {
+			api_key {env.PORKBUN_API_KEY}
+			api_secret_key {env.PORKBUN_API_SECRET_KEY}
+		}
+
+		domains {
+			{$PORKBUN_DOMAIN} * *.ipfs.kubo *.ipns.kubo
+		}
+	}
+
 	dynamic_dns {
 		provider duckdns {env.DUCKDNS_API_TOKEN}
 		domains {
@@ -28,7 +44,7 @@
 	}
 }
 
-*.{$DUCKDNS_DOMAIN}.duckdns.org *.ipfs.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipns.kubo.{$DUCKDNS_DOMAIN}.duckdns.org {
+*.{$DUCKDNS_DOMAIN}.duckdns.org *.ipfs.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipns.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN} {
 	header Strict-Transport-Security "max-age=63072000"
 
 	log {$DUCKDNS_DOMAIN}.duckdns.org {
@@ -37,53 +53,68 @@
 		}
 	}
 
+	log {$PORKBUN_DOMAIN} {
+		output file /var/log/caddy/{$PORKBUN_DOMAIN}.log {
+			roll_local_time
+		}
+	}
+
 	tls {
+		dns porkbun {
+			api_key {env.PORKBUN_API_KEY}
+			api_secret_key {env.PORKBUN_API_SECRET_KEY}
+		}
 		dns duckdns {env.DUCKDNS_API_TOKEN}
 		protocols tls1.3
 		resolvers 2606:4700:4700::1111 1.1.1.1 2606:4700:4700::1001 1.0.0.1 2001:4860:4860::8888 8.8.8.8 2001:4860:4860::8844 8.8.4.4
 	}
 
-	@authentik host authentik.{$DUCKDNS_DOMAIN}.duckdns.org
+	@duckdns host {$DUCKDNS_DOMAIN}.duckdns.org *.{$DUCKDNS_DOMAIN}.duckdns.org
+	handle @duckdns {
+		redir https://{$PORKBUN_DOMAIN}{uri} permanent
+	}
+
+	@authentik host authentik.{$DUCKDNS_DOMAIN}.duckdns.org authentik.{$PORKBUN_DOMAIN}
 	handle @authentik {
 		reverse_proxy authentik-server:9000
 	}
 
-	@beszel host beszel.{$DUCKDNS_DOMAIN}.duckdns.org
+	@beszel host beszel.{$DUCKDNS_DOMAIN}.duckdns.org beszel.{$PORKBUN_DOMAIN}
 	handle @beszel {
 		reverse_proxy beszel:8090
 	}
 
-	@glances host glances.{$DUCKDNS_DOMAIN}.duckdns.org
+	@glances host glances.{$DUCKDNS_DOMAIN}.duckdns.org glances.{$PORKBUN_DOMAIN}
 	handle @glances {
 		import authentik glances:61208
 	}
 
-	@jellyfin host jellyfin.{$DUCKDNS_DOMAIN}.duckdns.org
+	@jellyfin host jellyfin.{$DUCKDNS_DOMAIN}.duckdns.org jellyfin.{$PORKBUN_DOMAIN}
 	handle @jellyfin {
 		reverse_proxy jellyfin:8096
 	}
 
-	@kubo host kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipfs.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipns.kubo.{$DUCKDNS_DOMAIN}.duckdns.org
+	@kubo host kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipfs.kubo.{$DUCKDNS_DOMAIN}.duckdns.org *.ipns.kubo.{$DUCKDNS_DOMAIN}.duckdns.org kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN}
 	handle @kubo {
 		reverse_proxy kubo:8080
 	}
 
-	@leanish host leanish.{$DUCKDNS_DOMAIN}.duckdns.org
+	@leanish host leanish.{$DUCKDNS_DOMAIN}.duckdns.org leanish.{$PORKBUN_DOMAIN}
 	handle @leanish {
 		reverse_proxy leanish:3000
 	}
 
-	@metube host metube.{$DUCKDNS_DOMAIN}.duckdns.org
+	@metube host metube.{$DUCKDNS_DOMAIN}.duckdns.org metube.{$PORKBUN_DOMAIN}
 	handle @metube {
 		import authentik metube:8081
 	}
 
-	@myspeed host myspeed.{$DUCKDNS_DOMAIN}.duckdns.org
+	@myspeed host myspeed.{$DUCKDNS_DOMAIN}.duckdns.org myspeed.{$PORKBUN_DOMAIN}
 	handle @myspeed {
 		import authentik myspeed:5216
 	}
 
-	@nextcloud host nextcloud.{$DUCKDNS_DOMAIN}.duckdns.org
+	@nextcloud host nextcloud.{$DUCKDNS_DOMAIN}.duckdns.org nextcloud.{$PORKBUN_DOMAIN}
 	handle @nextcloud {
 		encode gzip
 		file_server
@@ -97,7 +128,7 @@
 		root /var/www/nextcloud
 	}
 
-	@ollama host ollama.{$DUCKDNS_DOMAIN}.duckdns.org
+	@ollama host ollama.{$DUCKDNS_DOMAIN}.duckdns.org ollama.{$PORKBUN_DOMAIN}
 	handle @ollama {
 		basic_auth {
 			LAME {$OLLAMA_LAME_PASSWORD}
@@ -107,27 +138,27 @@
 		reverse_proxy ollama:11434
 	}
 
-	@planka host planka.{$DUCKDNS_DOMAIN}.duckdns.org
+	@planka host planka.{$DUCKDNS_DOMAIN}.duckdns.org planka.{$PORKBUN_DOMAIN}
 	handle @planka {
 		reverse_proxy planka:1337
 	}
 
-	@qbittorrent host qbittorrent.{$DUCKDNS_DOMAIN}.duckdns.org
+	@qbittorrent host qbittorrent.{$DUCKDNS_DOMAIN}.duckdns.org qbittorrent.{$PORKBUN_DOMAIN}
 	handle @qbittorrent {
 		import authentik qbittorrent:8080
 	}
 
-	@send host send.{$DUCKDNS_DOMAIN}.duckdns.org
+	@send host send.{$DUCKDNS_DOMAIN}.duckdns.org send.{$PORKBUN_DOMAIN}
 	handle @send {
 		reverse_proxy send:1443
 	}
 
-	@tandoor host tandoor.{$DUCKDNS_DOMAIN}.duckdns.org
+	@tandoor host tandoor.{$DUCKDNS_DOMAIN}.duckdns.org tandoor.{$PORKBUN_DOMAIN}
 	handle @tandoor {
 		reverse_proxy tandoor:8080
 	}
 
-	@uptime-kuma host uptime-kuma.{$DUCKDNS_DOMAIN}.duckdns.org
+	@uptime-kuma host uptime-kuma.{$DUCKDNS_DOMAIN}.duckdns.org uptime-kuma.{$PORKBUN_DOMAIN}
 	handle @uptime-kuma {
 		import authentik uptime-kuma:3001
 	}
