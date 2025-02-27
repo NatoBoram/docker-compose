@@ -5,6 +5,13 @@
 	}
 
 	dynamic_dns {
+		provider duckdns {env.DUCKDNS_API_TOKEN}
+		domains {
+			duckdns.org {$DUCKDNS_DOMAIN}
+		}
+	}
+
+	dynamic_dns {
 		provider porkbun {
 			api_key {env.PORKBUN_API_KEY}
 			api_secret_key {env.PORKBUN_API_SECRET_KEY}
@@ -12,13 +19,6 @@
 
 		domains {
 			{$PORKBUN_DOMAIN} * *.ipfs.kubo *.ipns.kubo
-		}
-	}
-
-	dynamic_dns {
-		provider duckdns {env.DUCKDNS_API_TOKEN}
-		domains {
-			duckdns.org {$DUCKDNS_DOMAIN}
 		}
 	}
 
@@ -69,9 +69,10 @@
 		resolvers 2606:4700:4700::1111 1.1.1.1 2606:4700:4700::1001 1.0.0.1 2001:4860:4860::8888 8.8.8.8 2001:4860:4860::8844 8.8.4.4
 	}
 
+	# https://caddyserver.com/docs/caddyfile/patterns#redirect-www-subdomain
 	@duckdns host {$DUCKDNS_DOMAIN}.duckdns.org *.{$DUCKDNS_DOMAIN}.duckdns.org
 	handle @duckdns {
-		redir https://{$PORKBUN_DOMAIN}{uri} permanent
+		redir https://{labels.3}.{$PORKBUN_DOMAIN}{uri} permanent
 	}
 
 	@authentik host authentik.{$DUCKDNS_DOMAIN}.duckdns.org authentik.{$PORKBUN_DOMAIN}
