@@ -1,0 +1,10 @@
+services:
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
