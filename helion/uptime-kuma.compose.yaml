@@ -1,7 +1,6 @@
 networks:
   uptime-kuma-authentik-postgres:
   uptime-kuma-nextcloud-postgres:
-  uptime-kuma-tandoor-postgres:
 
   uptime-kuma-authentik-redis:
   uptime-kuma-nextcloud-redis:
@@ -19,7 +18,6 @@ services:
 
       - uptime-kuma-authentik-postgres
       - uptime-kuma-nextcloud-postgres
-      - uptime-kuma-tandoor-postgres
 
       - uptime-kuma-authentik-redis
       - uptime-kuma-nextcloud-redis

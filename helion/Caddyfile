@@ -139,11 +139,6 @@
 		reverse_proxy send:1443
 	}
 
-	@tandoor host tandoor.{$PORKBUN_DOMAIN}
-	handle @tandoor {
-		reverse_proxy tandoor:8080
-	}
-
 	@uptime-kuma host uptime-kuma.{$PORKBUN_DOMAIN}
 	handle @uptime-kuma {
 		import authentik uptime-kuma:3001

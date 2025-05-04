@@ -39,7 +39,6 @@ services:
       - caddy-ollama
       - caddy-qbittorrent
       - caddy-send
-      - caddy-tandoor
       - caddy-uptime-kuma
     ports:
       - 80:80

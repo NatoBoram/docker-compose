@@ -13,6 +13,5 @@ include:
   - path: qbittorrent.compose.yaml
   - path: send.compose.yaml
   - path: syncthing.compose.yaml
-  - path: tandoor.compose.yaml
   - path: uptime-kuma.compose.yaml
   - path: watchtower.compose.yaml
