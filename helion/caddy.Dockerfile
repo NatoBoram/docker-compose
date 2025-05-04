@@ -2,7 +2,6 @@ FROM caddy:builder AS builder
 
 RUN xcaddy build \
 	--with github.com/caddy-dns/acmedns \
-	--with github.com/caddy-dns/duckdns \
 	--with github.com/caddy-dns/porkbun \
 	--with github.com/mholt/caddy-dynamicdns
 
