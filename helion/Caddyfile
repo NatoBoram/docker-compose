@@ -129,11 +129,6 @@
 		reverse_proxy ollama:11434
 	}
 
-	@planka host planka.{$PORKBUN_DOMAIN}
-	handle @planka {
-		reverse_proxy planka:1337
-	}
-
 	@qbittorrent host qbittorrent.{$PORKBUN_DOMAIN}
 	handle @qbittorrent {
 		import authentik qbittorrent:8080

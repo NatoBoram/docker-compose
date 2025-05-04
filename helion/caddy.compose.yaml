@@ -37,7 +37,6 @@ services:
       - caddy-myspeed
       - caddy-nextcloud
       - caddy-ollama
-      - caddy-planka
       - caddy-qbittorrent
       - caddy-send
       - caddy-tandoor
