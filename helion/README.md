@@ -1,5 +1,9 @@
 # Helion
 
+> [!WARNING]
+>
+> Helion was decommissioned on 15 June 2025.
+
 Helion is the first desktop computer I bought in 2013.
 
 [PCPartPicker Part List](https://ca.pcpartpicker.com/list/kCYpgn)
