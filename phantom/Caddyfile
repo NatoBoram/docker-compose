@@ -1,0 +1,146 @@
+{
+	acme_dns porkbun {
+		api_key {env.PORKBUN_API_KEY}
+		api_secret_key {env.PORKBUN_API_SECRET_KEY}
+	}
+
+	dynamic_dns {
+		provider porkbun {
+			api_key {env.PORKBUN_API_KEY}
+			api_secret_key {env.PORKBUN_API_SECRET_KEY}
+		}
+
+		domains {
+			{$PORKBUN_DOMAIN} @ * *.ipfs.kubo *.ipns.kubo
+		}
+	}
+
+	email {env.EMAIL}
+
+	servers {
+		trusted_proxies static private_ranges
+		trusted_proxies_strict
+	}
+}
+
+(authentik) {
+	route {
+		reverse_proxy /outpost.goauthentik.io/* authentik-server:9000
+
+		forward_auth authentik-server:9000 {
+			uri /outpost.goauthentik.io/auth/caddy
+			copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version
+			trusted_proxies private_ranges
+		}
+
+		reverse_proxy {args[0]}
+	}
+}
+
+{$PORKBUN_DOMAIN} *.{$PORKBUN_DOMAIN} ipfs.kubo.{$PORKBUN_DOMAIN} ipns.kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN} {
+	header Strict-Transport-Security "max-age=63072000"
+
+	log {$PORKBUN_DOMAIN} {
+		output file /var/log/caddy/{$PORKBUN_DOMAIN}.log {
+			roll_local_time
+		}
+	}
+
+	tls {
+		dns porkbun {
+			api_key {env.PORKBUN_API_KEY}
+			api_secret_key {env.PORKBUN_API_SECRET_KEY}
+		}
+		protocols tls1.3
+		resolvers 2606:4700:4700::1111 1.1.1.1 2606:4700:4700::1001 1.0.0.1 2001:4860:4860::8888 8.8.8.8 2001:4860:4860::8844 8.8.4.4
+	}
+
+	@www host www.{$PORKBUN_DOMAIN}
+	handle @www {
+		redir https://{$PORKBUN_DOMAIN}{uri} permanent
+	}
+
+	@root host {$PORKBUN_DOMAIN}
+	handle @root {
+		respond ":)" 200
+	}
+
+	@authentik host authentik.{$PORKBUN_DOMAIN}
+	handle @authentik {
+		reverse_proxy authentik-server:9000
+	}
+
+	@beszel host beszel.{$PORKBUN_DOMAIN}
+	handle @beszel {
+		reverse_proxy beszel:8090
+	}
+
+	@glances host glances.{$PORKBUN_DOMAIN}
+	handle @glances {
+		import authentik glances:61208
+	}
+
+	@jellyfin host jellyfin.{$PORKBUN_DOMAIN}
+	handle @jellyfin {
+		reverse_proxy jellyfin:8096
+	}
+
+	@kubo host kubo.{$PORKBUN_DOMAIN} ipfs.kubo.{$PORKBUN_DOMAIN} ipns.kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN}
+	handle @kubo {
+		reverse_proxy kubo:8080
+	}
+
+	@leanish host leanish.{$PORKBUN_DOMAIN}
+	handle @leanish {
+		reverse_proxy leanish:3000
+	}
+
+	@metube host metube.{$PORKBUN_DOMAIN}
+	handle @metube {
+		import authentik metube:8081
+	}
+
+	@myspeed host myspeed.{$PORKBUN_DOMAIN}
+	handle @myspeed {
+		import authentik myspeed:5216
+	}
+
+	@nextcloud host nextcloud.{$PORKBUN_DOMAIN}
+	handle @nextcloud {
+		encode gzip
+		file_server
+
+		php_fastcgi nextcloud:9000 {
+			root /var/www/html
+		}
+
+		redir /.well-known/caldav /remote.php/dav/ 301
+		redir /.well-known/carddav /remote.php/dav/ 301
+		root /var/www/nextcloud
+	}
+
+	@ollama host ollama.{$PORKBUN_DOMAIN}
+	handle @ollama {
+		basic_auth {
+			LAME {$OLLAMA_LAME_PASSWORD}
+			Nextcloud {$OLLAMA_NEXTCLOUD_PASSWORD}
+		}
+
+		reverse_proxy ollama:11434
+	}
+
+	@qbittorrent host qbittorrent.{$PORKBUN_DOMAIN}
+	handle @qbittorrent {
+		import authentik qbittorrent:8080
+	}
+
+	@send host send.{$PORKBUN_DOMAIN}
+	handle @send {
+		reverse_proxy send:1443
+	}
+
+	@uptime-kuma host uptime-kuma.{$PORKBUN_DOMAIN}
+	handle @uptime-kuma {
+		import authentik uptime-kuma:3001
+	}
+}

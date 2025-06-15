@@ -1,0 +1,106 @@
+networks:
+  nextcloud-ollama:
+  nextcloud-postgres:
+  nextcloud-redis:
+
+services:
+  clamav:
+    container_name: clamav
+    image: clamav/clamav:stable_base
+    restart: always
+    volumes:
+      - clamav-lib:/var/lib/clamav
+      - clamav-run:/tmp
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  nextcloud:
+    container_name: nextcloud
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/kfd:/dev/kfd
+    depends_on:
+      - clamav
+      - nextcloud-postgres
+      - nextcloud-redis
+      - ollama
+    env_file:
+      - path: .env.nextcloud
+      - path: .env.nextcloud.local
+    environment:
+      - NC_ALLOW_LOCAL_REMOTE_SERVERS=true
+
+      - POSTGRES_HOST=nextcloud-postgres
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+
+      - REDIS_HOST=nextcloud-redis
+
+      - SMTP_SECURE=ssl
+      - SMTP_PORT=465
+    image: nextcloud:fpm
+    networks:
+      - caddy-nextcloud
+      - nextcloud-ollama
+      - nextcloud-postgres
+      - nextcloud-redis
+    restart: always
+    volumes:
+      - /var/log/nextcloud.log:/var/www/html/data/nextcloud.log
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - clamav-run:/var/run/clamav:ro
+      - nextcloud:/var/www/html
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  nextcloud-cron:
+    container_name: nextcloud-cron
+    depends_on:
+      - nextcloud
+    entrypoint: /cron.sh
+    extends: nextcloud
+    networks:
+      - nextcloud-ollama
+      - nextcloud-postgres
+      - nextcloud-redis
+
+  nextcloud-postgres:
+    container_name: nextcloud-postgres
+    env_file:
+      - path: .env.nextcloud-postgres
+      - path: .env.nextcloud-postgres.local
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+    image: postgres:17
+    networks:
+      - nextcloud-postgres
+      - uptime-kuma-nextcloud-postgres
+    restart: always
+    volumes:
+      - nextcloud-postgres:/var/lib/postgresql/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  nextcloud-redis:
+    container_name: nextcloud-redis
+    image: redis:alpine
+    networks:
+      - nextcloud-redis
+      - uptime-kuma-nextcloud-redis
+    restart: always
+    volumes:
+      - nextcloud-redis:/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  clamav-lib:
+  clamav-run:
+  nextcloud:
+  nextcloud-postgres:
+  nextcloud-redis:

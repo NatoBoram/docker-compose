@@ -1,0 +1,61 @@
+networks:
+  caddy:
+    enable_ipv6: true
+  caddy-authentik:
+  caddy-beszel:
+  caddy-glances:
+  caddy-jellyfin:
+  caddy-kubo:
+  caddy-leanish:
+  caddy-metube:
+  caddy-myspeed:
+  caddy-nextcloud:
+  caddy-ollama:
+  caddy-qbittorrent:
+  caddy-send:
+  caddy-uptime-kuma:
+
+services:
+  caddy:
+    build:
+      dockerfile: ./caddy.Dockerfile
+    cap_add:
+      - NET_ADMIN
+    container_name: caddy
+    env_file:
+      - path: .env.caddy
+      - path: .env.caddy.local
+    networks:
+      - caddy
+      - caddy-authentik
+      - caddy-beszel
+      - caddy-glances
+      - caddy-jellyfin
+      - caddy-kubo
+      - caddy-leanish
+      - caddy-metube
+      - caddy-myspeed
+      - caddy-nextcloud
+      - caddy-ollama
+      - caddy-qbittorrent
+      - caddy-send
+      - caddy-uptime-kuma
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    restart: always
+    user: 1000:1000
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - /var/log/caddy:/var/log/caddy
+      - caddy-config:/config/caddy
+      - caddy-data:/data/caddy
+      - nextcloud:/var/www/nextcloud:ro
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  caddy-config:
+  caddy-data:

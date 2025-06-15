@@ -1,0 +1,37 @@
+networks:
+  uptime-kuma-authentik-postgres:
+  uptime-kuma-nextcloud-postgres:
+
+  uptime-kuma-authentik-redis:
+  uptime-kuma-nextcloud-redis:
+  uptime-kuma-send-redis:
+
+services:
+  uptime-kuma:
+    container_name: uptime-kuma
+    depends_on:
+      - authentik-server
+    image: louislam/uptime-kuma
+    networks:
+      - authentik-uptime-kuma
+      - caddy-uptime-kuma
+
+      - uptime-kuma-authentik-postgres
+      - uptime-kuma-nextcloud-postgres
+
+      - uptime-kuma-authentik-redis
+      - uptime-kuma-nextcloud-redis
+      - uptime-kuma-send-redis
+
+    # ports:
+    #   - 3001:3001
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - uptime-kuma:/app/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  uptime-kuma:

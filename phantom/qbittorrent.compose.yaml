@@ -1,0 +1,24 @@
+services:
+  qbittorrent:
+    container_name: qbittorrent
+    depends_on:
+      - authentik-server
+    environment:
+      - QBT_LEGAL_NOTICE=confirm
+    image: qbittorrentofficial/qbittorrent-nox
+    networks:
+      - authentik-qbittorrent
+      - caddy-qbittorrent
+    # ports:
+    #   - 8080:8080
+    restart: always
+    volumes:
+      - qbittorrent-config:/config
+      - qbittorrent-downloads:/downloads
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  qbittorrent-config:
+  qbittorrent-downloads:

@@ -1,0 +1,9 @@
+services:
+  leanish:
+    container_name: leanish
+    image: natoboram/leanish
+    depends_on:
+      - caddy
+    networks:
+      - caddy-leanish
+    restart: always

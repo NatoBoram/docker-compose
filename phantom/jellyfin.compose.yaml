@@ -1,0 +1,33 @@
+services:
+  jellyfin:
+    build:
+      dockerfile: ./jellyfin.Dockerfile
+    container_name: jellyfin
+    depends_on:
+      - authentik-server
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/kfd:/dev/kfd
+    env_file:
+      - .env.jellyfin
+      - .env.jellyfin.local
+    networks:
+      - caddy-jellyfin
+    volumes:
+      - ./jellyfin/fonts:/usr/local/share/fonts/custom:ro
+      - /var/log/jellyfin:/config/log
+      - jellyfin-cache:/cache
+      - jellyfin-config:/config
+      - jellyfin-media:/media
+      - metube:/metube:ro
+      - qbittorrent-downloads:/qbittorrent
+      - syncthing-jellyfin:/syncthing
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: always
+
+volumes:
+  jellyfin-cache:
+  jellyfin-config:
+  jellyfin-media:

@@ -1,0 +1,28 @@
+services:
+  glances:
+    container_name: glances
+    depends_on:
+      - authentik-server
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+              count: all
+              driver: nvidia
+    env_file:
+      - path: .env.glances
+      - path: .env.glances.local
+    image: nicolargo/glances:latest-full
+    networks:
+      - authentik-glances
+      - caddy-glances
+    restart: always
+    volumes:
+      - ./glances:/root/.config/glances:ro
+      - /etc/os-release:/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro

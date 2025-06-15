@@ -1,6 +1,6 @@
 # Phantom
 
-Phantom is my newest homelab server. It will replace Helion soon.
+Phantom is my newest homelab server. It replaces Helion.
 
 [PCPartPicker Part List](https://ca.pcpartpicker.com/list/VPDrt3)
 
