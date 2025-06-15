@@ -45,7 +45,6 @@ services:
       - 443:443
       - 443:443/udp
     restart: always
-    user: 1000:1000
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - /var/log/caddy:/var/log/caddy

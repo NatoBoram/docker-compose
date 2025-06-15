@@ -13,7 +13,6 @@ services:
       - 4001:4001/udp
       - 8080:8080
     restart: always
-    user: 1000:1000
     volumes:
       - kubo:/data/ipfs
 

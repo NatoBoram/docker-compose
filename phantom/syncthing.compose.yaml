@@ -12,7 +12,6 @@ services:
       - 22000:22000/udp
       - 21027:21027/udp
     restart: always
-    user: 1000:1000
     volumes:
       - syncthing:/var/syncthing
       - syncthing-jellyfin:/var/syncthing/Jellyfin
