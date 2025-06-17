@@ -1,9 +1,6 @@
 services:
   syncthing:
     container_name: syncthing
-    environment:
-      - PGID=1000
-      - PUID=1000
     hostname: phantom
     image: syncthing/syncthing
     ports:
