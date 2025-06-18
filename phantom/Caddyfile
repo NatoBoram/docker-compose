@@ -141,7 +141,7 @@
 		root /var/www/nextcloud
 	}
 
-	@ollama host olloma.{$PORKBUN_DOMAIN}
+	@ollama host ollama.{$PORKBUN_DOMAIN}
 	handle @ollama {
 		basic_auth {
 			LAME {$OLLAMA_LAME_PASSWORD}
