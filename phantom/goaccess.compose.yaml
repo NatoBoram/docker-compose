@@ -1,0 +1,27 @@
+services:
+  goaccess:
+    command:
+      - /srv/logs/caddy/*.log
+      - --log-format=CADDY
+      - --no-global-config
+      - --output=/srv/report/report.html
+      - --real-time-html
+      - --tz=America/Toronto
+    container_name: goaccess
+    depends_on:
+      - authentik-server
+      - caddy
+    image: allinurl/goaccess
+    networks:
+      - authentik-goaccess
+    restart: always
+    volumes:
+      - ./goaccess:/srv/config:ro
+      - /var/log/caddy:/srv/logs/caddy:ro
+      - goaccess:/srv/report
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  goaccess:

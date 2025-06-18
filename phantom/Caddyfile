@@ -80,6 +80,11 @@
 		import authentik glances:61208
 	}
 
+	@goaccess host goaccess.{$PORKBUN_DOMAIN}
+	handle @goaccess {
+		import authentik goaccess:7890
+	}
+
 	@jellyfin host jellyfin.{$PORKBUN_DOMAIN}
 	handle @jellyfin {
 		reverse_proxy jellyfin:8096
