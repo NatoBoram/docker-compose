@@ -85,7 +85,7 @@
 
 		@websocket {
 			header Connection *Upgrade*
-			header Upgrade    websocket
+			header Upgrade websocket
 		}
 		reverse_proxy @websocket goaccess:7890
 
