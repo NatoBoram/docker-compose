@@ -1,4 +1,5 @@
 networks:
+  authentik-dozzle:
   authentik-glances:
   authentik-goaccess:
   authentik-metube:
@@ -33,6 +34,7 @@ services:
       authentik-redis:
         condition: service_healthy
     networks:
+      - authentik-dozzle
       - authentik-glances
       - authentik-goaccess
       - authentik-metube
@@ -125,6 +127,6 @@ services:
       - /etc/timezone:/etc/timezone:ro
 
 volumes:
+  authentik-media:
   authentik-postgres:
   authentik-redis:
-  authentik-media:
