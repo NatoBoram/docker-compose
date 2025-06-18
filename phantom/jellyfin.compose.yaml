@@ -6,8 +6,8 @@ services:
     depends_on:
       - authentik-server
     devices:
-      - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
+      - /dev/dri
+      - /dev/kfd
     env_file:
       - .env.jellyfin
       - .env.jellyfin.local

@@ -2,8 +2,8 @@ services:
   ollama:
     container_name: ollama
     devices:
-      - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
+      - /dev/dri
+      - /dev/kfd
     environment:
       - HSA_OVERRIDE_GFX_VERSION=${HSA_OVERRIDE_GFX_VERSION-10.3.0}
     image: ollama/ollama:rocm

@@ -18,8 +18,8 @@ services:
   nextcloud:
     container_name: nextcloud
     devices:
-      - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
+      - /dev/dri
+      - /dev/kfd
     depends_on:
       - clamav
       - nextcloud-postgres

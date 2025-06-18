@@ -2,9 +2,9 @@ services:
   ollama:
     container_name: ollama
     devices:
-      - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
-    image: ollama/ollama
+      - /dev/dri
+      - /dev/kfd
+    image: ollama/ollama:rocm
     networks:
       - caddy-ollama
       - nextcloud-ollama
