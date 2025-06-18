@@ -1,12 +1,14 @@
 services:
   goaccess:
+    # This attribute has to be overridden in `compose.override.yaml`.
     command:
-      - /srv/logs/caddy/*.log
+      - /srv/logs/caddy/$$DOMAIN.log
       - --log-format=CADDY
       - --no-global-config
-      - --output=/srv/report/report.html
+      - --output=/srv/report/index.html
       - --real-time-html
       - --tz=America/Toronto
+      - --ws-url=wss://goaccess.$$DOMAIN:443
     container_name: goaccess
     depends_on:
       - authentik-server
@@ -14,6 +16,7 @@ services:
     image: allinurl/goaccess
     networks:
       - authentik-goaccess
+      - caddy-goaccess
     restart: always
     volumes:
       - ./goaccess:/srv/config:ro

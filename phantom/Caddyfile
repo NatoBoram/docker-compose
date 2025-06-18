@@ -32,8 +32,6 @@
 			copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version
 			trusted_proxies private_ranges
 		}
-
-		reverse_proxy {args[0]}
 	}
 }
 
@@ -77,12 +75,23 @@
 
 	@glances host glances.{$PORKBUN_DOMAIN}
 	handle @glances {
-		import authentik glances:61208
+		import authentik
+		reverse_proxy glances:61208
 	}
 
 	@goaccess host goaccess.{$PORKBUN_DOMAIN}
 	handle @goaccess {
-		import authentik goaccess:7890
+		import authentik
+
+		@websocket {
+			header Connection *Upgrade*
+			header Upgrade    websocket
+		}
+		reverse_proxy @websocket goaccess:7890
+
+		encode gzip
+		file_server
+		root /var/www/goaccess
 	}
 
 	@jellyfin host jellyfin.{$PORKBUN_DOMAIN}
@@ -102,12 +111,14 @@
 
 	@metube host metube.{$PORKBUN_DOMAIN}
 	handle @metube {
-		import authentik metube:8081
+		import authentik
+		reverse_proxy metube:8081
 	}
 
 	@myspeed host myspeed.{$PORKBUN_DOMAIN}
 	handle @myspeed {
-		import authentik myspeed:5216
+		import authentik
+		reverse_proxy myspeed:5216
 	}
 
 	@nextcloud host nextcloud.{$PORKBUN_DOMAIN}
@@ -136,7 +147,8 @@
 
 	@qbittorrent host qbittorrent.{$PORKBUN_DOMAIN}
 	handle @qbittorrent {
-		import authentik qbittorrent:8080
+		import authentik
+		reverse_proxy qbittorrent:8080
 	}
 
 	@send host send.{$PORKBUN_DOMAIN}
@@ -146,6 +158,7 @@
 
 	@uptime-kuma host uptime-kuma.{$PORKBUN_DOMAIN}
 	handle @uptime-kuma {
-		import authentik uptime-kuma:3001
+		import authentik
+		reverse_proxy uptime-kuma:3001
 	}
 }
