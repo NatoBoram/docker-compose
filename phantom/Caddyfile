@@ -73,6 +73,12 @@
 		reverse_proxy beszel:8090
 	}
 
+	@dozzle host dozzle.{$PORKBUN_DOMAIN}
+	handle @dozzle {
+		import authentik
+		reverse_proxy dozzle:8080
+	}
+
 	@glances host glances.{$PORKBUN_DOMAIN}
 	handle @glances {
 		import authentik

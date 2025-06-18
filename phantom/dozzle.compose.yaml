@@ -1,0 +1,15 @@
+services:
+  dozzle:
+    container_name: dozzle
+    depends_on:
+      - authentik-server
+    image: amir20/dozzle
+    networks:
+      - authentik-dozzle
+      - caddy-dozzle
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro

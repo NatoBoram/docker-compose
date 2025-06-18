@@ -3,6 +3,7 @@ networks:
     enable_ipv6: true
   caddy-authentik:
   caddy-beszel:
+  caddy-dozzle:
   caddy-glances:
   caddy-goaccess:
   caddy-jellyfin:
@@ -30,6 +31,7 @@ services:
       - caddy
       - caddy-authentik
       - caddy-beszel
+      - caddy-dozzle
       - caddy-glances
       - caddy-goaccess
       - caddy-jellyfin
