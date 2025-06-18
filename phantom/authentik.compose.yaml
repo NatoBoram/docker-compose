@@ -1,5 +1,6 @@
 networks:
   authentik-glances:
+  authentik-goaccess:
   authentik-metube:
   authentik-myspeed:
   authentik-postgres:
@@ -33,6 +34,7 @@ services:
         condition: service_healthy
     networks:
       - authentik-glances
+      - authentik-goaccess
       - authentik-metube
       - authentik-myspeed
       - authentik-postgres
