@@ -4,6 +4,9 @@ services:
     devices:
       - /dev/dri
       - /dev/kfd
+    env_file:
+      - .env.ollama
+      - .env.ollama.local
     image: ollama/ollama:rocm
     networks:
       - caddy-ollama
