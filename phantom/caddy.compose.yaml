@@ -15,6 +15,7 @@ networks:
   caddy-ollama:
   caddy-qbittorrent:
   caddy-send:
+  caddy-syncthing:
   caddy-uptime-kuma:
 
 services:
@@ -43,6 +44,7 @@ services:
       - caddy-ollama
       - caddy-qbittorrent
       - caddy-send
+      - caddy-syncthing
       - caddy-uptime-kuma
     ports:
       - 80:80

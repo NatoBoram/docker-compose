@@ -3,6 +3,9 @@ services:
     container_name: syncthing
     hostname: phantom
     image: syncthing/syncthing
+    networks:
+      - authentik-syncthing
+      - caddy-syncthing
     ports:
       - 8384:8384
       - 22000:22000/tcp

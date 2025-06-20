@@ -162,6 +162,12 @@
 		reverse_proxy send:1443
 	}
 
+	@syncthing host syncthing.{$PORKBUN_DOMAIN}
+	handle @syncthing {
+		import authentik
+		reverse_proxy syncthing:8384
+	}
+
 	@uptime-kuma host uptime-kuma.{$PORKBUN_DOMAIN}
 	handle @uptime-kuma {
 		import authentik

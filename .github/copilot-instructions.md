@@ -23,3 +23,7 @@ Key conventions to follow:
    ```
 
 4. Adhere to the patterns already present in the codebase. For example, if existing services use an implicit `:latest` tag for Docker images, continue to do so.
+
+5. `ollama` is spelled with two "a". Do not misspell it as `olloma`.
+
+6. Do not wrap the contents of this file in markdown code blocks like "```instructions".
