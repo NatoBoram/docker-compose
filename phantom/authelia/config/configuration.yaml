@@ -51,3 +51,5 @@ storage:
     address: tcp4://authelia-postgres
     database: authelia
     username: authelia
+
+theme: auto
