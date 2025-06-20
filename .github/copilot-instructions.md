@@ -23,3 +23,9 @@ Key conventions to follow:
    ```
 
 4. Adhere to the patterns already present in the codebase. For example, if existing services use an implicit `:latest` tag for Docker images, continue to do so.
+
+5. Networks are named according to the pattern `<app_that_needs_access>-<app_accessed>`. For example, `caddy-authelia` means that Caddy needs to access Authelia.
+
+6. Networks are only _declared_ in the compose file of the app that needs access. The app being accessed should only list the network under its `networks` key, but not declare it at the top level of its compose file.
+
+7. Ollama is spelled with two "a". Do not misspell it as "olloma".

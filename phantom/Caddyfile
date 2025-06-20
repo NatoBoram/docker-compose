@@ -23,6 +23,13 @@
 	}
 }
 
+(authelia) {
+	forward_auth authelia:9091 {
+		uri /api/authz/forward-auth
+		copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
+	}
+}
+
 (authentik) {
 	route {
 		reverse_proxy /outpost.goauthentik.io/* authentik-server:9000
@@ -66,6 +73,11 @@
 	@authentik host authentik.{$PORKBUN_DOMAIN}
 	handle @authentik {
 		reverse_proxy authentik-server:9000
+	}
+
+	@authelia host authelia.{$PORKBUN_DOMAIN}
+	handle @authelia {
+		reverse_proxy authelia:9091
 	}
 
 	@beszel host beszel.{$PORKBUN_DOMAIN}

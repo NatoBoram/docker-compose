@@ -1,0 +1,53 @@
+# yaml-language-server: $schema=https://www.authelia.com/schemas/latest/json-schema/configuration.json
+
+access_control:
+  default_policy: two_factor
+
+authentication_backend:
+  file:
+    path: /config/user-database.yaml
+    watch: true
+
+identity_providers:
+  oidc:
+    jwks:
+      - key: |-
+          {{ secret "/run/secrets/JWKS_KEY_PRIVATE" | mindent 10 "" }}
+    clients:
+      - access_token_signed_response_alg: none
+        client_id: '{{ env "JELLYFIN_CLIENT_ID" }}'
+        client_name: Jellyfin
+        client_secret: '{{ env "JELLYFIN_CLIENT_SECRET" }}'
+        grant_types:
+          - authorization_code
+        response_types:
+          - code
+        scopes:
+          - groups
+          - openid
+          - profile
+        token_endpoint_auth_method: client_secret_post
+        userinfo_signed_response_alg: none
+
+notifier:
+  smtp:
+    address: '{{ env "SMTP_ADDRESS" }}'
+    sender: '{{ env "SMTP_SENDER" }}'
+    username: '{{ env "SMTP_USERNAME" }}'
+
+password_policy:
+  zxcvbn:
+    enabled: true
+
+session:
+  cookies:
+    - domain: '{{ env "DOMAIN" }}'
+      authelia_url: https://authelia.{{ env "DOMAIN" }}
+  redis:
+    host: authelia-redis
+
+storage:
+  postgres:
+    address: tcp4://authelia-postgres
+    database: authelia
+    username: authelia

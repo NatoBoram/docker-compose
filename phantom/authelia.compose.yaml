@@ -1,0 +1,97 @@
+secrets:
+  HMAC_SECRET:
+    file: authelia/secrets/HMAC_SECRET
+  JWKS_KEY_PRIVATE:
+    file: authelia/secrets/JWKS_KEY_PRIVATE
+  JWKS_KEY_PUBLIC:
+    file: authelia/secrets/JWKS_KEY_PUBLIC
+  JWT_SECRET:
+    file: authelia/secrets/JWT_SECRET
+  SESSION_SECRET:
+    file: authelia/secrets/SESSION_SECRET
+  SMTP_PASSWORD:
+    file: authelia/secrets/SMTP_PASSWORD
+  STORAGE_ENCRYPTION_KEY:
+    file: authelia/secrets/STORAGE_ENCRYPTION_KEY
+  STORAGE_PASSWORD:
+    file: authelia/secrets/STORAGE_PASSWORD
+
+networks:
+  authelia-postgres:
+  authelia-redis:
+
+services:
+  authelia:
+    container_name: authelia
+    depends_on:
+      - authelia-postgres
+      - authelia-redis
+    env_file:
+      - path: .env.authelia
+      - path: .env.authelia.local
+    environment:
+      AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE: /run/secrets/HMAC_SECRET
+      AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE: /run/secrets/JWT_SECRET
+      AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE: /run/secrets/SMTP_PASSWORD
+      AUTHELIA_SESSION_SECRET_FILE: /run/secrets/SESSION_SECRET
+      AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: /run/secrets/STORAGE_ENCRYPTION_KEY
+      AUTHELIA_STORAGE_POSTGRES_PASSWORD_FILE: /run/secrets/STORAGE_PASSWORD
+      X_AUTHELIA_CONFIG_FILTERS: template
+      X_AUTHELIA_CONFIG: /config/configuration.yaml
+    image: authelia/authelia
+    networks:
+      - authelia-postgres
+      - authelia-redis
+      - caddy-authelia
+    restart: always
+    secrets:
+      - HMAC_SECRET
+      - JWKS_KEY_PRIVATE
+      - JWKS_KEY_PUBLIC
+      - JWT_SECRET
+      - SESSION_SECRET
+      - SMTP_PASSWORD
+      - STORAGE_ENCRYPTION_KEY
+      - STORAGE_PASSWORD
+    user: 1000:1000
+    volumes:
+      - ./authelia/config:/config
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  authelia-postgres:
+    container_name: authelia-postgres
+    env_file:
+      - path: .env.authelia-postgres
+      - path: .env.authelia-postgres.local
+    environment:
+      POSTGRES_DB: authelia
+      POSTGRES_USER: authelia
+    image: postgres:17
+    networks:
+      - authelia-postgres
+      - uptime-kuma-authelia-postgres
+    restart: always
+    volumes:
+      - authelia-postgres:/var/lib/postgresql/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  authelia-redis:
+    container_name: authelia-redis
+    image: redis:alpine
+    networks:
+      - authelia-redis
+      - uptime-kuma-authelia-redis
+    restart: always
+    volumes:
+      - authelia-redis:/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  authelia-postgres:
+  authelia-redis:

@@ -1,7 +1,9 @@
 networks:
+  uptime-kuma-authelia-postgres:
   uptime-kuma-authentik-postgres:
   uptime-kuma-nextcloud-postgres:
 
+  uptime-kuma-authelia-redis:
   uptime-kuma-authentik-redis:
   uptime-kuma-nextcloud-redis:
   uptime-kuma-send-redis:
@@ -16,9 +18,11 @@ services:
       - authentik-uptime-kuma
       - caddy-uptime-kuma
 
+      - uptime-kuma-authelia-postgres
       - uptime-kuma-authentik-postgres
       - uptime-kuma-nextcloud-postgres
 
+      - uptime-kuma-authelia-redis
       - uptime-kuma-authentik-redis
       - uptime-kuma-nextcloud-redis
       - uptime-kuma-send-redis
