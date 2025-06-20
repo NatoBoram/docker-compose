@@ -1,6 +1,10 @@
 !.env
+!.env.*
 .env.local
 .env.*.local
+
+*/authelia/config/user-database.yaml
+secrets/
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,macos,windows,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,macos,windows,visualstudiocode
