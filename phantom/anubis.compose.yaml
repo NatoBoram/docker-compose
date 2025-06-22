@@ -1,0 +1,19 @@
+services:
+  anubis:
+    container_name: anubis
+    depends_on:
+      - caddy
+    env_file:
+      - path: .env.anubis
+      - path: .env.anubis.local
+    environment:
+      TARGET: " "
+    image: ghcr.io/techarohq/anubis
+    networks:
+      - caddy-anubis
+    restart: always
+    volumes:
+      - ./anubis:/data/cfg:ro
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro

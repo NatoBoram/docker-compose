@@ -23,6 +23,22 @@
 	}
 }
 
+(anubis) {
+	route {
+		reverse_proxy /.within.website/* anubis:8923
+
+		forward_auth anubis:8923 {
+			uri /.within.website/x/cmd/anubis/api/check
+			trusted_proxies private_ranges
+
+			@unauthorized status 401
+			handle_response @unauthorized {
+				redir * /.within.website/?redir={uri} 307
+			}
+		}
+	}
+}
+
 (authentik) {
 	route {
 		reverse_proxy /outpost.goauthentik.io/* authentik-server:9000
@@ -36,6 +52,7 @@
 }
 
 {$PORKBUN_DOMAIN} *.{$PORKBUN_DOMAIN} ipfs.kubo.{$PORKBUN_DOMAIN} ipns.kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN} {
+	encode
 	header Strict-Transport-Security "max-age=63072000"
 
 	log {$PORKBUN_DOMAIN} {
@@ -95,7 +112,6 @@
 		}
 		reverse_proxy @websocket goaccess:7890
 
-		encode gzip
 		file_server
 		root /var/www/goaccess
 	}
@@ -129,7 +145,6 @@
 
 	@nextcloud host nextcloud.{$PORKBUN_DOMAIN}
 	handle @nextcloud {
-		encode gzip
 		file_server
 
 		php_fastcgi nextcloud:9000 {
@@ -159,6 +174,7 @@
 
 	@send host send.{$PORKBUN_DOMAIN}
 	handle @send {
+		import anubis
 		reverse_proxy send:1443
 	}
 
