@@ -1,6 +1,7 @@
 networks:
   caddy:
     enable_ipv6: true
+  caddy-anubis:
   caddy-authentik:
   caddy-beszel:
   caddy-dozzle:
@@ -30,6 +31,7 @@ services:
       - path: .env.caddy.local
     networks:
       - caddy
+      - caddy-anubis
       - caddy-authentik
       - caddy-beszel
       - caddy-dozzle

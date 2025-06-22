@@ -11,6 +11,8 @@ services:
     env_file:
       - .env.jellyfin
       - .env.jellyfin.local
+    environment:
+      HISTORY_ROUTER_MODE: 1
     networks:
       - caddy-jellyfin
     volumes:
