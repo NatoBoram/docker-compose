@@ -82,6 +82,7 @@
 
 	@authentik host authentik.{$PORKBUN_DOMAIN}
 	handle @authentik {
+		import anubis
 		reverse_proxy authentik-server:9000
 	}
 
@@ -128,6 +129,7 @@
 
 	@leanish host leanish.{$PORKBUN_DOMAIN}
 	handle @leanish {
+		import anubis
 		reverse_proxy leanish:3000
 	}
 
