@@ -77,7 +77,8 @@
 
 	@root host {$PORKBUN_DOMAIN}
 	handle @root {
-		respond ":)" 200
+		file_server
+		root /var/www/html
 	}
 
 	@anubis host anubis.{$PORKBUN_DOMAIN}
@@ -195,5 +196,19 @@
 	handle @uptime-kuma {
 		import authentik
 		reverse_proxy uptime-kuma:3001
+	}
+
+	handle {
+		abort
+	}
+
+	handle_errors {
+		handle @root {
+			rewrite * /{err.status_code}
+			reverse_proxy https://http.cat {
+				header_up Host {upstream_hostport}
+				replace_status {err.status_code}
+			}
+		}
 	}
 }

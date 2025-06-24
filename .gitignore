@@ -3,9 +3,16 @@
 .env.local
 .env.*.local
 
+*.compose.override.yaml
+compose.override.yaml
+docker-compose.override.yaml
+
 *.mmdb
+*.pwd
 */authelia/config/user-database.yaml
 secrets/
+
+phantom/caddy
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,macos,windows,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,macos,windows,visualstudiocode
@@ -104,8 +111,4 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,macos,windows,visualstudiocode
 
-*.pwd
-
-*.compose.override.yaml
-compose.override.yaml
-docker-compose.override.yaml
+!.vscode/mcp.json
