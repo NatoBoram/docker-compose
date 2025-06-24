@@ -3,10 +3,21 @@ services:
     # This attribute has to be overridden in `compose.override.yaml`.
     command:
       - /srv/logs/caddy/$$DOMAIN.log
+      - --agent-list
+      - --db-path=/srv/db
+      - --external-assets
+      - --geoip-database=/srv/config/GeoLite2-ASN.mmdb
+      - --geoip-database=/srv/config/GeoLite2-City.mmdb
+      - --geoip-database=/srv/config/GeoLite2-Country.mmdb
+      - --jobs=6
+      - --keep-last=90
       - --log-format=CADDY
       - --no-global-config
+      - --no-query-string
       - --output=/srv/report/index.html
+      - --persist
       - --real-time-html
+      - --restore
       - --tz=America/Toronto
       - --ws-url=wss://goaccess.$$DOMAIN:443
     container_name: goaccess
@@ -21,10 +32,12 @@ services:
     volumes:
       - ./goaccess:/srv/config:ro
       - /var/log/caddy:/srv/logs/caddy:ro
-      - goaccess:/srv/report
+      - goaccess-db:/srv/db
+      - goaccess-report:/srv/report
 
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
 
 volumes:
-  goaccess:
+  goaccess-db:
+  goaccess-report:

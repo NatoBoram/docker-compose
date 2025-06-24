@@ -58,7 +58,7 @@ services:
       - /var/log/caddy:/var/log/caddy
       - caddy-config:/config/caddy
       - caddy-data:/data/caddy
-      - goaccess:/var/www/goaccess:ro
+      - goaccess-report:/var/www/goaccess:ro
       - nextcloud:/var/www/nextcloud:ro
 
       - /etc/localtime:/etc/localtime:ro
