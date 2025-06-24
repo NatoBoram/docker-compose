@@ -80,6 +80,11 @@
 		respond ":)" 200
 	}
 
+	@anubis host anubis.{$PORKBUN_DOMAIN}
+	handle @anubis {
+		reverse_proxy anubis:8923
+	}
+
 	@authentik host authentik.{$PORKBUN_DOMAIN}
 	handle @authentik {
 		import anubis
