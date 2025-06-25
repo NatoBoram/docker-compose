@@ -7,5 +7,5 @@ filter = jellyfin
 maxretry = 3
 bantime = 86400
 findtime = 43200
-logpath = /var/log/jellyfin/*.log
+logpath = /var/log/jellyfin/log_*.log
 action = iptables-allports[name=jellyfin, chain=DOCKER-USER]
