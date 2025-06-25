@@ -2,6 +2,34 @@
 
 Phantom is my newest homelab server. It replaces Helion.
 
+It's managed entirely via Docker Compose. It uses Caddy as a reverse proxy for its simplicity and it's protected by Anubis, Authentik and Fail2Ban. Some parts are open to the public, such as Kubo, Leanish and Send.
+
+## Software
+
+|                                                                                          | Service                                                   | Protection | About                                                                                                                            |
+| :--------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------- |
+| <img alt="Anubis logo"      height="48px" src="../logos/anubis.png"      width="48px" /> | [Anubis](https://github.com/TecharoHQ/anubis)             |            | Weighs the soul of incoming HTTP requests to stop AI crawlers                                                                    |
+| <img alt="Authentik logo"   height="48px" src="../logos/authentik.png"   width="48px" /> | [Authentik](https://github.com/goauthentik/authentik)     | Anubis     | The authentication glue you need                                                                                                 |
+| <img alt="Beszel logo"      height="48px" src="../logos/beszel.png"      width="48px" /> | [Beszel](https://github.com/henrygd/beszel)               | Authentik  | Lightweight server monitoring hub with historical data, docker stats, and alerts                                                 |
+| <img alt="Caddy logo"       height="48px" src="../logos/caddy.png"       width="48px" /> | [Caddy](https://github.com/caddyserver/caddy)             |            | Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS                                                    |
+| <img alt="Dozzle logo"      height="48px" src="../logos/dozzle.png"      width="48px" /> | [Dozzle](https://github.com/amir20/dozzle)                | Authentik  | Realtime log viewer for containers                                                                                               |
+| <img alt="Glances logo"     height="48px" src="../logos/glances.png"     width="48px" /> | [Glances](https://github.com/nicolargo/glances)           | Authentik  | Glances an Eye on your system                                                                                                    |
+| <img alt="GoAccess logo"    height="48px" src="../logos/goaccess.png"    width="48px" /> | [GoAccess](https://github.com/allinurl/goaccess)          | Authentik  | GoAccess is a real-time web log analyzer and interactive viewer that runs in a terminal in \*nix systems or through your browser |
+| <img alt="Jellyfin logo"    height="48px" src="../logos/jellyfin.png"    width="48px" /> | [Jellyfin](https://github.com/jellyfin/jellyfin)          | Authentik  | The Free Software Media System                                                                                                   |
+| <img alt="Kubo logo"        height="48px" src="../logos/ipfs.png"        width="48px" /> | [Kubo](https://github.com/ipfs/kubo)                      |            | An IPFS implementation in Go                                                                                                     |
+| <img alt="Leanish logo"     height="48px" src="../logos/leanish.png"     width="48px" /> | [Leanish](https://github.com/NatoBoram/leanish)           | Anubis     | A lean-ish web client for Lemmy                                                                                                  |
+| <img alt="MeTube logo"      height="48px" src="../logos/metube.png"      width="48px" /> | [MeTube](https://github.com/alexta69/metube)              | Authentik  | Self-hosted YouTube downloader                                                                                                   |
+| <img alt="MySpeed logo"     height="48px" src="../logos/myspeed.png"     width="48px" /> | [MySpeed](https://github.com/gnmyt/myspeed)               | Authentik  | A speed test analysis software that shows your internet speed for up to 30 days                                                  |
+| <img alt="Nextcloud logo"   height="48px" src="../logos/nextcloud.png"   width="48px" /> | [Nextcloud](https://github.com/nextcloud/server)          |            | A safe home for all your data                                                                                                    |
+| <img alt="Ollama logo"      height="48px" src="../logos/ollama.png"      width="48px" /> | [Ollama](https://github.com/ollama/ollama)                | Basic Auth | Get up and running with large language models                                                                                    |
+| <img alt="qBittorrent logo" height="48px" src="../logos/qbittorrent.png" width="48px" /> | [qBittorrent](https://github.com/qbittorrent/qBittorrent) | Authentik  | A BitTorrent client                                                                                                              |
+| <img alt="Send logo"        height="48px" src="../logos/send.png"        width="48px" /> | [Send](https://gitlab.com/timvisee/send)                  | Anubis     | Simple, private file sharing                                                                                                     |
+| <img alt="Syncthing logo"   height="48px" src="../logos/syncthing.png"   width="48px" /> | [Syncthing](https://github.com/syncthing/syncthing)       | Authentik  | Open Source Continuous File Synchronization                                                                                      |
+| <img alt="Uptime Kuma logo" height="48px" src="../logos/uptime-kuma.png" width="48px" /> | [Uptime Kuma](https://github.com/louislam/uptime-kuma)    | Authentik  | A fancy self-hosted monitoring tool                                                                                              |
+| <img alt="Watchtower logo"  height="48px" src="../logos/watchtower.png"  width="48px" /> | [Watchtower](https://github.com/containrrr/watchtower)    |            | A process for automating Docker container base image updates                                                                     |
+
+## Hardware
+
 [PCPartPicker Part List](https://ca.pcpartpicker.com/list/VPDrt3)
 
 | Type               | Item                                                                                                                                                                                                                 |
