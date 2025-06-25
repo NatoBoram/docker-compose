@@ -20,6 +20,7 @@
 	servers {
 		trusted_proxies static private_ranges
 		trusted_proxies_strict
+		strict_sni_host on
 	}
 }
 
