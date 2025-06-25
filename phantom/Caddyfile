@@ -20,6 +20,7 @@
 	servers {
 		trusted_proxies static private_ranges
 		trusted_proxies_strict
+		strict_sni_host on
 	}
 }
 
@@ -62,6 +63,7 @@
 	}
 
 	tls {
+		alpn h3 h2
 		dns porkbun {
 			api_key {env.PORKBUN_API_KEY}
 			api_secret_key {env.PORKBUN_API_SECRET_KEY}
