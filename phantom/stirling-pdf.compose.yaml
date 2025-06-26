@@ -1,0 +1,36 @@
+services:
+  stirling-pdf:
+    container_name: stirling-pdf
+    depends_on:
+      authentik-server:
+        condition: service_healthy
+      caddy:
+        condition: service_started
+    env_file:
+      - .env.stirling-pdf
+      - .env.stirling-pdf.local
+    environment:
+      DOCKER_ENABLE_SECURITY: true
+    image: stirlingtools/stirling-pdf:latest-fat
+    networks:
+      - authentik-stirling-pdf
+      - caddy-stirling-pdf
+    restart: always
+    volumes:
+      - ./stirling-pdf/configs/custom_settings.yaml:/configs/custom_settings.yml
+      - ./stirling-pdf/configs/settings.yaml:/configs/settings.yml
+
+      - ./stirling-pdf/customFiles/static:/customFiles/static
+      - ./stirling-pdf/customFiles/templates:/customFiles/templates
+
+      - /var/log/stirling-pdf:/logs
+
+      - stirling-pdf-configs:/configs
+      - stirling-pdf-custom-files:/customFiles
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  stirling-pdf-configs:
+  stirling-pdf-custom-files:

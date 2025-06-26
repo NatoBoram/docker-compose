@@ -7,6 +7,7 @@ networks:
   authentik-postgres:
   authentik-qbittorrent:
   authentik-redis:
+  authentik-stirling-pdf:
   authentik-syncthing:
   authentik-uptime-kuma:
 
@@ -43,6 +44,7 @@ services:
       - authentik-postgres
       - authentik-qbittorrent
       - authentik-redis
+      - authentik-stirling-pdf
       - authentik-syncthing
       - authentik-uptime-kuma
       - caddy-authentik
