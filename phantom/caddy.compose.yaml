@@ -16,6 +16,7 @@ networks:
   caddy-ollama:
   caddy-qbittorrent:
   caddy-send:
+  caddy-stirling-pdf:
   caddy-syncthing:
   caddy-uptime-kuma:
 
@@ -46,6 +47,7 @@ services:
       - caddy-ollama
       - caddy-qbittorrent
       - caddy-send
+      - caddy-stirling-pdf
       - caddy-syncthing
       - caddy-uptime-kuma
     ports:

@@ -1,0 +1,7 @@
+[stirling-pdf]
+enabled = true
+filter = stirling-pdf
+logpath = /var/log/stirling-pdf/invalid-auths.log
+maxretry = 5
+findtime = 300
+bantime = 3600

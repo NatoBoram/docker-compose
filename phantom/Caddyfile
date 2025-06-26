@@ -90,7 +90,6 @@
 
 	@authentik host authentik.{$PORKBUN_DOMAIN}
 	handle @authentik {
-		import anubis
 		reverse_proxy authentik-server:9000
 	}
 
@@ -186,6 +185,11 @@
 	handle @send {
 		import anubis
 		reverse_proxy send:1443
+	}
+
+	@stirling-pdf host stirling-pdf.{$PORKBUN_DOMAIN}
+	handle @stirling-pdf {
+		reverse_proxy stirling-pdf:8080
 	}
 
 	@syncthing host syncthing.{$PORKBUN_DOMAIN}
