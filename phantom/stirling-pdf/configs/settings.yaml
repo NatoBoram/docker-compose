@@ -135,8 +135,8 @@ metrics:
 
 # Automatically Generated Settings (Do Not Edit Directly)
 AutomaticallyGenerated:
-  key: cda2f555-295f-4c58-bdc4-34e4ca543e1a
-  UUID: 1c5b45fe-48fa-4c4d-915b-5ec1d97ac89c
+  key: example
+  UUID: example
   appVersion: 0.46.2
 
 processExecutor:
