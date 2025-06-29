@@ -6,9 +6,9 @@ services:
       - --agent-list
       - --db-path=/srv/db
       - --external-assets
-      - --geoip-database=/srv/config/GeoLite2-ASN.mmdb
-      - --geoip-database=/srv/config/GeoLite2-City.mmdb
-      - --geoip-database=/srv/config/GeoLite2-Country.mmdb
+      - --geoip-database=/srv/mmdb/GeoLite2-City.mmdb
+      - --geoip-database=/srv/mmdb/GeoLite2-ASN.mmdb
+      - --geoip-database=/srv/mmdb/GeoLite2-Country.mmdb
       - --jobs=6
       - --keep-last=90
       - --log-format=CADDY
@@ -24,14 +24,15 @@ services:
     depends_on:
       - authentik-server
       - caddy
+      - geoipupdate
     image: allinurl/goaccess
     networks:
       - authentik-goaccess
       - caddy-goaccess
     restart: always
     volumes:
-      - ./goaccess:/srv/config:ro
       - /var/log/caddy:/srv/logs/caddy:ro
+      - geoipupdate:/srv/mmdb:ro
       - goaccess-db:/srv/db
       - goaccess-report:/srv/report
 

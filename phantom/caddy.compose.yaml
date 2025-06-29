@@ -27,6 +27,8 @@ services:
     cap_add:
       - NET_ADMIN
     container_name: caddy
+    depends_on:
+      - geoipupdate
     env_file:
       - path: .env.caddy
       - path: .env.caddy.local
@@ -61,6 +63,7 @@ services:
       - /var/log/caddy:/var/log/caddy
       - caddy-config:/config/caddy
       - caddy-data:/data/caddy
+      - geoipupdate:/data/geoip:ro
       - goaccess-report:/var/www/goaccess:ro
       - nextcloud:/var/www/nextcloud:ro
 

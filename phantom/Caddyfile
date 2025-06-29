@@ -83,6 +83,14 @@
 		root /var/www/html
 	}
 
+	@not_québec not maxmind_geolocation {
+		allow_subdivisions QC
+		db_path /data/geoip/GeoLite2-City.mmdb
+	}
+	handle @not_québec {
+		abort
+	}
+
 	@anubis host anubis.{$PORKBUN_DOMAIN}
 	handle @anubis {
 		reverse_proxy anubis:8923
