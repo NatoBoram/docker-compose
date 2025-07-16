@@ -206,6 +206,11 @@
 		reverse_proxy syncthing:8384
 	}
 
+	@ticky host ticky.{$PORKBUN_DOMAIN}
+	handle @ticky {
+		reverse_proxy ticky:8080
+	}
+
 	@uptime-kuma host uptime-kuma.{$PORKBUN_DOMAIN}
 	handle @uptime-kuma {
 		import authentik

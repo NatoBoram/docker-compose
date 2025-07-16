@@ -18,6 +18,7 @@ networks:
   caddy-send:
   caddy-stirling-pdf:
   caddy-syncthing:
+  caddy-ticky:
   caddy-uptime-kuma:
 
 services:
@@ -51,6 +52,7 @@ services:
       - caddy-send
       - caddy-stirling-pdf
       - caddy-syncthing
+      - caddy-ticky
       - caddy-uptime-kuma
     ports:
       - 80:80

@@ -1,0 +1,54 @@
+networks:
+  ticky-mysql:
+
+services:
+  ticky:
+    container_name: ticky
+    depends_on:
+      caddy:
+        condition: service_started
+      ticky-mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: ticky-mysql
+      DB_NAME: ticky
+      DB_USERNAME: ticky
+    env_file:
+      - .env.ticky
+      - .env.ticky.local
+    image: ghcr.io/dkorecko/ticky
+    networks:
+      - caddy-ticky
+      - ticky-mysql
+    restart: always
+    volumes:
+      - ticky:/app/wwwroot/uploaded
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  ticky-mysql:
+    container_name: ticky-mysql
+    environment:
+      MYSQL_DATABASE: ticky
+      MYSQL_USER: ticky
+    env_file:
+      - .env.ticky-mysql
+      - .env.ticky-mysql.local
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 2s
+      retries: 30
+    image: mysql:8
+    networks:
+      - ticky-mysql
+    restart: always
+    volumes:
+      - ticky-mysql:/var/lib/mysql
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  ticky:
+  ticky-mysql:

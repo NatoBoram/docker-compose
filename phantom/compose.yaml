@@ -18,5 +18,6 @@ include:
   - path: send.compose.yaml
   - path: stirling-pdf.compose.yaml
   - path: syncthing.compose.yaml
+  - path: ticky.compose.yaml
   - path: uptime-kuma.compose.yaml
   - path: watchtower.compose.yaml
