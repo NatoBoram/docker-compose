@@ -1,0 +1,20 @@
+services:
+  dumbkan:
+    container_name: dumbkan
+    depends_on:
+      - caddy
+    env_file:
+      - .env.dumbkan
+      - .env.dumbkan.local
+    image: dumbwareio/dumbkan
+    networks:
+      - caddy-dumbkan
+    restart: unless-stopped
+    volumes:
+      - dumbkan:/app/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  dumbkan:

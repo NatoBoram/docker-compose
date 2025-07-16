@@ -112,6 +112,11 @@
 		reverse_proxy dozzle:8080
 	}
 
+	@dumbkan host dumbkan.{$PORKBUN_DOMAIN}
+	handle @dumbkan {
+		reverse_proxy dumbkan:3000
+	}
+
 	@glances host glances.{$PORKBUN_DOMAIN}
 	handle @glances {
 		import authentik

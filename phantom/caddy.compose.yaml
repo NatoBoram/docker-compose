@@ -5,6 +5,7 @@ networks:
   caddy-authentik:
   caddy-beszel:
   caddy-dozzle:
+  caddy-dumbkan:
   caddy-glances:
   caddy-goaccess:
   caddy-jellyfin:
@@ -38,6 +39,7 @@ services:
       - caddy-authentik
       - caddy-beszel
       - caddy-dozzle
+      - caddy-dumbkan
       - caddy-glances
       - caddy-goaccess
       - caddy-jellyfin
