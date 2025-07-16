@@ -212,6 +212,11 @@
 		reverse_proxy uptime-kuma:3001
 	}
 
+	@vikunja host vikunja.{$PORKBUN_DOMAIN}
+	handle @vikunja {
+		reverse_proxy vikunja:3456
+	}
+
 	handle {
 		abort
 	}

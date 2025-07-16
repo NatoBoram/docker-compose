@@ -19,4 +19,5 @@ include:
   - path: stirling-pdf.compose.yaml
   - path: syncthing.compose.yaml
   - path: uptime-kuma.compose.yaml
+  - path: vikunja.compose.yaml
   - path: watchtower.compose.yaml

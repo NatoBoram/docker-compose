@@ -19,6 +19,7 @@ networks:
   caddy-stirling-pdf:
   caddy-syncthing:
   caddy-uptime-kuma:
+  caddy-vikunja:
 
 services:
   caddy:
@@ -52,6 +53,7 @@ services:
       - caddy-stirling-pdf
       - caddy-syncthing
       - caddy-uptime-kuma
+      - caddy-vikunja
     ports:
       - 80:80
       - 443:443

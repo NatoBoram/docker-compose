@@ -1,0 +1,58 @@
+networks:
+  vikunja-postgres:
+
+services:
+  vikunja:
+    container_name: vikunja
+    depends_on:
+      caddy:
+        condition: service_started
+      vikunja-postgres:
+        condition: service_healthy
+    environment:
+      VIKUNJA_DATABASE_DATABASE: vikunja
+      VIKUNJA_DATABASE_HOST: vikunja-postgres
+      VIKUNJA_DATABASE_TYPE: postgres
+      VIKUNJA_DATABASE_USER: vikunja
+      VIKUNJA_SERVICE_TIMEZONE: America/Toronto
+    env_file:
+      - .env.vikunja
+      - .env.vikunja.local
+    image: vikunja/vikunja
+    networks:
+      - caddy-vikunja
+      - vikunja-postgres
+    restart: always
+    volumes:
+      - vikunja:/app/vikunja/files
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  vikunja-postgres:
+    container_name: vikunja-postgres
+    environment:
+      POSTGRES_DB: vikunja
+      POSTGRES_USER: vikunja
+    env_file:
+      - .env.vikunja-postgres
+      - .env.vikunja-postgres.local
+    healthcheck:
+      interval: 2s
+      start_period: 30s
+      test:
+        - CMD-SHELL
+        - pg_isready -h localhost -U $$POSTGRES_USER
+    image: postgres:16-alpine
+    networks:
+      - vikunja-postgres
+    restart: always
+    volumes:
+      - vikunja-postgres:/var/lib/postgresql/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  vikunja:
+  vikunja-postgres:
