@@ -206,6 +206,11 @@
 		reverse_proxy syncthing:8384
 	}
 
+	@tocry host tocry.{$PORKBUN_DOMAIN}
+	handle @tocry {
+		reverse_proxy tocry:3000
+	}
+
 	@uptime-kuma host uptime-kuma.{$PORKBUN_DOMAIN}
 	handle @uptime-kuma {
 		import authentik

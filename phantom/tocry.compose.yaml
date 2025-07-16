@@ -1,0 +1,17 @@
+services:
+  tocry:
+    container_name: tocry
+    depends_on:
+      - caddy
+    image: ghcr.io/ralsina/tocry
+    networks:
+      - caddy-tocry
+    restart: always
+    volumes:
+      - tocry:/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  tocry:
