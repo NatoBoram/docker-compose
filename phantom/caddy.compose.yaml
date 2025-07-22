@@ -7,6 +7,7 @@ networks:
   caddy-dozzle:
   caddy-glances:
   caddy-goaccess:
+  caddy-jellyfin-vue:
   caddy-jellyfin:
   caddy-kubo:
   caddy-leanish:
@@ -41,6 +42,7 @@ services:
       - caddy-glances
       - caddy-goaccess
       - caddy-jellyfin
+      - caddy-jellyfin-vue
       - caddy-kubo
       - caddy-leanish
       - caddy-metube

@@ -137,6 +137,12 @@
 		reverse_proxy jellyfin:8096
 	}
 
+	@jellyfin-vue host jellyfin-vue.{$PORKBUN_DOMAIN}
+	handle @jellyfin-vue {
+		import anubis
+		reverse_proxy jellyfin-vue:80
+	}
+
 	@kubo host kubo.{$PORKBUN_DOMAIN} ipfs.kubo.{$PORKBUN_DOMAIN} ipns.kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN}
 	handle @kubo {
 		reverse_proxy kubo:8080

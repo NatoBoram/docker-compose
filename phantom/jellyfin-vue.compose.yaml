@@ -1,0 +1,18 @@
+services:
+  jellyfin-vue:
+    container_name: jellyfin-vue
+    depends_on:
+      - anubis
+      - authentik-server
+      - caddy
+      - jellyfin
+    env_file:
+      - .env.jellyfin-vue
+      - .env.jellyfin-vue.local
+    image: ghcr.io/jellyfin/jellyfin-vue:unstable
+    networks:
+      - caddy-jellyfin-vue
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
