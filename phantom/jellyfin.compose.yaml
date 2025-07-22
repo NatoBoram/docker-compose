@@ -11,16 +11,19 @@ services:
     env_file:
       - .env.jellyfin
       - .env.jellyfin.local
-    environment:
-      HISTORY_ROUTER_MODE: 1
+    group_add:
+      - 110 # render
+      - 44 # video
     networks:
       - caddy-jellyfin
     volumes:
       - ./jellyfin/fonts:/usr/local/share/fonts/custom:ro
       - /var/log/jellyfin:/config/log
+
       - jellyfin-cache:/cache
       - jellyfin-config:/config
       - jellyfin-media:/media
+
       - metube:/metube:ro
       - qbittorrent-downloads:/qbittorrent
       - syncthing-jellyfin:/syncthing
