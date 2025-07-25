@@ -9,6 +9,8 @@ services:
     env_file:
       - .env.jellyfin-vue
       - .env.jellyfin-vue.local
+    environment:
+      HISTORY_ROUTER_MODE: 0
     image: ghcr.io/jellyfin/jellyfin-vue:unstable
     networks:
       - caddy-jellyfin-vue
