@@ -5,7 +5,6 @@ Key conventions to follow:
 1. Any service protected by Authentik must include `depends_on: - authentik-server`.
 
 2. The keys within a service definition should be in alphabetical order.
-
    - `command`
    - `container_name`
    - `depends_on`
@@ -39,7 +38,6 @@ Key conventions to follow:
 11. Internal networks connecting a service to a private dependency should be named `[service]-[dependency]`, mirroring the container naming convention. For example, the network connecting `taskcafe` to `taskcafe-postgres` should be named `taskcafe-postgres`, not the generic `taskcafe-db`.
 
 12. When adding a new service `potato` that is exposed via Caddy, remember to:
-
     1. Add it to the `Caddyfile`.
     2. Define and use the `caddy-potato` network in `caddy.compose.yaml`.
     3. Use it (without re-declaring) it in `potato.compose.yaml`.

@@ -2,6 +2,7 @@
 	"recommendations": [
 		"matthewpi.caddyfile-support",
 		"ms-azuretools.vscode-docker",
-		"ms-vscode-remote.remote-ssh"
+		"ms-vscode-remote.remote-ssh",
+		"redhat.vscode-yaml"
 	]
 }

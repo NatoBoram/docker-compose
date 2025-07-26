@@ -1,0 +1,41 @@
+{
+	"name": "@natoboram/docker-compose",
+	"version": "0.0.0",
+	"description": "My personal homelab",
+	"keywords": [
+		"docker-compose",
+		"docker",
+		"homelab"
+	],
+	"homepage": "https://github.com/NatoBoram/docker-compose",
+	"bugs": {
+		"url": "https://github.com/NatoBoram/docker-compose/issues"
+	},
+	"license": "AGPL-3.0-or-later",
+	"author": {
+		"name": "Nato Boram",
+		"url": "https://github.com/NatoBoram"
+	},
+	"funding": [
+		{
+			"type": "patreon",
+			"url": "https://www.patreon.com/NatoBoram"
+		},
+		{
+			"type": "individual",
+			"url": "https://paypal.me/NatoBoram/5"
+		}
+	],
+	"repository": "github:NatoBoram/docker-compose",
+	"scripts": {
+		"format": "prettier --write .",
+		"lint": "markdownlint-cli2 \"**/*.md\" && prettier --check .",
+		"lint:fix": "markdownlint-cli2 \"**/*.md\" --fix; prettier --list-different --write ."
+	},
+	"devDependencies": {
+		"markdownlint-cli2": "^0.18.1",
+		"prettier": "^3.6.2"
+	},
+	"private": true,
+	"type": "module"
+}

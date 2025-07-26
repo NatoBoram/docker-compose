@@ -1,0 +1,8 @@
+.pnpm-store/
+coverage/
+dist/
+docs/
+node_modules/
+package-lock.json
+phantom/stirling-pdf/configs/settings.yaml
+pnpm-lock.yaml
