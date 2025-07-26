@@ -46,3 +46,5 @@ Key conventions to follow:
     3. Use it (without re-declaring) it in `potato.compose.yaml`.
 
 13. Persist data using named volumes, not bind mounts.
+
+14. In Caddyfiles, the `{blocks.key}` syntax is valid for passing block arguments to an `import` statement. Do not suggest replacing it with `{args.N}`.
