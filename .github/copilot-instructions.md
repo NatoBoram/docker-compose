@@ -8,9 +8,12 @@ Key conventions to follow:
    - `command`
    - `container_name`
    - `depends_on`
+   - `env_file`
+   - `environment`
    - `image`
    - `networks`
    - `restart`
+   - `secrets`
    - `volumes`
 
 3. All services must mount the host's timezone and localtime.
