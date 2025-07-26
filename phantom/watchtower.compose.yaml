@@ -1,10 +1,24 @@
+secrets:
+  WATCHTOWER_HTTP_API_TOKEN:
+    file: ./watchtower/secrets/WATCHTOWER_HTTP_API_TOKEN
+
 services:
   watchtower:
+    command:
+      - --http-api-periodic-polls
+      - --http-api-update
     container_name: watchtower
+    depends_on:
+      - caddy
     environment:
       WATCHTOWER_CLEANUP: true
+      WATCHTOWER_HTTP_API_TOKEN: /run/secrets/WATCHTOWER_HTTP_API_TOKEN
     image: containrrr/watchtower
+    networks:
+      - caddy-watchtower
     restart: always
+    secrets:
+      - WATCHTOWER_HTTP_API_TOKEN
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 

@@ -1,6 +1,6 @@
 # Docker Compose
 
-[![Wakapi](https://wakapi.dev/api/badge/NatoBoram/interval:any/project:docker-compose)](https://wakapi.dev/summary?interval=any&project=docker-compose)
+[![Docker CI](https://github.com/NatoBoram/docker-compose/actions/workflows/docker.yaml/badge.svg)](https://github.com/NatoBoram/docker-compose/actions/workflows/docker.yaml) [![Node.js CI](https://github.com/NatoBoram/docker-compose/actions/workflows/node.js.yaml/badge.svg)](https://github.com/NatoBoram/docker-compose/actions/workflows/node.js.yaml) [![Wakapi](https://wakapi.dev/api/badge/NatoBoram/interval:any/project:docker-compose)](https://wakapi.dev/summary?interval=any&project=docker-compose)
 
 My personal homelab setup using Docker Compose.
 
