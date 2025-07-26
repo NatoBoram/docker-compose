@@ -20,6 +20,7 @@ networks:
   caddy-stirling-pdf:
   caddy-syncthing:
   caddy-uptime-kuma:
+  caddy-watchtower:
 
 services:
   caddy:
@@ -54,6 +55,7 @@ services:
       - caddy-stirling-pdf
       - caddy-syncthing
       - caddy-uptime-kuma
+      - caddy-watchtower
     ports:
       - 80:80
       - 443:443

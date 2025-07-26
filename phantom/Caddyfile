@@ -218,6 +218,11 @@
 		reverse_proxy uptime-kuma:3001
 	}
 
+	@watchtower host watchtower.{$PORKBUN_DOMAIN}
+	handle @watchtower {
+		reverse_proxy watchtower:8080
+	}
+
 	handle {
 		abort
 	}
