@@ -8,6 +8,8 @@ services:
       - --http-api-periodic-polls
       - --http-api-update
     container_name: watchtower
+    depends_on:
+      - caddy
     environment:
       WATCHTOWER_CLEANUP: true
       WATCHTOWER_HTTP_API_TOKEN: /run/secrets/WATCHTOWER_HTTP_API_TOKEN
