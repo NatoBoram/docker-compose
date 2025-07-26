@@ -52,6 +52,24 @@
 	}
 }
 
+(maxmind_geolocation) {
+	@maxmind_geolocation {
+		not maxmind_geolocation {
+			allow_countries {blocks.allow_countries}
+			db_path /data/geoip/GeoLite2-Country.mmdb
+		}
+
+		not maxmind_geolocation {
+			allow_subdivisions {blocks.allow_subdivisions}
+			db_path /data/geoip/GeoLite2-City.mmdb
+		}
+	}
+
+	handle @maxmind_geolocation {
+		abort
+	}
+}
+
 {$PORKBUN_DOMAIN} *.{$PORKBUN_DOMAIN} ipfs.kubo.{$PORKBUN_DOMAIN} ipns.kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN} {
 	encode
 	header Strict-Transport-Security "max-age=63072000"
@@ -83,13 +101,6 @@
 		root /var/www/html
 	}
 
-	@not_québec not maxmind_geolocation {
-		allow_subdivisions QC
-		db_path /data/geoip/GeoLite2-City.mmdb
-	}
-	handle @not_québec {
-		abort
-	}
 
 	@anubis host anubis.{$PORKBUN_DOMAIN}
 	handle @anubis {
@@ -98,28 +109,47 @@
 
 	@authentik host authentik.{$PORKBUN_DOMAIN}
 	handle @authentik {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+
 		reverse_proxy authentik-server:9000
 	}
 
 	@beszel host beszel.{$PORKBUN_DOMAIN}
 	handle @beszel {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+
 		reverse_proxy beszel:8090
 	}
 
 	@dozzle host dozzle.{$PORKBUN_DOMAIN}
 	handle @dozzle {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
 		import authentik
+
 		reverse_proxy dozzle:8080
 	}
 
 	@glances host glances.{$PORKBUN_DOMAIN}
 	handle @glances {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
 		import authentik
+
 		reverse_proxy glances:61208
 	}
 
 	@goaccess host goaccess.{$PORKBUN_DOMAIN}
 	handle @goaccess {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
 		import authentik
 
 		@websocket {
@@ -134,12 +164,20 @@
 
 	@jellyfin host jellyfin.{$PORKBUN_DOMAIN}
 	handle @jellyfin {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+
 		reverse_proxy jellyfin:8096
 	}
 
 	@jellyfin-vue host jellyfin-vue.{$PORKBUN_DOMAIN}
 	handle @jellyfin-vue {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
 		import anubis
+
 		reverse_proxy jellyfin-vue:80
 	}
 
@@ -156,18 +194,30 @@
 
 	@metube host metube.{$PORKBUN_DOMAIN}
 	handle @metube {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
 		import authentik
+
 		reverse_proxy metube:8081
 	}
 
 	@myspeed host myspeed.{$PORKBUN_DOMAIN}
 	handle @myspeed {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
 		import authentik
+
 		reverse_proxy myspeed:5216
 	}
 
 	@nextcloud host nextcloud.{$PORKBUN_DOMAIN}
 	handle @nextcloud {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+
 		file_server
 
 		php_fastcgi nextcloud:9000 {
@@ -181,6 +231,10 @@
 
 	@ollama host ollama.{$PORKBUN_DOMAIN}
 	handle @ollama {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+
 		basic_auth {
 			LAME {$OLLAMA_LAME_PASSWORD}
 			Nextcloud {$OLLAMA_NEXTCLOUD_PASSWORD}
@@ -191,35 +245,60 @@
 
 	@qbittorrent host qbittorrent.{$PORKBUN_DOMAIN}
 	handle @qbittorrent {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
 		import authentik
+
 		reverse_proxy qbittorrent:8080
 	}
 
 	@send host send.{$PORKBUN_DOMAIN}
 	handle @send {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
 		import anubis
+
 		reverse_proxy send:1443
 	}
 
 	@stirling-pdf host stirling-pdf.{$PORKBUN_DOMAIN}
 	handle @stirling-pdf {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+
 		reverse_proxy stirling-pdf:8080
 	}
 
 	@syncthing host syncthing.{$PORKBUN_DOMAIN}
 	handle @syncthing {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
 		import authentik
+
 		reverse_proxy syncthing:8384
 	}
 
 	@uptime-kuma host uptime-kuma.{$PORKBUN_DOMAIN}
 	handle @uptime-kuma {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
 		import authentik
+
 		reverse_proxy uptime-kuma:3001
 	}
 
 	@watchtower host watchtower.{$PORKBUN_DOMAIN}
 	handle @watchtower {
+		import maxmind_geolocation {
+			allow_countries US
+			allow_subdivisions QC
+		}
+
 		reverse_proxy watchtower:8080
 	}
 
