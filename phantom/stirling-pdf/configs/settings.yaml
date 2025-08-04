@@ -163,7 +163,7 @@ metrics:
 AutomaticallyGenerated:
   key: example
   UUID: example
-  appVersion: 1.1.0
+  appVersion: 1.1.1
 
 processExecutor:
   sessionLimit: # Process executor instances limits
