@@ -1,0 +1,31 @@
+secrets:
+  cert:
+    file: ./dozzle/secrets/cert.pem
+  key:
+    file: ./dozzle/secrets/key.pem
+
+services:
+  dozzle:
+    command: agent
+    container_name: dozzle
+    healthcheck:
+      interval: 5s
+      retries: 5
+      start_interval: 5s
+      start_period: 5s
+      test: ["CMD", "/dozzle", "healthcheck"]
+    hostname: olea
+    image: amir20/dozzle
+    ports:
+      - 7007:7007
+    restart: always
+    secrets:
+      - source: cert
+        target: /dozzle_cert.pem
+      - source: key
+        target: /dozzle_key.pem
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
