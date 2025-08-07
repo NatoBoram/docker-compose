@@ -39,10 +39,12 @@ jobs:
       - uses: docker/setup-compose-action@v1
 
       - run: docker compose build
-        working-directory: corsair
+        working-directory: ${{ matrix.host }}
 
-      - run: docker compose build
-        working-directory: helion
-
-      - run: docker compose build
-        working-directory: phantom
+    strategy:
+      matrix:
+        host:
+          - corsair
+          - helion
+          - olea
+          - phantom
