@@ -1,13 +1,35 @@
+secrets:
+  cert:
+    file: ./dozzle/secrets/cert.pem
+  key:
+    file: ./dozzle/secrets/key.pem
+
 services:
   dozzle:
     container_name: dozzle
     depends_on:
       - authentik-server
+      - caddy
+    env_file:
+      - .env.dozzle
+      - .env.dozzle.local
+    healthcheck:
+      interval: 5s
+      retries: 5
+      start_interval: 5s
+      start_period: 5s
+      test: ["CMD", "/dozzle", "healthcheck"]
+    hostname: phantom
     image: amir20/dozzle
     networks:
       - authentik-dozzle
       - caddy-dozzle
     restart: always
+    secrets:
+      - source: cert
+        target: /dozzle_cert.pem
+      - source: key
+        target: /dozzle_key.pem
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
