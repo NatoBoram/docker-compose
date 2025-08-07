@@ -1,3 +1,4 @@
 include:
   - path: beszel-agent.compose.yaml
+  - path: dozzle.compose.yaml
   - path: watchtower.compose.yaml
