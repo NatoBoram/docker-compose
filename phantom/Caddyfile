@@ -119,7 +119,7 @@
 	@beszel host beszel.{$PORKBUN_DOMAIN}
 	handle @beszel {
 		import maxmind_geolocation {
-			allow_subdivisions QC
+			allow_subdivisions QC ON
 		}
 
 		reverse_proxy beszel:8090
