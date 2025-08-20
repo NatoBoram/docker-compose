@@ -5,13 +5,22 @@ Key conventions to follow:
 1. Any service protected by Authentik must include `depends_on: - authentik-server`.
 
 2. The keys within a service definition should be in alphabetical order.
+   - `build`
+   - `cap_add`
    - `command`
    - `container_name`
    - `depends_on`
+   - `devices`
+   - `entrypoint`
    - `env_file`
    - `environment`
+   - `extends`
+   - `group_add`
+   - `healthcheck`
+   - `hostname`
    - `image`
    - `networks`
+   - `ports`
    - `restart`
    - `secrets`
    - `volumes`
@@ -36,7 +45,7 @@ Key conventions to follow:
 
 9. Services protected by Authentik must `depends_on: - authentik-server` and services behind Caddy must `depends_on: - caddy`.
 
-10. A network is defined in the compose file of the service that needs to connect to another service. For example, for Caddy to connect to Send, the network `caddy-send` is defined in `caddy.compose.yaml`. The other service's compose file (`send.compose.yaml` in this case) not redefine it with a top-level `networks:` block.
+10. A network is defined in the compose file of the service that needs to connect to another service. For example, for Caddy to connect to Send, the network `caddy-send` is defined in `caddy.compose.yaml`. The other service's compose file (`send.compose.yaml` in this case) must not redefine it with a top-level `networks:` block.
 
 11. Internal networks connecting a service to a private dependency should be named `[service]-[dependency]`, mirroring the container naming convention. For example, the network connecting `taskcafe` to `taskcafe-postgres` should be named `taskcafe-postgres`, not the generic `taskcafe-db`.
 
@@ -44,7 +53,10 @@ Key conventions to follow:
     1. Add it to the `Caddyfile`.
     2. Define and use the `caddy-potato` network in `caddy.compose.yaml`.
     3. Use it (without re-declaring) it in `potato.compose.yaml`.
+    4. Import `potato.compose.yaml` in the `compose.yaml` of that environment.
 
 13. Persist data using named volumes, not bind mounts.
 
 14. In Caddyfiles, the `{blocks.key}` syntax is valid for passing block arguments to an `import` statement. Do not suggest replacing it with `{args.N}`.
+
+15. The project is organized into environments (`phantom`, `corsair`), each with its own set of `compose.yaml` files. A top-level `compose.yaml` in each environment aggregates the individual service files. When adding a new service, ensure it is included in the main `compose.yaml` for that environment.
