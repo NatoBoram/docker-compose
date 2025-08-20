@@ -13,6 +13,7 @@ services:
     networks:
       - authentik-glances
       - caddy-glances
+    pid: host
     restart: always
     volumes:
       - ./glances:/root/.config/glances:ro
