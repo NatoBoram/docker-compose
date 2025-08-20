@@ -1,6 +1,8 @@
 secrets:
   WATCHTOWER_HTTP_API_TOKEN:
     file: ./watchtower/secrets/WATCHTOWER_HTTP_API_TOKEN
+  WATCHTOWER_NOTIFICATION_URL:
+    file: ./watchtower/secrets/WATCHTOWER_NOTIFICATION_URL
 
 services:
   watchtower:
@@ -13,12 +15,14 @@ services:
     environment:
       WATCHTOWER_CLEANUP: true
       WATCHTOWER_HTTP_API_TOKEN: /run/secrets/WATCHTOWER_HTTP_API_TOKEN
+      WATCHTOWER_NOTIFICATION_URL: /run/secrets/WATCHTOWER_NOTIFICATION_URL
     image: containrrr/watchtower
     networks:
       - caddy-watchtower
     restart: always
     secrets:
       - WATCHTOWER_HTTP_API_TOKEN
+      - WATCHTOWER_NOTIFICATION_URL
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
