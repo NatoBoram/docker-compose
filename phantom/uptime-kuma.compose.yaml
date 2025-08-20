@@ -9,8 +9,37 @@ networks:
 services:
   uptime-kuma:
     container_name: uptime-kuma
-    depends_on:
+    depends_on: # Don't monitor something until it's started
+      - anubis
+      - authentik-postgres
+      - authentik-redis
       - authentik-server
+      - authentik-worker
+      - beszel
+      - beszel-agent
+      - caddy
+      - clamav
+      - dozzle
+      - geoipupdate
+      - glances
+      - goaccess
+      - jellyfin
+      - jellyfin-vue
+      - kubo
+      - leanish
+      - metube
+      - myspeed
+      - nextcloud
+      - nextcloud-cron
+      - nextcloud-postgres
+      - nextcloud-redis
+      - ollama
+      - qbittorrent
+      - send
+      - send-redis
+      - stirling-pdf
+      - syncthing
+      - watchtower
     image: louislam/uptime-kuma
     networks:
       - authentik-uptime-kuma
@@ -22,7 +51,6 @@ services:
       - uptime-kuma-authentik-redis
       - uptime-kuma-nextcloud-redis
       - uptime-kuma-send-redis
-
     # ports:
     #   - 3001:3001
     restart: always
