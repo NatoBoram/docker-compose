@@ -28,3 +28,27 @@ updates:
       timezone: America/Toronto
     commit-message:
       prefix: "⬆️ "
+
+  - package-ecosystem: docker-compose
+    directory: /corsair
+    schedule:
+      interval: monthly
+      timezone: America/Toronto
+    commit-message:
+      prefix: "⬆️ "
+
+  - package-ecosystem: docker-compose
+    directory: /olea
+    schedule:
+      interval: monthly
+      timezone: America/Toronto
+    commit-message:
+      prefix: "⬆️ "
+
+  - package-ecosystem: docker-compose
+    directory: /phantom
+    schedule:
+      interval: monthly
+      timezone: America/Toronto
+    commit-message:
+      prefix: "⬆️ "
