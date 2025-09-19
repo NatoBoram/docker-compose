@@ -70,7 +70,7 @@
 	}
 }
 
-{$PORKBUN_DOMAIN} *.{$PORKBUN_DOMAIN} ipfs.kubo.{$PORKBUN_DOMAIN} ipns.kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN} {
+{$PORKBUN_DOMAIN} *.{$PORKBUN_DOMAIN} rpc.kubo.{$PORKBUN_DOMAIN} ipfs.kubo.{$PORKBUN_DOMAIN} ipns.kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN} {
 	encode
 	header Strict-Transport-Security "max-age=63072000"
 
@@ -100,7 +100,6 @@
 		file_server
 		root /var/www/html
 	}
-
 
 	@anubis host anubis.{$PORKBUN_DOMAIN}
 	handle @anubis {
@@ -184,6 +183,16 @@
 	@kubo host kubo.{$PORKBUN_DOMAIN} ipfs.kubo.{$PORKBUN_DOMAIN} ipns.kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN}
 	handle @kubo {
 		reverse_proxy kubo:8080
+	}
+
+	@kubo-rpc host rpc.kubo.{$PORKBUN_DOMAIN}
+	handle @kubo-rpc {
+		import maxmind_geolocation {
+			allow_countries US
+			allow_subdivisions QC
+		}
+
+		reverse_proxy kubo:5001
 	}
 
 	@leanish host leanish.{$PORKBUN_DOMAIN}
