@@ -2,3 +2,5 @@ arrowParens: avoid
 semi: false
 trailingComma: all
 useTabs: true
+plugins:
+  - "@prettier/plugin-xml"
