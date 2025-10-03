@@ -1,62 +1,132 @@
-When creating a new `compose.yaml` file, it must be consistent with the style and structure of existing files.
+# Copilot Instructions
 
-Key conventions to follow:
+This is a multi-environment Docker Compose homelab setup organized around reverse-proxy architecture with strong security layers.
 
-1. Any service protected by Authentik must include `depends_on: - authentik-server`.
+## Project Architecture
 
-2. The keys within a service definition should be in alphabetical order.
-   - `build`
-   - `cap_add`
-   - `command`
-   - `container_name`
-   - `depends_on`
-   - `devices`
-   - `entrypoint`
-   - `env_file`
-   - `environment`
-   - `extends`
-   - `group_add`
-   - `healthcheck`
-   - `hostname`
-   - `image`
-   - `networks`
-   - `ports`
-   - `restart`
-   - `secrets`
-   - `volumes`
+The project follows a **modular, environment-based** structure where each top-level directory represents a physical machine:
 
-3. All services must mount the host's timezone and localtime.
+- `phantom` - Current production homelab server
+- `helion` - Decommissioned server (reference only)
+- `corsair` - Secondary build machine
+- `olea` - Cloud server
 
-   ```yaml
-   volumes:
-     - /etc/localtime:/etc/localtime:ro
-     - /etc/timezone:/etc/timezone:ro
+Each environment uses a **service-per-file** approach where the main `compose.yaml` includes individual service files like `jellyfin.compose.yaml`, `caddy.compose.yaml`, etc.
+
+## Core Infrastructure Pattern
+
+The homelab uses **layered security** with these core components:
+
+1. **Caddy** as reverse proxy with automatic HTTPS (Porkbun DNS + Let's Encrypt)
+2. **Anubis** for AI crawler protection on public services
+3. **Authentik** for SSO authentication on internal services
+4. **GeoIP blocking** restricting access to Québec/Ontario regions
+5. **Fail2Ban** for intrusion prevention
+
+## Service Configuration Conventions
+
+### Compose Service Keys (Alphabetical Order)
+
+```yaml
+services:
+  potato:
+    build:
+    cap_add:
+    command:
+    container_name:
+    depends_on:
+    devices:
+    entrypoint:
+    env_file:
+    environment:
+    extends:
+    group_add:
+    healthcheck:
+    hostname:
+    image:
+    networks:
+    ports:
+    restart:
+    secrets:
+    volumes:
+```
+
+### Mandatory Volume Mounts
+
+All services must include timezone synchronization:
+
+```yaml
+volumes:
+  - /etc/localtime:/etc/localtime:ro
+  - /etc/timezone:/etc/timezone:ro
+```
+
+### Container Naming Convention
+
+Containers are named after their primary image: `image: natoboram/potato` → `container_name: potato`.
+
+Exception: Private dependencies use `service-dependency` format (e.g., `authentik-postgres`, `send-redis`).
+
+### Environment File Pattern
+
+Each service has **two** environment files:
+
+- `.env.${container_name}` - Template with empty variables (committed to git)
+- `.env.${container_name}.local` - Actual values (gitignored)
+
+**Critical**: Never share environment files between services, even related ones. `nextcloud` and `nextcloud-postgres` must have separate env files.
+
+### Network Architecture
+
+- **Caddy networks**: Defined in `caddy.compose.yaml` as `caddy-servicename`
+- **Internal networks**: Named `service-dependency` (e.g., `authentik-postgres`)
+- Services consuming networks do **not** redeclare them in their own files
+
+### Dependency Management
+
+- Services behind Authentik: `depends_on: - authentik-server`
+- Services behind Caddy: `depends_on: - caddy`
+- Use **named volumes**, not bind mounts for persistence
+
+## Adding New Services Workflow
+
+When adding a service `potato` exposed via Caddy:
+
+1. Create `potato.compose.yaml` with service definition
+2. Add `caddy-potato` network to `caddy.compose.yaml`
+3. Configure routing in `Caddyfile` with appropriate protection:
+
+   ```Caddyfile
+   @potato host potato.{$PORKBUN_DOMAIN}
+   handle @potato {
+       import maxmind_geolocation { allow_subdivisions QC }
+       import authentik  # or import anubis for public services
+       reverse_proxy potato:{$PORT}
+   }
    ```
 
-4. Adhere to the patterns already present in the codebase. For example, if existing services use an implicit `:latest` tag for Docker images, continue to do so.
+4. Include `potato.compose.yaml` in main environment `compose.yaml`
+5. Create `.env.potato` template and `.env.potato.local` files
 
-5. `ollama` is spelled with two "a". Do not misspell it as `olloma`.
+## Protection Patterns in Caddyfile
 
-6. Do not wrap the contents of this file in markdown code blocks like "```instructions".
+- **Public services**: `import anubis` (AI crawler protection only)
+- **Internal services**: `import authentik` + geolocation
+- **Admin services**: Authentik + strict geolocation to Québec only
+- **API endpoints**: Basic auth or bearer tokens + geolocation
 
-7. Containers are named after their image. For example, `image: natoboram/potato` should have `container_name: potato`. An exception is made for services that are installed privately to other services. For example, if an instance of Redis is used exclusively by an instance of Send, then it'll be named `send-redis`.
+## Development Workflow
 
-8. Each service may have its own dedicated environment files, typically named `.env.${container_name}` and `.env.${container_name}.local`. The `.env.${container_name}` file lists all expected environment variables without their values, while the gitignored `.env.${container_name}.local` file contains the actual values. Crucially, do not share environment files between services, even if they are related. For example, a service like `nextcloud` and its database `nextcloud-postgres` must have separate environment files (`.env.nextcloud` and `.env.nextcloud-postgres`). The `environment` key in the compose file should only be used for public, non-changing values.
+- **Linting**: `npm run lint` (Prettier + MarkdownLint)
+- **Deployment**: Push to main branch triggers Watchtower update via webhook
+- **Service Updates**: Watchtower handles automatic container updates
+- **Log Access**: Dozzle provides web UI for container logs (Authentik protected)
 
-9. Services protected by Authentik must `depends_on: - authentik-server` and services behind Caddy must `depends_on: - caddy`.
+## Common Patterns
 
-10. A network is defined in the compose file of the service that needs to connect to another service. For example, for Caddy to connect to Send, the network `caddy-send` is defined in `caddy.compose.yaml`. The other service's compose file (`send.compose.yaml` in this case) must not redefine it with a top-level `networks:` block.
+- **Database services**: Always use Alpine images with health checks
+- **Media services**: Mount shared volumes (e.g., `metube:/metube:ro` in Jellyfin)
+- **Hardware access**: Use `devices:` and `group_add:` for GPU access (e.g., in Jellyfin)
+- **Custom builds**: Place Dockerfiles in environment directory (`./jellyfin.Dockerfile`)
 
-11. Internal networks connecting a service to a private dependency should be named `[service]-[dependency]`, mirroring the container naming convention. For example, the network connecting `taskcafe` to `taskcafe-postgres` should be named `taskcafe-postgres`, not the generic `taskcafe-db`.
-
-12. When adding a new service `potato` that is exposed via Caddy, remember to:
-    1. Add it to the `Caddyfile`.
-    2. Define and use the `caddy-potato` network in `caddy.compose.yaml`.
-    3. Use it (without re-declaring) it in `potato.compose.yaml`.
-    4. Import `potato.compose.yaml` in the `compose.yaml` of that environment.
-
-13. Persist data using named volumes, not bind mounts.
-
-14. In Caddyfiles, the `{blocks.key}` syntax is valid for passing block arguments to an `import` statement. Do not suggest replacing it with `{args.N}`.
-
-15. The project is organized into environments (`phantom`, `corsair`), each with its own set of `compose.yaml` files. A top-level `compose.yaml` in each environment aggregates the individual service files. When adding a new service, ensure it is included in the main `compose.yaml` for that environment.
+## Spelling: `ollama` (not `olloma`) - LLM service with two "a"s
