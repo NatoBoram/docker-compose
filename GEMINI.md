@@ -1,6 +1,6 @@
-# Copilot Instructions
+# Gemini
 
-This is a multi-environment Docker Compose homelab setup organized around reverse-proxy architecture with strong security layers.
+This is a multi-environment Docker Compose homelab setup organized around a reverse-proxy architecture with strong security layers.
 
 ## Project Architecture
 
@@ -17,15 +17,17 @@ Each environment uses a **service-per-file** approach where the main `compose.ya
 
 The homelab uses **layered security** with these core components:
 
-1. **Caddy** as reverse proxy with automatic HTTPS (Porkbun DNS + Let's Encrypt)
+1. **Caddy** as a reverse proxy with automatic HTTPS (Porkbun DNS + Let's Encrypt)
 2. **Anubis** for AI crawler protection on public services
 3. **Authentik** for SSO authentication on internal services
-4. **GeoIP blocking** restricting access to Québec/Ontario regions
+4. **GeoIP blocking** restricting access to specific regions
 5. **Fail2Ban** for intrusion prevention
 
 ## Service Configuration Conventions
 
 ### Compose Service Keys (Alphabetical Order)
+
+Compose service keys should be in alphabetical order.
 
 ```yaml
 services:
@@ -92,8 +94,8 @@ Each service has **two** environment files:
 
 When adding a service `potato` exposed via Caddy:
 
-1. Create `potato.compose.yaml` with service definition
-2. Add `caddy-potato` network to `caddy.compose.yaml`
+1. Create `potato.compose.yaml` with the service definition.
+2. Add the `caddy-potato` network to `caddy.compose.yaml`.
 3. Configure routing in `Caddyfile` with appropriate protection:
 
    ```Caddyfile
@@ -105,8 +107,8 @@ When adding a service `potato` exposed via Caddy:
    }
    ```
 
-4. Include `potato.compose.yaml` in main environment `compose.yaml`
-5. Create `.env.potato` template and `.env.potato.local` files
+4. Include `potato.compose.yaml` in the main environment `compose.yaml`.
+5. Create `.env.potato` template and `.env.potato.local` files.
 
 ## Protection Patterns in Caddyfile
 
@@ -117,16 +119,18 @@ When adding a service `potato` exposed via Caddy:
 
 ## Development Workflow
 
-- **Linting**: `npm run lint` (Prettier + MarkdownLint)
-- **Deployment**: Push to main branch triggers Watchtower update via webhook
-- **Service Updates**: Watchtower handles automatic container updates
-- **Log Access**: Dozzle provides web UI for container logs (Authentik protected)
+- **Linting**: `pnpm run lint` (Prettier + MarkdownLint)
+- **Deployment**: Pushing to the main branch triggers a Watchtower update via a webhook.
+- **Service Updates**: Watchtower handles automatic container updates.
+- **Log Access**: Dozzle provides a web UI for container logs (protected by Authentik).
 
 ## Common Patterns
 
-- **Database services**: Always use Alpine images with health checks
-- **Media services**: Mount shared volumes (e.g., `metube:/metube:ro` in Jellyfin)
-- **Hardware access**: Use `devices:` and `group_add:` for GPU access (e.g., in Jellyfin)
-- **Custom builds**: Place Dockerfiles in environment directory (`./jellyfin.Dockerfile`)
+- **Database services**: Always use Alpine images with health checks.
+- **Media services**: Mount shared volumes (e.g., `metube:/metube:ro` in Jellyfin).
+- **Hardware access**: Use `devices:` and `group_add:` for GPU access (e.g., in Jellyfin).
+- **Custom builds**: Place Dockerfiles in the environment directory (`./jellyfin.Dockerfile`).
 
-## Spelling: `ollama` (not `olloma`) - LLM service with two "a"s
+## Spelling
+
+- `ollama` (not `olloma`) - LLM service with two "a"s
