@@ -14,4 +14,4 @@ jobs:
       contents: read
 
     steps:
-      - run: "curl --oauth2-bearer '${{secrets.WATCHTOWER_HTTP_API_TOKEN}}' --tlsv1.3 'https://watchtower.${{secrets.DOMAIN}}/v1/update'"
+      - run: curl --oauth2-bearer '${{secrets.WATCHTOWER_HTTP_API_TOKEN}}' --tlsv1.3 'https://watchtower.${{secrets.DOMAIN}}/v1/update'

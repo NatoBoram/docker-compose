@@ -1,31 +1,29 @@
 # Copilot Instructions
 
-This is a multi-environment Docker Compose homelab setup organized around reverse-proxy architecture with strong security layers.
+Multi-environment Docker Compose homelab with reverse-proxy architecture and layered security.
 
-## Project Architecture
+## Architecture
 
-The project follows a **modular, environment-based** structure where each top-level directory represents a physical machine:
+Each top-level directory = physical machine:
 
-- `phantom` - Current production homelab server
-- `helion` - Decommissioned server (reference only)
-- `corsair` - Secondary build machine
-- `olea` - Cloud server
+- `phantom/` - Current production server (subdirectory structure)
+- `helion/` - Decommissioned (flat `.compose.yaml` files, reference only)
+- `corsair/` - Dev machine
+- `olea/` - Cloud server
 
-Each environment uses a **service-per-file** approach where the main `compose.yaml` includes individual service files like `jellyfin.compose.yaml`, `caddy.compose.yaml`, etc.
+**Structure evolution**: `phantom/` uses service subdirectories (`jellyfin/compose.yaml`), while legacy `helion/` uses flat naming (`jellyfin.compose.yaml`). Main `compose.yaml` includes all services via `include:` directive.
 
-## Core Infrastructure Pattern
+## Security Layers
 
-The homelab uses **layered security** with these core components:
+1. **Caddy** - Reverse proxy with automatic HTTPS (Porkbun DNS + Let's Encrypt)
+2. **Anubis** - AI crawler protection (public services)
+3. **Authentik** - SSO authentication (internal services)
+4. **GeoIP blocking** - MaxMind geolocation (Québec/Ontario regions)
+5. **Fail2Ban** - Intrusion prevention
 
-1. **Caddy** as reverse proxy with automatic HTTPS (Porkbun DNS + Let's Encrypt)
-2. **Anubis** for AI crawler protection on public services
-3. **Authentik** for SSO authentication on internal services
-4. **GeoIP blocking** restricting access to Québec/Ontario regions
-5. **Fail2Ban** for intrusion prevention
+## Service Configuration
 
-## Service Configuration Conventions
-
-### Compose Service Keys (Alphabetical Order)
+### Compose Keys (Alphabetical)
 
 ```yaml
 services:
@@ -51,9 +49,9 @@ services:
     volumes:
 ```
 
-### Mandatory Volume Mounts
+### Mandatory Patterns
 
-All services must include timezone synchronization:
+**Timezone sync** (all services):
 
 ```yaml
 volumes:
@@ -61,72 +59,158 @@ volumes:
   - /etc/timezone:/etc/timezone:ro
 ```
 
-### Container Naming Convention
+**Container naming**: Match primary image (`natoboram/potato` → `container_name: potato`)
+**Exception**: Dependencies use `service-dependency` (e.g., `authentik-postgres`, `send-redis`)
 
-Containers are named after their primary image: `image: natoboram/potato` → `container_name: potato`.
+### Environment Files
 
-Exception: Private dependencies use `service-dependency` format (e.g., `authentik-postgres`, `send-redis`).
+**Two files per service** (never shared):
 
-### Environment File Pattern
+- `.env.potato` - Template with all keys present (committed, empty values serve as documentation)
+- `.env.potato.local` - Actual secrets (gitignored)
 
-Each service has **two** environment files:
+Example:
 
-- `.env.${container_name}` - Template with empty variables (committed to git)
-- `.env.${container_name}.local` - Actual values (gitignored)
+```yaml
+env_file:
+  - .env.potato
+  - .env.potato.local
+```
 
-**Critical**: Never share environment files between services, even related ones. `nextcloud` and `nextcloud-postgres` must have separate env files.
+**Critical**:
+
+- Even related services (e.g., `nextcloud` + `nextcloud-postgres`) have separate env files
+- All keys must be present in `.env.potato` even if empty (e.g., `KEY=`) - this documents what's needed in `.local`
 
 ### Network Architecture
 
-- **Caddy networks**: Defined in `caddy.compose.yaml` as `caddy-servicename`
-- **Internal networks**: Named `service-dependency` (e.g., `authentik-postgres`)
-- Services consuming networks do **not** redeclare them in their own files
+**Caddy networks**: Defined in `caddy/compose.yaml` as `caddy-servicename`, consumed by service compose files without redeclaration.
 
-### Dependency Management
+**Internal networks**: Named `service-dependency` (e.g., `authentik-postgres`, `authentik-redis`).
 
-- Services behind Authentik: `depends_on: - authentik-server`
-- Services behind Caddy: `depends_on: - caddy`
-- Use **named volumes**, not bind mounts for persistence
+**Cross-service dependencies**: Use dedicated networks (e.g., `authentik-server` connects to multiple service-specific networks like `authentik-dozzle`, `authentik-metube`).
 
-## Adding New Services Workflow
+### Dependencies
 
-When adding a service `potato` exposed via Caddy:
+```yaml
+depends_on:
+  - caddy # All exposed services
+  - authentik-server # Protected services
+  authentik-postgres: # With health checks
+    condition: service_healthy
+```
 
-1. Create `potato.compose.yaml` with service definition
-2. Add `caddy-potato` network to `caddy.compose.yaml`
-3. Configure routing in `Caddyfile` with appropriate protection:
+Use **named volumes**, not bind mounts for persistence (exception: main config files like `Caddyfile`).
 
-   ```Caddyfile
+## Adding New Service
+
+For service `potato` exposed via Caddy:
+
+1. **Create subdirectory** (phantom structure):
+
+   ```log
+   phantom/potato/
+     ├── compose.yaml
+     ├── .env.potato
+     └── .env.potato.local
+   ```
+
+2. **Add network to `caddy/compose.yaml`**:
+
+   ```yaml
+   networks:
+     caddy-potato:
+   services:
+     caddy:
+       networks:
+         - caddy-potato
+   ```
+
+3. **Configure routing in `Caddyfile`**:
+
+   ```caddyfile
    @potato host potato.{$PORKBUN_DOMAIN}
    handle @potato {
        import maxmind_geolocation { allow_subdivisions QC }
-       import authentik  # or import anubis for public services
-       reverse_proxy potato:{$PORT}
+       import authentik  # or: import anubis (public services)
+       reverse_proxy potato:3000
    }
    ```
 
-4. Include `potato.compose.yaml` in main environment `compose.yaml`
-5. Create `.env.potato` template and `.env.potato.local` files
+4. **Include in main `compose.yaml`**:
 
-## Protection Patterns in Caddyfile
+   ```yaml
+   include:
+     - path: potato/compose.yaml
+   ```
 
-- **Public services**: `import anubis` (AI crawler protection only)
-- **Internal services**: `import authentik` + geolocation
-- **Admin services**: Authentik + strict geolocation to Québec only
-- **API endpoints**: Basic auth or bearer tokens + geolocation
+5. **Create env files**: Template `.env.potato` + local `.env.potato.local`
+
+### Protection Patterns
+
+- **Public**: `import anubis` only (Kubo, Leanish, Send)
+- **Internal**: `import authentik` + geolocation (Jellyfin, Dozzle, Glances)
+- **Admin**: Authentik + strict geolocation `QC` only (Authentik itself, Dozzle)
+- **APIs**: Basic auth + geolocation (Ollama, Kubo RPC)
 
 ## Development Workflow
 
-- **Linting**: `npm run lint` (Prettier + MarkdownLint)
-- **Deployment**: Push to main branch triggers Watchtower update via webhook
-- **Service Updates**: Watchtower handles automatic container updates
-- **Log Access**: Dozzle provides web UI for container logs (Authentik protected)
+**Linting**: `pnpm lint` (Prettier + MarkdownLint via `.prettierrc.yaml`)
+**Format**: `pnpm format`
+
+**Deployment**: Push to `main` → GitHub Actions calls Watchtower webhook → Watchtower pulls/restarts containers
+
+**Reload Caddy**: `./reload_caddy.sh` (runs `docker compose exec caddy caddy reload`)
+
+**Service structure comparison**:
+
+- Legacy `helion/`: `include: - path: jellyfin.compose.yaml`
+- Current `phantom/`: `include: - path: jellyfin/compose.yaml`
 
 ## Common Patterns
 
-- **Database services**: Always use Alpine images with health checks
-- **Media services**: Mount shared volumes (e.g., `metube:/metube:ro` in Jellyfin)
-- **Hardware access**: Use `devices:` and `group_add:` for GPU access (e.g., in Jellyfin)
-- **Custom builds**: Place Dockerfiles in environment directory (`./jellyfin.Dockerfile`)
+**Database health checks**:
 
-## Spelling: `ollama` (not `olloma`) - LLM service with two "a"s
+```yaml
+healthcheck:
+  test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+  interval: 30s
+  timeout: 5s
+  retries: 5
+  start_period: 20s
+```
+
+**Shared media volumes**: Cross-mount with `:ro` (e.g., Jellyfin reads `metube:/metube:ro`, `qbittorrent-downloads:/qbittorrent`)
+
+**Hardware access** (GPU transcoding):
+
+```yaml
+devices:
+  - /dev/dri
+  - /dev/kfd
+group_add:
+  - 110 # render
+  - 44 # video
+```
+
+**Disable Watchtower auto-update** (locally-built images only):
+
+```yaml
+build:
+  dockerfile: ./Dockerfile
+labels:
+  - com.centurylinklabs.watchtower.enable=false
+```
+
+Watchtower is disabled only for services with `build:` directive (e.g. Caddy with xcaddy extensions and Jellyfin). Public images are always auto-updated.
+
+## Key Files
+
+- `phantom/caddy/Caddyfile` - Routing rules and protection snippets
+- `phantom/compose.yaml` - Service includes for production
+- `phantom/README.md` - Service inventory with protection levels
+- `.prettierrc.yaml` - Code style (tabs, no semicolons, avoid arrow parens)
+
+## Spelling
+
+`ollama` (not `olloma`) - Two "a"s
