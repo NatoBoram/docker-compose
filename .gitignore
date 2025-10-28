@@ -5,6 +5,7 @@ docker-compose.override.yaml
 
 *.mmdb
 *.pwd
+*.sql
 */authelia/config/user-database.yaml
 secrets/
 

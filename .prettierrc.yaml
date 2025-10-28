@@ -1,6 +1,10 @@
 arrowParens: avoid
+database: postgresql
+dialect: postgresql
+language: postgresql
+plugins:
+  - "@prettier/plugin-xml"
+  - prettier-plugin-sql
 semi: false
 trailingComma: all
 useTabs: true
-plugins:
-  - "@prettier/plugin-xml"

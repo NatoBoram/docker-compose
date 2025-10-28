@@ -45,12 +45,12 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     networks:
       - forgejo-postgres
     restart: always
     volumes:
-      - forgejo-postgres:/var/lib/postgresql/data
+      - forgejo-postgres:/var/lib/postgresql
 
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro

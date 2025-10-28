@@ -74,13 +74,13 @@ services:
     environment:
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     networks:
       - nextcloud-postgres
       - uptime-kuma-nextcloud-postgres
     restart: always
     volumes:
-      - nextcloud-postgres:/var/lib/postgresql/data
+      - nextcloud-postgres:/var/lib/postgresql
 
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
