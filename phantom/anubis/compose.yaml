@@ -4,8 +4,8 @@ services:
     depends_on:
       - caddy
     env_file:
-      - path: .env.anubis
-      - path: .env.anubis.local
+      - path: .env
+      - path: .env.local
     environment:
       TARGET: " "
     image: ghcr.io/techarohq/anubis
@@ -13,7 +13,7 @@ services:
       - caddy-anubis
     restart: always
     volumes:
-      - ./anubis:/data/cfg:ro
+      - ./volumes/cfg:/data/cfg
 
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
