@@ -74,7 +74,7 @@ services:
     environment:
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
-    image: postgres:17
+    image: postgres:17-alpine
     networks:
       - nextcloud-postgres
       - uptime-kuma-nextcloud-postgres

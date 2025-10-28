@@ -45,7 +45,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
-    image: postgres:17
+    image: postgres:17-alpine
     networks:
       - forgejo-postgres
     restart: always
