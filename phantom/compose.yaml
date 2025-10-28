@@ -1,6 +1,6 @@
 include:
   - path: anubis/compose.yaml
-  - path: authentik.compose.yaml
+  - path: authentik/compose.yaml
   - path: beszel.compose.yaml
   - path: caddy.compose.yaml
   - path: dozzle.compose.yaml
