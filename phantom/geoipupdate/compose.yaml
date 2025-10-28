@@ -1,8 +1,8 @@
 secrets:
   GEOIPUPDATE_ACCOUNT_ID:
-    file: ./geoipupdate/secrets/GEOIPUPDATE_ACCOUNT_ID
+    file: ./secrets/GEOIPUPDATE_ACCOUNT_ID
   GEOIPUPDATE_LICENSE_KEY:
-    file: ./geoipupdate/secrets/GEOIPUPDATE_LICENSE_KEY
+    file: ./secrets/GEOIPUPDATE_LICENSE_KEY
 
 services:
   geoipupdate:
