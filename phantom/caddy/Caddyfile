@@ -134,6 +134,15 @@
 		reverse_proxy dozzle:8080
 	}
 
+	@forgejo host forgejo.{$PORKBUN_DOMAIN}
+	handle @forgejo {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+
+		reverse_proxy forgejo:3000
+	}
+
 	@glances host glances.{$PORKBUN_DOMAIN}
 	handle @glances {
 		import maxmind_geolocation {

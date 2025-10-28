@@ -1,5 +1,6 @@
 networks:
   authentik-dozzle:
+  authentik-forgejo:
   authentik-glances:
   authentik-goaccess:
   authentik-metube:
@@ -33,6 +34,7 @@ services:
     image: ghcr.io/goauthentik/server
     networks:
       - authentik-dozzle
+      - authentik-forgejo
       - authentik-glances
       - authentik-goaccess
       - authentik-metube
