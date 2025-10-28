@@ -4,8 +4,8 @@ services:
     depends_on:
       - caddy
     env_file:
-      - path: .env
-      - path: .env.local
+      - path: .env.anubis
+      - path: .env.anubis.local
     environment:
       TARGET: " "
     image: ghcr.io/techarohq/anubis
