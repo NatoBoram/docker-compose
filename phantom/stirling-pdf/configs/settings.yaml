@@ -60,9 +60,8 @@ security:
     privateKey: classpath:saml-private-key.key # Your private key. Generated from your keypair
     spCert: classpath:saml-public-cert.crt # Your signing certificate. Generated from your keypair
   jwt: # This feature is currently under development and not yet fully supported. Do not use in production.
-    persistence: false # Set to 'true' to enable JWT key store
-    enableKeyRotation: true # Set to 'true' to enable key pair rotation
-    enableKeyCleanup: true # Set to 'true' to enable key pair cleanup
+    enabled: false # Set to 'true' to enable JWT key store
+    keyCleanup: false # Set to 'true' to enable key pair cleanup
     keyRetentionDays: 7 # Number of days to retain old keys. The default is 7 days.
     secureCookie: true # Set to 'true' to use secure cookies for JWTs
 
@@ -110,7 +109,9 @@ system:
   showUpdateOnlyAdmin: true # only admins can see when a new update is available, depending on showUpdate it must be set to 'true'
   customHTMLFiles: false # enable to have files placed in /customFiles/templates override the existing template HTML files
   tessdataDir: /usr/share/tessdata # path to the directory containing the Tessdata files. This setting is relevant for Windows systems. For Windows users, this path should be adjusted to point to the appropriate directory where the Tessdata files are stored.
-  enableAnalytics: true # set to 'true' to enable analytics, set to 'false' to disable analytics; for enterprise users, this is set to true
+  enableAnalytics: true # Master toggle for analytics: set to 'true' to enable all analytics, 'false' to disable all analytics, or leave as 'null' to prompt admin on first launch
+  enablePosthog: null # Enable PostHog analytics (open-source product analytics): set to 'true' to enable, 'false' to disable, or 'null' to enable by default when analytics is enabled
+  enableScarf: null # Enable Scarf pixel: set to 'true' to enable, 'false' to disable, or 'null' to enable by default when analytics is enabled
   enableUrlToPDF: false # Set to 'true' to enable URL to PDF, INTERNAL ONLY, known security issues, should not be used externally
   disableSanitize: false # set to true to disable Sanitize HTML; (can lead to injections in HTML)
   maxDPI: 500 # Maximum allowed DPI for PDF to image conversion
@@ -171,7 +172,7 @@ metrics:
 AutomaticallyGenerated:
   key: example
   UUID: example
-  appVersion: 1.3.2
+  appVersion: 1.5.0
 
 processExecutor:
   sessionLimit: # Process executor instances limits
