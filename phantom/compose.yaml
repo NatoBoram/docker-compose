@@ -9,7 +9,7 @@ include:
   - path: goaccess/compose.yaml
   - path: jellyfin-vue/compose.yaml
   - path: jellyfin/compose.yaml
-  - path: kubo.compose.yaml
+  - path: kubo/compose.yaml
   - path: leanish.compose.yaml
   - path: metube.compose.yaml
   - path: myspeed.compose.yaml
