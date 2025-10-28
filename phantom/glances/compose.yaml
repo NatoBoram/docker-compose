@@ -16,7 +16,8 @@ services:
     pid: host
     restart: always
     volumes:
-      - ./glances:/root/.config/glances:ro
+      - ./volumes/glances:/root/.config/glances:ro
+
       - /etc/os-release:/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
