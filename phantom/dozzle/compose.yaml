@@ -1,8 +1,8 @@
 secrets:
   cert:
-    file: ./dozzle/secrets/cert.pem
+    file: ./secrets/cert.pem
   key:
-    file: ./dozzle/secrets/key.pem
+    file: ./secrets/key.pem
 
 services:
   dozzle:
