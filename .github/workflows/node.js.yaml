@@ -13,10 +13,10 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
-
     permissions:
       contents: read
+
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v5
@@ -32,20 +32,19 @@ jobs:
       - run: pnpm run lint
 
   fix:
-    runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
-    needs:
-      - lint
+    needs: lint
 
     if: failure() && github.event_name != 'merge_group' && github.actor != 'github-actions[bot]' && github.actor != 'nektos/act'
+
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v5
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.head_ref || github.ref }}
       - uses: pnpm/action-setup@v4
         with:
           version: latest
