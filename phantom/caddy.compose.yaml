@@ -34,6 +34,8 @@ services:
     env_file:
       - path: .env.caddy
       - path: .env.caddy.local
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
     networks:
       - caddy
       - caddy-anubis
