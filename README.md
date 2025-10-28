@@ -14,10 +14,11 @@ Top-level folders represent a different machine in which Docker Compose is used 
 
 The machines are:
 
-- [Helion](./helion) (decomissioned)
+- [Corsair](./corsair) (dev machine)
+- [Helion](./helion) (decommissioned)
 - [Olea](./olea) (cloud server)
 - [Phantom](./phantom) (current)
 
-Each folder contains a `compose.yaml` that orchestrates the services running on that machine. The `compose.yaml` file loads services at `compose.${service}.yaml` and may expect overrides at `compose.override.yaml`. You'll have to read service definitions to see what needs to be overridden.
+Each folder contains a `compose.yaml` that orchestrates the services running on that machine. The `compose.yaml` file loads services at `${service}/compose.yaml` and may expect overrides at `compose.override.yaml`. You'll have to read service definitions to see what needs to be overridden.
 
-Each service has its own `.env.${service}` file. This is a template that contains default environment variables for that service that are expected to be modified. Copy that file to `.env.${service}.local` and override the defaults. The `compose.${service}.yaml` files will expect the `.env.${service}.local` file to exist and won't start without it.
+Each service has its own `.env.${service}` file. This is a template that contains all environment variables and their defaults for that service, with empty values serving as documentation. Copy that file to `.env.${service}.local` and fill in the actual values. The service compose files expect the `.env.${service}.local` file to exist and won't start without it.
