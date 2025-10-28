@@ -6,7 +6,7 @@ include:
   - path: dozzle/compose.yaml
   - path: geoipupdate/compose.yaml
   - path: glances/compose.yaml
-  - path: goaccess.compose.yaml
+  - path: goaccess/compose.yaml
   - path: jellyfin-vue.compose.yaml
   - path: jellyfin.compose.yaml
   - path: kubo.compose.yaml
