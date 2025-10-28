@@ -12,7 +12,7 @@ services:
     restart: always
     volumes:
       - metube:/downloads
-      - ./metube/yt-dlp.json:/yt-dlp.json:ro
+      - ./volumes/root/yt-dlp.json:/yt-dlp.json:ro
 
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro

@@ -10,14 +10,14 @@ include:
   - path: jellyfin-vue/compose.yaml
   - path: jellyfin/compose.yaml
   - path: kubo/compose.yaml
-  - path: leanish.compose.yaml
-  - path: metube.compose.yaml
-  - path: myspeed.compose.yaml
-  - path: nextcloud.compose.yaml
-  - path: ollama.compose.yaml
-  - path: qbittorrent.compose.yaml
-  - path: send.compose.yaml
-  - path: stirling-pdf.compose.yaml
-  - path: syncthing.compose.yaml
-  - path: uptime-kuma.compose.yaml
-  - path: watchtower.compose.yaml
+  - path: leanish/compose.yaml
+  - path: metube/compose.yaml
+  - path: myspeed/compose.yaml
+  - path: nextcloud/compose.yaml
+  - path: ollama/compose.yaml
+  - path: qbittorrent/compose.yaml
+  - path: send/compose.yaml
+  - path: stirling-pdf/compose.yaml
+  - path: syncthing/compose.yaml
+  - path: uptime-kuma/compose.yaml
+  - path: watchtower/compose.yaml

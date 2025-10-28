@@ -17,11 +17,11 @@ services:
       - caddy-stirling-pdf
     restart: always
     volumes:
-      - ./stirling-pdf/configs/custom_settings.yaml:/configs/custom_settings.yml
-      - ./stirling-pdf/configs/settings.yaml:/configs/settings.yml
+      - ./volumes/configs/custom_settings.yaml:/configs/custom_settings.yml
+      - ./volumes/configs/settings.yaml:/configs/settings.yml
 
-      - ./stirling-pdf/customFiles/static:/customFiles/static
-      - ./stirling-pdf/customFiles/templates:/customFiles/templates
+      - ./volumes/customFiles/static:/customFiles/static
+      - ./volumes/customFiles/templates:/customFiles/templates
 
       - /var/log/stirling-pdf:/logs
 

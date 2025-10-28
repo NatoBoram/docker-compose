@@ -1,8 +1,8 @@
 secrets:
   WATCHTOWER_HTTP_API_TOKEN:
-    file: ./watchtower/secrets/WATCHTOWER_HTTP_API_TOKEN
+    file: ./secrets/WATCHTOWER_HTTP_API_TOKEN
   WATCHTOWER_NOTIFICATION_URL:
-    file: ./watchtower/secrets/WATCHTOWER_NOTIFICATION_URL
+    file: ./secrets/WATCHTOWER_NOTIFICATION_URL
 
 services:
   watchtower:
