@@ -25,7 +25,7 @@ networks:
 services:
   caddy:
     build:
-      dockerfile: ./caddy.Dockerfile
+      dockerfile: ./Dockerfile
     cap_add:
       - NET_ADMIN
     container_name: caddy
@@ -64,7 +64,7 @@ services:
       - 443:443/udp
     restart: always
     volumes:
-      - ./caddy:/var/www/html:ro
+      - ./volumes/html:/var/www/html:ro
       - ./Caddyfile:/etc/caddy/Caddyfile
       - /var/log/caddy:/var/log/caddy
       - caddy-config:/config/caddy

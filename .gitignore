@@ -8,8 +8,6 @@ docker-compose.override.yaml
 */authelia/config/user-database.yaml
 secrets/
 
-phantom/caddy
-
 # Created by https://www.toptal.com/developers/gitignore/api/node,linux,macos,windows,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,linux,macos,windows,visualstudiocode
 
