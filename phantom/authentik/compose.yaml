@@ -7,7 +7,6 @@ networks:
   authentik-myspeed:
   authentik-postgres:
   authentik-qbittorrent:
-  authentik-redis:
   authentik-stirling-pdf:
   authentik-syncthing:
   authentik-uptime-kuma:
@@ -19,8 +18,6 @@ services:
     depends_on:
       authentik-postgres:
         condition: service_healthy
-      authentik-redis:
-        condition: service_healthy
       caddy:
         condition: service_started
     env_file:
@@ -30,8 +27,7 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__USER: authentik
-      AUTHENTIK_REDIS__HOST: authentik-redis
-    image: ghcr.io/goauthentik/server
+    image: ghcr.io/goauthentik/server:2025.10
     networks:
       - authentik-dozzle
       - authentik-forgejo
@@ -41,7 +37,6 @@ services:
       - authentik-myspeed
       - authentik-postgres
       - authentik-qbittorrent
-      - authentik-redis
       - authentik-stirling-pdf
       - authentik-syncthing
       - authentik-uptime-kuma
@@ -63,8 +58,6 @@ services:
     depends_on:
       authentik-postgres:
         condition: service_healthy
-      authentik-redis:
-        condition: service_healthy
     env_file:
       - .env.authentik-worker
       - .env.authentik-worker.local
@@ -72,11 +65,9 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__USER: authentik
-      AUTHENTIK_REDIS__HOST: authentik-redis
-    image: ghcr.io/goauthentik/server
+    image: ghcr.io/goauthentik/server:2025.10
     networks:
       - authentik-postgres
-      - authentik-redis
     # ports:
     #   - 9000:9000
     #   - 9443:9443
@@ -117,29 +108,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
 
-  authentik-redis:
-    command: --save 60 1 --loglevel warning
-    container_name: authentik-redis
-    healthcheck:
-      interval: 30s
-      retries: 5
-      start_period: 20s
-      test:
-        - CMD-SHELL
-        - redis-cli ping | grep PONG
-      timeout: 3s
-    image: docker.io/library/redis:alpine
-    networks:
-      - authentik-redis
-      - uptime-kuma-authentik-redis
-    restart: always
-    volumes:
-      - authentik-redis:/data
-
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-
 volumes:
   authentik-media:
   authentik-postgres:
-  authentik-redis:
