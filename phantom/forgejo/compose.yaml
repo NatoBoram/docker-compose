@@ -48,6 +48,7 @@ services:
     image: postgres:18-alpine
     networks:
       - forgejo-postgres
+      - uptime-kuma-forgejo-postgres
     restart: always
     volumes:
       - forgejo-postgres:/var/lib/postgresql

@@ -1,5 +1,6 @@
 networks:
   uptime-kuma-authentik-postgres:
+  uptime-kuma-forgejo-postgres:
   uptime-kuma-nextcloud-postgres:
 
   uptime-kuma-nextcloud-redis:
@@ -18,6 +19,8 @@ services:
       - caddy
       - clamav
       - dozzle
+      - forgejo
+      - forgejo-postgres
       - geoipupdate
       - glances
       - goaccess
@@ -44,6 +47,7 @@ services:
       - caddy-uptime-kuma
 
       - uptime-kuma-authentik-postgres
+      - uptime-kuma-forgejo-postgres
       - uptime-kuma-nextcloud-postgres
 
       - uptime-kuma-nextcloud-redis
