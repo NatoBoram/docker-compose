@@ -95,12 +95,30 @@ env_file:
 ```yaml
 depends_on:
   - caddy # All exposed services
-  - authentik-server # Protected services
-  authentik-postgres: # With health checks
-    condition: service_healthy
+  - anubis # Protected by Anubis
+  - authentik-server # Protected by Authentik
 ```
 
 Use **named volumes**, not bind mounts for persistence (exception: main config files like `Caddyfile`).
+
+### Secrets
+
+For sensitive files (certificates, tokens), use Docker Compose secrets:
+
+```yaml
+secrets:
+  WATCHTOWER_HTTP_API_TOKEN:
+    file: ./secrets/WATCHTOWER_HTTP_API_TOKEN
+
+services:
+  watchtower:
+    environment:
+      WATCHTOWER_HTTP_API_TOKEN: /run/secrets/WATCHTOWER_HTTP_API_TOKEN
+    secrets:
+      - WATCHTOWER_HTTP_API_TOKEN
+```
+
+Secrets are mounted at `/run/secrets/SECRET_NAME` inside containers.
 
 ## Adding New Service
 
@@ -146,6 +164,31 @@ For service `potato` exposed via Caddy:
 
 5. **Create env files**: Template `.env.potato` + local `.env.potato.local`
 
+6. **Add to Uptime Kuma monitoring** - Update `uptime-kuma/compose.yaml`:
+
+   ```yaml
+   networks:
+     uptime-kuma-potato-postgres: # Declare monitoring networks
+
+   services:
+     uptime-kuma:
+       depends_on:
+         - potato # Add to dependency list
+         - potato-postgres
+       networks:
+         - uptime-kuma-potato-postgres # Reference the network
+   ```
+
+   Then in `potato/compose.yaml`, reference the network:
+
+   ```yaml
+   services:
+     potato-postgres:
+       networks:
+         - potato-postgres
+         - uptime-kuma-potato-postgres # Reference network declared by uptime-kuma
+   ```
+
 ### Protection Patterns
 
 - **Public**: `import anubis` only (Kubo, Leanish, Send)
@@ -160,7 +203,13 @@ For service `potato` exposed via Caddy:
 
 **Deployment**: Push to `main` → GitHub Actions calls Watchtower webhook → Watchtower pulls/restarts containers
 
-**Reload Caddy**: `./reload_caddy.sh` (runs `docker compose exec caddy caddy reload`)
+**Common scripts** (in `phantom/`):
+
+- `./reload_caddy.sh` - Reload Caddy config without restart
+- `./reload_docker.sh` - Restart all services
+- `./occ.sh [command]` - Run Nextcloud OCC commands as user 33
+- `./add_missing_indices.sh` - Add missing Nextcloud database indices
+- `./caddy_logs.sh` - Follow Caddy logs
 
 **Service structure comparison**:
 
@@ -169,7 +218,7 @@ For service `potato` exposed via Caddy:
 
 ## Common Patterns
 
-**Database health checks**:
+**Database health checks** (PostgreSQL):
 
 ```yaml
 healthcheck:
@@ -180,7 +229,7 @@ healthcheck:
   start_period: 20s
 ```
 
-**Shared media volumes**: Cross-mount with `:ro` (e.g., Jellyfin reads `metube:/metube:ro`, `qbittorrent-downloads:/qbittorrent`)
+**Shared media volumes**: Cross-mount with `:ro` (e.g., Jellyfin reads `metube:/metube:ro`)
 
 **Hardware access** (GPU transcoding):
 
@@ -202,14 +251,27 @@ labels:
   - com.centurylinklabs.watchtower.enable=false
 ```
 
-Watchtower is disabled only for services with `build:` directive (e.g. Caddy with xcaddy extensions and Jellyfin). Public images are always auto-updated.
+Watchtower is disabled only for services with `build:` directive (e.g. Caddy with xcaddy extensions and Jellyfin). Public images are always auto-updated. When the `:latest` tag is unavailable, then updates are handled by Dependabot.
 
 ## Key Files
 
 - `phantom/caddy/Caddyfile` - Routing rules and protection snippets
-- `phantom/compose.yaml` - Service includes for production
+- `phantom/compose.yaml` - Service included for production
 - `phantom/README.md` - Service inventory with protection levels
-- `.prettierrc.yaml` - Code style (tabs, no semicolons, avoid arrow parens)
+
+## Reference Patterns
+
+**Geolocation blocking** (Caddyfile):
+
+- Some services may be exposed to the US for webhook purposes.
+- Internal services are restricted to Québec only.
+
+```caddyfile
+import maxmind_geolocation {
+  allow_countries US
+  allow_subdivisions QC
+}
+```
 
 ## Spelling
 

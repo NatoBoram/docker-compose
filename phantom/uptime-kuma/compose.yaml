@@ -1,8 +1,8 @@
 networks:
   uptime-kuma-authentik-postgres:
+  uptime-kuma-forgejo-postgres:
   uptime-kuma-nextcloud-postgres:
 
-  uptime-kuma-authentik-redis:
   uptime-kuma-nextcloud-redis:
   uptime-kuma-send-redis:
 
@@ -12,7 +12,6 @@ services:
     depends_on: # Don't monitor something until it's started
       - anubis
       - authentik-postgres
-      - authentik-redis
       - authentik-server
       - authentik-worker
       - beszel
@@ -20,6 +19,8 @@ services:
       - caddy
       - clamav
       - dozzle
+      - forgejo
+      - forgejo-postgres
       - geoipupdate
       - glances
       - goaccess
@@ -46,9 +47,9 @@ services:
       - caddy-uptime-kuma
 
       - uptime-kuma-authentik-postgres
+      - uptime-kuma-forgejo-postgres
       - uptime-kuma-nextcloud-postgres
 
-      - uptime-kuma-authentik-redis
       - uptime-kuma-nextcloud-redis
       - uptime-kuma-send-redis
     # ports:
