@@ -15,10 +15,32 @@ services:
       - path: .env.forgejo
       - path: .env.forgejo.local
     environment:
-      - FORGEJO__database__DB_TYPE=postgres
-      - FORGEJO__database__HOST=forgejo-postgres:5432
-      - FORGEJO__database__NAME=forgejo
-      - FORGEJO__database__USER=forgejo
+      FORGEJO__cron__ENABLED: true
+
+      FORGEJO__database__DB_TYPE: postgres
+      FORGEJO__database__HOST: forgejo-postgres:5432
+      FORGEJO__database__NAME: forgejo
+      FORGEJO__database__USER: forgejo
+
+      FORGEJO__openid__ENABLE_OPENID_SIGNIN: false
+      FORGEJO__openid__ENABLE_OPENID_SIGNUP: false
+
+      FORGEJO__repository.pull-request__DEFAULT_MERGE_STYLE: fast-forward-only
+      FORGEJO__repository.signing__CRUD_ACTIONS: always
+      FORGEJO__repository.signing__MERGES: always
+      FORGEJO__repository.signing__WIKI: always
+
+      FORGEJO__security__PASSWORD_CHECK_PWN: true
+      FORGEJO__security__PASSWORD_HASH_ALGO: argon2
+
+      FORGEJO__server__ENABLE_GZIP: true
+      FORGEJO__server__OFFLINE_MODE: false
+
+      FORGEJO__service__ALLOW_ONLY_EXTERNAL_REGISTRATION: true
+      FORGEJO__service__DEFAULT_KEEP_EMAIL_PRIVATE: true
+      FORGEJO__service__ENABLE_INTERNAL_SIGNIN: false
+
+      FORGEJO__ui__SHOW_USER_EMAIL: false
     image: codeberg.org/forgejo/forgejo:13
     networks:
       - authentik-forgejo
@@ -37,8 +59,8 @@ services:
       - path: .env.forgejo-postgres
       - path: .env.forgejo-postgres.local
     environment:
-      - POSTGRES_DB=forgejo
-      - POSTGRES_USER=forgejo
+      POSTGRES_DB: forgejo
+      POSTGRES_USER: forgejo
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       interval: 30s
