@@ -10,6 +10,8 @@ To get started with your own homelab, take an hour to watch [Christian Lempa](ht
 
 Docker volumes are at `/var/lib/docker/volumes`.
 
+The `daemon.json` file goes at `/etc/docker/daemon.json`.
+
 ## Usage
 
 Top-level folders represent a different machine in which Docker Compose is used to manage containers.
