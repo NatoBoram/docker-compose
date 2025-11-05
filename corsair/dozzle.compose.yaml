@@ -1,3 +1,7 @@
+networks:
+  dozzle:
+    enable_ipv6: true
+
 secrets:
   cert:
     file: ./dozzle/secrets/cert.pem
@@ -16,6 +20,8 @@ services:
       test: ["CMD", "/dozzle", "healthcheck"]
     hostname: corsair
     image: amir20/dozzle
+    networks:
+      - dozzle
     ports:
       - 7007:7007
     restart: always
