@@ -3,4 +3,4 @@ include:
   - path: dozzle.compose.yaml
   - path: kubo.compose.yaml
   - path: ollama.compose.yaml
-  # - path: watchtower.compose.yaml
+  - path: watchtower.compose.yaml

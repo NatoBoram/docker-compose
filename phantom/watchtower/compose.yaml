@@ -16,7 +16,7 @@ services:
       WATCHTOWER_CLEANUP: true
       WATCHTOWER_HTTP_API_TOKEN: /run/secrets/WATCHTOWER_HTTP_API_TOKEN
       WATCHTOWER_NOTIFICATION_URL: /run/secrets/WATCHTOWER_NOTIFICATION_URL
-    image: containrrr/watchtower
+    image: nickfedor/watchtower
     networks:
       - caddy-watchtower
     restart: always

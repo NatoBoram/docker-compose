@@ -1,7 +1,9 @@
 services:
   watchtower:
     container_name: watchtower
-    image: containrrr/watchtower
+    environment:
+      WATCHTOWER_CLEANUP: true
+    image: nickfedor/watchtower
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
