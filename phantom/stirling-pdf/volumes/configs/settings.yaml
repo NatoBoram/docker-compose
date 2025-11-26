@@ -140,7 +140,7 @@ system:
       level: MEDIUM # Security level: MAX (whitelist only), MEDIUM (block internal networks), OFF (no restrictions)
       allowedDomains: [] # Whitelist of allowed domains (e.g. ['cdn.example.com', 'images.google.com'])
       blockedDomains: [] # Additional domains to block (e.g. ['evil.com', 'malicious.org'])
-      internalTlds: [.local, .internal, .corp, .home] # Block domains with these TLD patterns
+      internalTlds: ['.local', '.internal', '.corp', '.home'] # Block domains with these TLD patterns
       blockPrivateNetworks: true # Block RFC 1918 private networks (10.x.x.x, 192.168.x.x, 172.16-31.x.x)
       blockLocalhost: true # Block localhost and loopback addresses (127.x.x.x, ::1)
       blockLinkLocal: true # Block link-local addresses (169.254.x.x, fe80::/10)
@@ -172,7 +172,7 @@ system:
     startupCleanup: true # Clean up old temp files on startup
     cleanupSystemTemp: false # Whether to clean broader system temp directory
   databaseBackup:
-    cron: 0 0 0 * * ? # Cron expression for automatic database backups "0 0 0 * * ?" daily at midnight
+    cron: '0 0 0 * * ?' # Cron expression for automatic database backups "0 0 0 * * ?" daily at midnight
 
 stirling:
   pdf:
@@ -207,7 +207,7 @@ metrics:
 AutomaticallyGenerated:
   key: example
   UUID: example
-  appVersion: 2.0.0
+  appVersion: 2.0.1
 
 processExecutor:
   sessionLimit: # Process executor instances limits
