@@ -32,7 +32,7 @@ It's managed entirely via Docker Compose. It uses Caddy as a reverse proxy for i
 | <img alt="Stirling PDF logo" src="../logos/stirling-pdf.png" width="48px" /> | [Stirling PDF](https://github.com/Stirling-Tools/Stirling-PDF) | Authentik, Geoblock  | #1 locally hosted web application that allows you to perform various operations on PDF files                         |
 | <img alt="Syncthing logo"    src="../logos/syncthing.png"    width="48px" /> | [Syncthing](https://github.com/syncthing/syncthing)            | Authentik, Geoblock  | Open source continuous file synchronization                                                                          |
 | <img alt="Uptime Kuma logo"  src="../logos/uptime-kuma.png"  width="48px" /> | [Uptime Kuma](https://github.com/louislam/uptime-kuma)         | Authentik, Geoblock  | A fancy self-hosted monitoring tool                                                                                  |
-| <img alt="Watchtower logo"   src="../logos/watchtower.png"   width="48px" /> | [Watchtower](https://github.com/containrrr/watchtower)         | Geoblock             | A process for automating Docker container base image updates                                                         |
+| <img alt="Watchtower logo"   src="../logos/watchtower.png"   width="48px" /> | [Watchtower](https://github.com/nicholas-fedor/watchtower/)    | Geoblock             | A process for automating Docker container base image updates                                                         |
 
 ## Hardware
 
