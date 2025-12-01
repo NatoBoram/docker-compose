@@ -34,8 +34,8 @@
 	},
 	"devDependencies": {
 		"@prettier/plugin-xml": "^3.4.2",
-		"markdownlint-cli2": "^0.18.1",
-		"prettier": "^3.6.2",
+		"markdownlint-cli2": "^0.19.1",
+		"prettier": "^3.7.3",
 		"prettier-plugin-sql": "^0.19.2"
 	},
 	"private": true,
