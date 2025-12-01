@@ -39,7 +39,7 @@ services:
 
       - SMTP_SECURE=ssl
       - SMTP_PORT=465
-    image: nextcloud:fpm
+    image: nextcloud
     networks:
       - caddy-nextcloud
       - nextcloud-ollama

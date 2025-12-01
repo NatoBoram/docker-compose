@@ -236,71 +236,7 @@
 			allow_subdivisions QC
 		}
 
-		file_server
-
-		# ---------------------------------------------------------------------------
-		# Nextcloud hardened rules translated from .htaccess (Apache) to Caddy
-		# Keep dual roots: php_fastcgi uses /var/www/html (inside container)
-		# while static file_server root is /var/www/nextcloud (mounted volume)
-		# ---------------------------------------------------------------------------
-
-		# Security & privacy related headers
-		# Default (all paths)
-		header {
-			# Referrer-Policy default; overridden on /login below
-			Referrer-Policy "no-referrer"
-			X-Content-Type-Options "nosniff"
-			X-Frame-Options "SAMEORIGIN"
-			X-Permitted-Cross-Domain-Policies "none"
-			X-Robots-Tag "noindex, nofollow"
-		}
-
-		# Override Referrer-Policy for login page (must allow origin for SSO flows)
-		@login path /login
-		header @login {
-			Referrer-Policy "same-origin"
-		}
-
-		# Static asset caching (long cache; versioned assets immutable)
-		@static_version {
-			path *.css *.js *.mjs *.svg *.gif *.png *.jpg *.webp *.ico *.wasm *.tflite
-			query v=*
-		}
-		header @static_version Cache-Control "max-age=15778463, immutable"
-
-		@static_generic path *.css *.js *.mjs *.svg *.gif *.png *.jpg *.webp *.ico *.wasm *.tflite
-		header @static_generic Cache-Control "max-age=15778463"
-
-		# Font caching (1 week)
-		@fonts path *.otf *.woff *.woff2
-		header @fonts Cache-Control "max-age=604800"
-
-		# Deny access to sensitive directories & entry points (404 instead of 403 like upstream)
-		@forbidden_paths {
-			path /build/* /tests/* /config/* /lib/* /3rdparty/* /templates/*
-			path /autotest* /occ* /issue* /indie* /db_* /console*
-		}
-		respond @forbidden_paths 404
-
-		# Deny hidden dotfiles except .well-known (handled separately)
-		@hidden path /.??*
-		@wellknown_allowed path /.well-known/*
-		# Order matters: allow well-known, then block remaining dotfiles
-		handle @wellknown_allowed {
-			# Later we rewrite most .well-known requests to index.php; ACME excluded via DNS challenge anyway
-		}
-		handle @hidden {
-			respond 404
-		}
-
-		php_fastcgi nextcloud:9000 {
-			root /var/www/html
-			env front_controller_active true
-		}
-
-		redir /.well-known/caldav /remote.php/dav/ 301
-		redir /.well-known/carddav /remote.php/dav/ 301
-		root /var/www/nextcloud
+		reverse_proxy nextcloud:80
 	}
 
 	@ollama host ollama.{$PORKBUN_DOMAIN}
