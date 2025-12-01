@@ -3,6 +3,7 @@ networks:
     enable_ipv6: true
   caddy-anubis:
   caddy-authentik:
+  caddy-backrest:
   caddy-beszel:
   caddy-dozzle:
   caddy-forgejo:
@@ -41,6 +42,7 @@ services:
       - caddy
       - caddy-anubis
       - caddy-authentik
+      - caddy-backrest
       - caddy-beszel
       - caddy-dozzle
       - caddy-forgejo

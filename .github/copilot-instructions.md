@@ -51,10 +51,13 @@ services:
 
 ### Mandatory Patterns
 
-**Timezone sync** (all services):
+**Timezone sync** (all services, ALWAYS at the END of volumes list):
 
 ```yaml
 volumes:
+  - potato-data:/data
+  - potato-config:/config
+
   - /etc/localtime:/etc/localtime:ro
   - /etc/timezone:/etc/timezone:ro
 ```
@@ -100,6 +103,34 @@ depends_on:
 ```
 
 Use **named volumes**, not bind mounts for persistence (exception: main config files like `Caddyfile`).
+
+**Volume declarations**: Services only declare their own volumes. When mounting volumes from other services, do NOT redeclare them as `external: true` - Docker Compose automatically finds them.
+
+```yaml
+# ✅ Correct - only declare owned volumes
+volumes:
+  backrest-data:
+  backrest-config:
+
+# ❌ Wrong - don't redeclare external volumes
+volumes:
+  backrest-data:
+  nextcloud-postgres:
+    external: true
+```
+
+**Volume naming**: Use simple declarations without `name:` property unless required.
+
+```yaml
+# ✅ Correct
+volumes:
+  potato-data:
+
+# ❌ Wrong - redundant name property
+volumes:
+  potato-data:
+    name: potato-data
+```
 
 ### Secrets
 

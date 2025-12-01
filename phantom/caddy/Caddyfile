@@ -115,6 +115,16 @@
 		reverse_proxy authentik-server:9000
 	}
 
+	@backrest host backrest.{$PORKBUN_DOMAIN}
+	handle @backrest {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+		import authentik
+
+		reverse_proxy backrest:9898
+	}
+
 	@beszel host beszel.{$PORKBUN_DOMAIN}
 	handle @beszel {
 		import maxmind_geolocation {
