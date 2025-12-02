@@ -19,36 +19,18 @@ services:
       - backrest-repos:/repos
       - backrest-tmp:/tmp
 
+      - ..:/userdata/phantom
       - authentik-media:/userdata/authentik-media
       - authentik-postgres:/userdata/authentik-postgres
       - beszel:/userdata/beszel
-      - caddy-config:/userdata/caddy-config
-      - caddy-data:/userdata/caddy-data
-      - clamav-lib:/userdata/clamav-lib
-      - clamav-run:/userdata/clamav-run
       - forgejo-postgres:/userdata/forgejo-postgres
       - forgejo:/userdata/forgejo
-      - geoipupdate:/userdata/geoipupdate
-      - goaccess-db:/userdata/goaccess-db
-      - goaccess-report:/userdata/goaccess-report
-      - jellyfin-cache:/userdata/jellyfin-cache
       - jellyfin-config:/userdata/jellyfin-config
-      - jellyfin-media:/userdata/jellyfin-media
       - kubo:/userdata/kubo
-      - metube:/userdata/metube
-      - myspeed:/userdata/myspeed
       - nextcloud-postgres:/userdata/nextcloud-postgres
       - nextcloud-redis:/userdata/nextcloud-redis
       - nextcloud:/userdata/nextcloud
-      - ollama:/userdata/ollama
       - qbittorrent-config:/userdata/qbittorrent-config
-      - qbittorrent-downloads:/userdata/qbittorrent-downloads
-      - send-redis:/userdata/send-redis
-      - send:/userdata/send
-      - stirling-pdf-configs:/userdata/stirling-pdf-configs
-      - stirling-pdf-custom-files:/userdata/stirling-pdf-custom-files
-      - syncthing-jellyfin:/userdata/syncthing-jellyfin
-      - syncthing:/userdata/syncthing
       - uptime-kuma:/userdata/uptime-kuma
 
       - /etc/localtime:/etc/localtime:ro
