@@ -19,7 +19,6 @@ include:
   - path: ollama/compose.yaml
   - path: qbittorrent/compose.yaml
   - path: send/compose.yaml
-  - path: stirling-pdf/compose.yaml
   - path: syncthing/compose.yaml
   - path: uptime-kuma/compose.yaml
   - path: watchtower/compose.yaml
