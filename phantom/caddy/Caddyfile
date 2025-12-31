@@ -283,15 +283,6 @@
 		reverse_proxy send:1443
 	}
 
-	@stirling-pdf host stirling-pdf.{$PORKBUN_DOMAIN}
-	handle @stirling-pdf {
-		import maxmind_geolocation {
-			allow_subdivisions QC
-		}
-
-		reverse_proxy stirling-pdf:8080
-	}
-
 	@syncthing host syncthing.{$PORKBUN_DOMAIN}
 	handle @syncthing {
 		import maxmind_geolocation {

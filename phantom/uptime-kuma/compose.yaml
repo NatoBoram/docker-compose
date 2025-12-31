@@ -39,7 +39,6 @@ services:
       - qbittorrent
       - send
       - send-redis
-      - stirling-pdf
       - syncthing
       - watchtower
     image: louislam/uptime-kuma

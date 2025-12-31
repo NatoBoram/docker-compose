@@ -7,7 +7,6 @@ networks:
   authentik-myspeed:
   authentik-postgres:
   authentik-qbittorrent:
-  authentik-stirling-pdf:
   authentik-syncthing:
   authentik-uptime-kuma:
 
@@ -37,7 +36,6 @@ services:
       - authentik-myspeed
       - authentik-postgres
       - authentik-qbittorrent
-      - authentik-stirling-pdf
       - authentik-syncthing
       - authentik-uptime-kuma
       - caddy-authentik
