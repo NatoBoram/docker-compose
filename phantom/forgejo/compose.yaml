@@ -25,11 +25,14 @@ services:
       FORGEJO__openid__ENABLE_OPENID_SIGNIN: false
       FORGEJO__openid__ENABLE_OPENID_SIGNUP: false
 
+      FORGEJO__repository__PREFERRED_LICENSES: AGPL-3.0-or-later, GPL-3.0-or-later, MPL-2.0
+
       FORGEJO__repository.pull-request__DEFAULT_MERGE_STYLE: fast-forward-only
       FORGEJO__repository.signing__CRUD_ACTIONS: always
       FORGEJO__repository.signing__MERGES: always
       FORGEJO__repository.signing__WIKI: always
 
+      FORGEJO__security__GLOBAL_TWO_FACTOR_REQUIREMENT: admin
       FORGEJO__security__PASSWORD_CHECK_PWN: true
       FORGEJO__security__PASSWORD_HASH_ALGO: argon2
 
