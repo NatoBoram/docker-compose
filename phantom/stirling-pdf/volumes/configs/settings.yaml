@@ -14,7 +14,7 @@ security:
   enableLogin: true # set to 'true' to enable login
   loginAttemptCount: 5 # lock user account after 5 tries; when using e.g. Fail2Ban you can deactivate the function with -1
   loginResetTimeMinutes: 120 # lock account for 2 hours after x attempts
-  loginMethod: oauth2 # Accepts values like 'all' and 'normal'(only Login with Username/Password), 'oauth2'(only Login with OAuth2) or 'saml2'(only Login with SAML2)
+  loginMethod: all # Accepts values like 'all' and 'normal'(only Login with Username/Password), 'oauth2'(only Login with OAuth2) or 'saml2'(only Login with SAML2)
   initialLogin:
     username: '' # initial username for the first login
     password: '' # initial password for the first login
@@ -42,7 +42,7 @@ security:
     clientSecret: '' # client secret from your Provider
     autoCreateUser: true # set to 'true' to allow auto-creation of non-existing users
     blockRegistration: false # set to 'true' to deny login with SSO without prior registration by an admin
-    useAsUsername: email # default is 'email'; custom fields can be used as the username
+    useAsUsername: preferred_username # default is 'email'; custom fields can be used as the username
     scopes: openid, profile, email # specify the scopes for which the application will request permissions
     provider: authentik # set this to your OAuth Provider's name, e.g., 'google' or 'keycloak'
   saml2:
@@ -86,7 +86,7 @@ premium:
   key: 00000000-0000-0000-0000-000000000000
   enabled: false # Enable license key checks for pro/enterprise features
   proFeatures:
-    SSOAutoLogin: false
+    SSOAutoLogin: true
     CustomMetadata:
       autoUpdateMetadata: false
       author: username
@@ -120,7 +120,7 @@ legal:
   impressum: '' # URL to the impressum of your application (e.g. https://example.com/impressum). Empty string to disable or filename to load from local file in static folder
 
 system:
-  defaultLocale: en-CA # set the default language (e.g. 'de-DE', 'fr-FR', etc)
+  defaultLocale: fr_FR # set the default language (e.g. 'de-DE', 'fr-FR', etc)
   googlevisibility: false # 'true' to allow Google visibility (via robots.txt), 'false' to disallow
   enableAlphaFunctionality: false # set to enable functionality which might need more testing before it fully goes live (this feature might make no changes)
   showUpdate: false # see when a new update is available
@@ -141,7 +141,7 @@ system:
     enabled: true # Enable server-side certificate for "Sign with Stirling-PDF" option
     organizationName: Stirling-PDF # Organization name for generated certificates
     validity: 365 # Certificate validity in days
-    regenerateOnStartup: false # Generate new certificate on each startup
+    regenerateOnStartup: true # Generate new certificate on each startup
   html:
     urlSecurity:
       enabled: true # Enable URL security restrictions for HTML processing
@@ -184,8 +184,8 @@ system:
 
 ui:
   appNameNavbar: '' # name displayed on the navigation bar
-  logoStyle: classic # Options: 'classic' (default - classic S icon) or 'modern' (minimalist logo)
-  languages: [] # If empty, all languages are enabled. To display only German and Polish ["de_DE", "pl_PL"]. British English is always enabled.
+  logoStyle: modern # Options: 'classic' (default - classic S icon) or 'modern' (minimalist logo)
+  languages: [fr_FR, en_GB] # If empty, all languages are enabled. To display only German and Polish ["de_DE", "pl_PL"]. British English is always enabled.
 
 endpoints:
   toRemove: [] # list endpoints to disable (e.g. ['img-to-pdf', 'remove-pages'])
