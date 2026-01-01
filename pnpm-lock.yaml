@@ -10,16 +10,16 @@ importers:
     devDependencies:
       '@prettier/plugin-xml':
         specifier: ^3.4.2
-        version: 3.4.2(prettier@3.7.3)
+        version: 3.4.2(prettier@3.7.4)
       markdownlint-cli2:
         specifier: ^0.19.1
         version: 0.19.1
       prettier:
-        specifier: ^3.7.3
-        version: 3.7.3
+        specifier: ^3.7.4
+        version: 3.7.4
       prettier-plugin-sql:
         specifier: ^0.19.2
-        version: 0.19.2(prettier@3.7.3)
+        version: 0.19.2(prettier@3.7.4)
 
 packages:
 
@@ -174,6 +174,7 @@ packages:
 
   jsox@1.2.124:
     resolution: {integrity: sha512-KwptI8xUfOt7qJ+P+2utrJIEHTgDjXpBsDhPSM4GDq++4by+LX9nUFee97QfRloGcMh5iA9Ha/4UCVZl7zWzuA==}
+    deprecated: Discovered error in stringification with certain references
     hasBin: true
 
   katex@0.16.25:
@@ -318,8 +319,8 @@ packages:
     peerDependencies:
       prettier: ^3.0.3
 
-  prettier@3.7.3:
-    resolution: {integrity: sha512-QgODejq9K3OzoBbuyobZlUhznP5SKwPqp+6Q6xw6o8gnhr4O85L2U915iM2IDcfF2NPXVaM9zlo9tdwipnYwzg==}
+  prettier@3.7.4:
+    resolution: {integrity: sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -387,10 +388,10 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@prettier/plugin-xml@3.4.2(prettier@3.7.3)':
+  '@prettier/plugin-xml@3.4.2(prettier@3.7.4)':
     dependencies:
       '@xml-tools/parser': 1.0.11
-      prettier: 3.7.3
+      prettier: 3.7.4
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
@@ -765,15 +766,15 @@ snapshots:
 
   picomatch@2.3.1: {}
 
-  prettier-plugin-sql@0.19.2(prettier@3.7.3):
+  prettier-plugin-sql@0.19.2(prettier@3.7.4):
     dependencies:
       jsox: 1.2.124
       node-sql-parser: 5.3.13
-      prettier: 3.7.3
+      prettier: 3.7.4
       sql-formatter: 15.6.10
       tslib: 2.8.1
 
-  prettier@3.7.3: {}
+  prettier@3.7.4: {}
 
   punycode.js@2.3.1: {}
 
