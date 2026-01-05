@@ -11,6 +11,7 @@ services:
     networks:
       - caddy-ollama
       - nextcloud-ollama
+      - tandoor-ollama
     ports:
       - 11434:11434
     restart: always

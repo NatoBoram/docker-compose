@@ -1,4 +1,5 @@
 networks:
+  tandoor-ollama:
   tandoor-postgres:
 
 secrets:
@@ -25,6 +26,7 @@ services:
     image: vabene1111/recipes:latest
     networks:
       - caddy-tandoor
+      - tandoor-ollama
       - tandoor-postgres
     restart: always
     secrets:

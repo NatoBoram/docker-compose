@@ -258,7 +258,6 @@
 		basic_auth {
 			LAME {$OLLAMA_LAME_PASSWORD}
 			Nextcloud {$OLLAMA_NEXTCLOUD_PASSWORD}
-			Tandoor {$OLLAMA_TANDOOR_PASSWORD}
 		}
 
 		reverse_proxy ollama:11434
