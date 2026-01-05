@@ -2,6 +2,7 @@ networks:
   uptime-kuma-authentik-postgres:
   uptime-kuma-forgejo-postgres:
   uptime-kuma-nextcloud-postgres:
+  uptime-kuma-tandoor-postgres:
 
   uptime-kuma-nextcloud-redis:
   uptime-kuma-send-redis:
@@ -40,6 +41,8 @@ services:
       - send
       - send-redis
       - syncthing
+      - tandoor
+      - tandoor-postgres
       - watchtower
     image: louislam/uptime-kuma
     networks:
@@ -49,6 +52,7 @@ services:
       - uptime-kuma-authentik-postgres
       - uptime-kuma-forgejo-postgres
       - uptime-kuma-nextcloud-postgres
+      - uptime-kuma-tandoor-postgres
 
       - uptime-kuma-nextcloud-redis
       - uptime-kuma-send-redis

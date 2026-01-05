@@ -293,6 +293,15 @@
 		reverse_proxy syncthing:8384
 	}
 
+	@tandoor host tandoor.{$PORKBUN_DOMAIN}
+	handle @tandoor {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+
+		reverse_proxy tandoor:80
+	}
+
 	@uptime-kuma host uptime-kuma.{$PORKBUN_DOMAIN}
 	handle @uptime-kuma {
 		import maxmind_geolocation {
