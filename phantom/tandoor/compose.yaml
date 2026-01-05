@@ -9,6 +9,7 @@ services:
   tandoor:
     container_name: tandoor
     depends_on:
+      - authentik-server
       - caddy
       - tandoor-postgres
     env_file:
