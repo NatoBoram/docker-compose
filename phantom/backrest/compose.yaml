@@ -19,19 +19,22 @@ services:
       - backrest-repos:/repos
       - backrest-tmp:/tmp
 
-      - ..:/userdata/phantom
-      - authentik-media:/userdata/authentik-media
-      - authentik-postgres:/userdata/authentik-postgres
-      - beszel:/userdata/beszel
-      - forgejo-postgres:/userdata/forgejo-postgres
-      - forgejo:/userdata/forgejo
-      - jellyfin-config:/userdata/jellyfin-config
-      - kubo:/userdata/kubo
-      - nextcloud-postgres:/userdata/nextcloud-postgres
-      - nextcloud-redis:/userdata/nextcloud-redis
-      - nextcloud:/userdata/nextcloud
-      - qbittorrent-config:/userdata/qbittorrent-config
-      - uptime-kuma:/userdata/uptime-kuma
+      - ..:/userdata/phantom:ro
+      - authentik-media:/userdata/authentik-media:ro
+      - authentik-postgres:/userdata/authentik-postgres:ro
+      - beszel:/userdata/beszel:ro
+      - forgejo-postgres:/userdata/forgejo-postgres:ro
+      - forgejo:/userdata/forgejo:ro
+      - jellyfin-config:/userdata/jellyfin-config:ro
+      - kubo:/userdata/kubo:ro
+      - nextcloud-postgres:/userdata/nextcloud-postgres:ro
+      - nextcloud-redis:/userdata/nextcloud-redis:ro
+      - nextcloud:/userdata/nextcloud:ro
+      - qbittorrent-config:/userdata/qbittorrent-config:ro
+      - tandoor-mediafiles:/userdata/tandoor-mediafiles:ro
+      - tandoor-postgres:/userdata/tandoor-postgres:ro
+      - tandoor-staticfiles:/userdata/tandoor-staticfiles:ro
+      - uptime-kuma:/userdata/uptime-kuma:ro
 
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
