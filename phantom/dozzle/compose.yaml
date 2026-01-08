@@ -17,6 +17,12 @@ services:
     env_file:
       - .env.dozzle
       - .env.dozzle.local
+    environment:
+      DOZZLE_AUTH_PROVIDER: forward-proxy
+      DOZZLE_AUTH_HEADER_EMAIL: X-Authentik-Email
+      DOZZLE_AUTH_HEADER_NAME: X-Authentik-Name
+      DOZZLE_AUTH_HEADER_USER: X-Authentik-Username
+      DOZZLE_AUTH_LOGOUT_URL: /outpost.goauthentik.io/sign_out
     healthcheck:
       interval: 5s
       retries: 5
