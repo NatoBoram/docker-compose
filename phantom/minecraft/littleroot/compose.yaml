@@ -14,4 +14,7 @@ services:
     user: 1000:1000
     volumes:
       - ./volumes/server:/server
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     working_dir: /server
