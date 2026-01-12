@@ -3,6 +3,7 @@ services:
     container_name: myspeed
     depends_on:
       - authentik-server
+      - caddy
     image: germannewsmaker/myspeed
     networks:
       - authentik-myspeed

@@ -5,6 +5,7 @@ services:
   send:
     container_name: send
     depends_on:
+      - caddy
       - send-redis
     env_file:
       - path: .env.send

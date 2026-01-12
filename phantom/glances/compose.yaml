@@ -3,6 +3,7 @@ services:
     container_name: glances
     depends_on:
       - authentik-server
+      - caddy
     devices:
       - /dev/dri
       - /dev/kfd
