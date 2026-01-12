@@ -70,7 +70,7 @@
 	}
 }
 
-{$PORKBUN_DOMAIN} *.{$PORKBUN_DOMAIN} rpc.kubo.{$PORKBUN_DOMAIN} ipfs.kubo.{$PORKBUN_DOMAIN} ipns.kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN} {
+{$PORKBUN_DOMAIN} *.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN} *.kubo.{$PORKBUN_DOMAIN} {
 	encode
 	header Strict-Transport-Security "max-age=63072000"
 
@@ -218,6 +218,16 @@
 	handle @leanish {
 		import anubis
 		reverse_proxy leanish:3000
+	}
+
+	@littleroot host littleroot.{$PORKBUN_DOMAIN}
+	handle @littleroot {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+		import anubis
+
+		reverse_proxy littleroot:8080
 	}
 
 	@metube host metube.{$PORKBUN_DOMAIN}

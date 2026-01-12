@@ -13,6 +13,7 @@ networks:
   caddy-jellyfin:
   caddy-kubo:
   caddy-leanish:
+  caddy-littleroot:
   caddy-metube:
   caddy-myspeed:
   caddy-nextcloud:
@@ -52,6 +53,7 @@ services:
       - caddy-jellyfin-vue
       - caddy-kubo
       - caddy-leanish
+      - caddy-littleroot
       - caddy-metube
       - caddy-myspeed
       - caddy-nextcloud
