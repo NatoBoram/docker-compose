@@ -3,6 +3,7 @@ services:
     container_name: qbittorrent
     depends_on:
       - authentik-server
+      - caddy
     environment:
       - QBT_LEGAL_NOTICE=confirm
     image: qbittorrentofficial/qbittorrent-nox

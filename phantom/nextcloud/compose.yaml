@@ -21,6 +21,7 @@ services:
       - /dev/dri
       - /dev/kfd
     depends_on:
+      - caddy
       - clamav
       - nextcloud-postgres
       - nextcloud-redis
