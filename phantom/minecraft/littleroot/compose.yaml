@@ -12,7 +12,6 @@ services:
       - 25571:25571
     restart: unless-stopped
     stdin_open: true
-    stop_grace_period: 1m
     tty: true
     user: 1000:1000
     volumes:
