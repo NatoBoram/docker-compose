@@ -1,8 +1,7 @@
 ---
 applyTo: **/compose.yaml,**/compose.override.yaml,**/*.compose.yaml
+name: compose.yaml
 ---
-
-# Compose Instructions
 
 ## Compose Keys (Alphabetical Order)
 
