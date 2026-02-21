@@ -1,0 +1,551 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"$ref": "#/definitions/Layer",
+	"definitions": {
+		"Layer": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"$schema": { "type": "string" },
+				"key": {
+					"type": "string",
+					"description": "Key for the layer. This is a unique identifier."
+				},
+				"label": { "type": "string", "description": "Label of the layer." },
+				"updateInterval": {
+					"type": "integer",
+					"description": "Layer's update interval (in seconds)."
+				},
+				"showControls": {
+					"type": "boolean",
+					"description": "Whether to show the layer in the control box."
+				},
+				"defaultHidden": {
+					"type": "boolean",
+					"description": "Whether the layer is hidden by default in the control box."
+				},
+				"priority": {
+					"type": "integer",
+					"description": "The indexed order for this layer in the control box. Falls back to alphanumeric ordering based on label if there are order conflicts."
+				},
+				"zIndex": {
+					"type": "integer",
+					"description": "The z-index for this layer. Used in determining what layers are visually on top of other layers. Falls back to alphanumeric ordering based on name if there are order conflicts. Defaults to `priority` value."
+				},
+				"pane": {
+					"type": "string",
+					"description": "The map pane for the layer."
+				},
+				"css": {
+					"type": "string",
+					"description": "The custom CSS to add for this layer."
+				},
+				"markers": {
+					"type": "array",
+					"items": { "$ref": "#/definitions/Marker" },
+					"description": "Array of markers to display in the layer"
+				}
+			},
+			"required": ["key", "label"],
+			"title": "Layer"
+		},
+		"Marker": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"type": {
+					"$ref": "#/definitions/MarkerType",
+					"description": "The type identifier of the marker."
+				},
+				"data": { "$ref": "#/definitions/Data" },
+				"options": { "$ref": "#/definitions/Options" }
+			},
+			"required": ["type", "data"],
+			"title": "Marker"
+		},
+		"MarkerType": {
+			"type": "string",
+			"enum": [
+				"circ",
+				"elli",
+				"icon",
+				"multipoly",
+				"multiline",
+				"poly",
+				"line",
+				"rect"
+			],
+			"title": "MarkerType"
+		},
+		"Data": {
+			"oneOf": [
+				{ "$ref": "#/definitions/CircleData" },
+				{ "$ref": "#/definitions/EllipseData" },
+				{ "$ref": "#/definitions/IconData" },
+				{ "$ref": "#/definitions/MultiPolygonData" },
+				{ "$ref": "#/definitions/PolylineData" },
+				{ "$ref": "#/definitions/PolygonData" },
+				{ "$ref": "#/definitions/RectangleData" }
+			],
+			"description": "The data object differs depending on the marker type.",
+			"title": "Data"
+		},
+		"CircleData": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"type": "string",
+					"description": "Key for the marker. This is a unique identifier."
+				},
+				"center": {
+					"$ref": "#/definitions/Point",
+					"description": "Center for the circle."
+				},
+				"radius": { "type": "number", "description": "Radius of the circle." },
+				"pane": {
+					"type": "string",
+					"description": "The map pane for the marker."
+				}
+			},
+			"required": ["key", "center", "radius"],
+			"title": "CircleData"
+		},
+		"EllipseData": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"type": "string",
+					"description": "Key for the marker. This is a unique identifier."
+				},
+				"center": {
+					"$ref": "#/definitions/Point",
+					"description": "Center for the ellipse."
+				},
+				"radius": { "type": "number", "description": "Radius of the ellipse." },
+				"tilt": {
+					"type": "number",
+					"description": "The tilt of the ellipse, in degrees, clockwise. Defaults to 0.",
+					"default": 0
+				},
+				"pane": {
+					"type": "string",
+					"description": "The map pane for the marker."
+				}
+			},
+			"required": ["key", "center", "radius"],
+			"title": "EllipseData"
+		},
+		"IconData": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"type": "string",
+					"description": "Key for the marker. This is a unique identifier."
+				},
+				"point": {
+					"$ref": "#/definitions/Point",
+					"description": "Point on the map for the icon."
+				},
+				"image": {
+					"type": "string",
+					"description": "The image to use for the icon. This is the filename of a png image in `/web/images/icon/` (without the extension)."
+				},
+				"retina": {
+					"type": "string",
+					"description": "The retina sized image to use for this icon. This image will be used on retina devices. Defaults to `image` value."
+				},
+				"size": {
+					"$ref": "#/definitions/Vector",
+					"description": "The size of the image."
+				},
+				"anchor": {
+					"$ref": "#/definitions/Vector",
+					"description": "The anchor point of the image relative to its top-left corner."
+				},
+				"shadow": {
+					"type": "string",
+					"description": "The shadow image to use for the icon. This is the filename of a png image in `/web/images/icon/` (without the extension)."
+				},
+				"shadowRetina": {
+					"type": "string",
+					"description": "The retina sized shadow image to use for this icon. This image will be used on retina devices. Defaults to `shadow` value."
+				},
+				"shadowSize": {
+					"$ref": "#/definitions/Vector",
+					"description": "The size of the shadow image."
+				},
+				"shadowAnchor": {
+					"$ref": "#/definitions/Vector",
+					"description": "The anchor point of the shadow image relative to its top-left corner."
+				},
+				"rotationAngle": {
+					"type": "number",
+					"description": "The rotation angle, in degrees, clockwise."
+				},
+				"rotationOrigin": {
+					"type": "string",
+					"description": "The rotation origin, as a transform-origin CSS rule."
+				},
+				"pane": {
+					"type": "string",
+					"description": "The map pane for the marker."
+				}
+			},
+			"required": ["key", "point", "image"],
+			"title": "IconData"
+		},
+		"MultiPolygonData": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"type": "string",
+					"description": "Key for the marker. This is a unique identifier."
+				},
+				"polygons": {
+					"type": "array",
+					"items": { "$ref": "#/definitions/Polygon" },
+					"description": "The list of polygons in this multi-polygon."
+				},
+				"pane": {
+					"type": "string",
+					"description": "The map pane for the marker."
+				}
+			},
+			"required": ["key", "polygons"],
+			"title": "MultiPolygonData"
+		},
+		"PolygonData": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"type": "string",
+					"description": "Key for the marker. This is a unique identifier."
+				},
+				"polylines": {
+					"type": "array",
+					"items": { "$ref": "#/definitions/Polyline" },
+					"description": "The list of polylines in this polygon."
+				},
+				"pane": {
+					"type": "string",
+					"description": "The map pane for the marker."
+				}
+			},
+			"required": ["key", "polylines"],
+			"title": "PolygonData"
+		},
+		"PolylineData": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"type": "string",
+					"description": "Key for the marker. This is a unique identifier."
+				},
+				"points": {
+					"type": "array",
+					"items": { "$ref": "#/definitions/Point" },
+					"description": "The list of points in this polyline. The last point does not need to be the same as the first point added for a polygon."
+				},
+				"pane": {
+					"type": "string",
+					"description": "The map pane for the marker."
+				}
+			},
+			"required": ["key", "points"],
+			"title": "PolylineData"
+		},
+		"RectangleData": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"type": "string",
+					"description": "Key for the marker. This is a unique identifier."
+				},
+				"point1": {
+					"$ref": "#/definitions/Point",
+					"description": "The first point of this rectangle."
+				},
+				"point2": {
+					"$ref": "#/definitions/Point",
+					"description": "The second point of this rectangle."
+				},
+				"pane": {
+					"type": "string",
+					"description": "The map pane for the marker."
+				}
+			},
+			"required": ["key", "point1", "point2"],
+			"title": "RectangleData"
+		},
+		"Polygon": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"type": "string",
+					"description": "Key for the marker. This is a unique identifier."
+				},
+				"polylines": {
+					"type": "array",
+					"items": { "$ref": "#/definitions/Polyline" },
+					"description": "The list of polylines in this polygon."
+				},
+				"pane": {
+					"type": "string",
+					"description": "The map pane for the marker."
+				}
+			},
+			"required": ["key", "polylines"],
+			"title": "Polygon"
+		},
+		"Polyline": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"type": "string",
+					"description": "Key for the marker. This is a unique identifier."
+				},
+				"points": {
+					"type": "array",
+					"items": { "$ref": "#/definitions/Point" },
+					"description": "The list of points in this polyline."
+				},
+				"pane": {
+					"type": "string",
+					"description": "The map pane for the marker."
+				}
+			},
+			"required": ["key", "points"],
+			"title": "Polyline"
+		},
+		"Point": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"x": {
+					"type": "integer",
+					"description": "The x coordinate of the point."
+				},
+				"z": {
+					"type": "integer",
+					"description": "The z coordinate of the point."
+				}
+			},
+			"required": ["x", "z"],
+			"title": "Point"
+		},
+		"Vector": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"x": { "type": "number", "description": "The x value of the vector." },
+				"z": { "type": "number", "description": "The z value of the vector." }
+			},
+			"required": ["x", "z"],
+			"title": "Vector"
+		},
+		"Options": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"stroke": { "$ref": "#/definitions/Stroke" },
+				"fill": { "$ref": "#/definitions/Fill" },
+				"tooltip": { "$ref": "#/definitions/Tooltip" },
+				"popup": { "$ref": "#/definitions/Popup" }
+			},
+			"title": "Options"
+		},
+		"Stroke": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"enabled": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to draw the stroke."
+				},
+				"weight": {
+					"type": "integer",
+					"default": 3,
+					"description": "The weight of the stroke."
+				},
+				"color": {
+					"type": "integer",
+					"default": 4281567487,
+					"description": "The color of the stroke in argb. Use decimal system. Example: red (#ffff0000) would be -65536."
+				},
+				"lineCap": {
+					"type": "string",
+					"enum": ["butt", "round", "square"],
+					"default": "round",
+					"description": "The shape to be used at the end of the stroke."
+				},
+				"lineJoin": {
+					"type": "string",
+					"enum": ["miter", "round", "bevel"],
+					"default": "round",
+					"description": "The shape to be used at the corners of the stroke."
+				},
+				"dashArray": {
+					"type": "string",
+					"description": "The stroke dash pattern. Doesn't work in some old browsers."
+				},
+				"dashOffset": {
+					"type": "string",
+					"description": "The distance into the dash pattern to start the dash. Doesn't work in some old browsers."
+				}
+			},
+			"title": "Stroke"
+		},
+		"Fill": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"enabled": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to fill the path with color. Setting to false will disable filling on polygons or circles."
+				},
+				"type": {
+					"type": "string",
+					"enum": ["nonzero", "evenodd"],
+					"default": "evenodd",
+					"description": "The fill type of the fill rule."
+				},
+				"color": {
+					"type": "integer",
+					"description": "The fill color of this fill rule. Use decimal system. Example: red (#ffff0000) would be -65536."
+				}
+			},
+			"title": "Fill"
+		},
+		"Tooltip": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"content": {
+					"type": "string",
+					"description": "The content of the tooltip. HTML is valid here. If null, the tooltip is effectively disabled."
+				},
+				"pane": {
+					"type": "string",
+					"default": "tooltipPane",
+					"description": "The map pane where tooltip will be added."
+				},
+				"offset": {
+					"$ref": "#/definitions/Point",
+					"default": { "x": 0, "z": 0 },
+					"description": "The offset of the tooltip from the marker point."
+				},
+				"direction": {
+					"type": "string",
+					"enum": ["right", "left", "top", "bottom", "center", "auto"],
+					"default": "auto",
+					"description": "The direction where to open the tooltip."
+				},
+				"permanent": {
+					"type": "boolean",
+					"default": false,
+					"description": "Whether to open the tooltip permanently or only on mouseover."
+				},
+				"sticky": {
+					"type": "boolean",
+					"default": false,
+					"description": "Whether the tooltip is sticky or not. A sticky tooltip will stick to and follow the mouse."
+				},
+				"opacity": {
+					"type": "number",
+					"default": 0.9,
+					"description": "The tooltip opacity percent."
+				}
+			},
+			"title": "Tooltip"
+		},
+		"Popup": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"content": {
+					"type": "string",
+					"description": "The content of the popup. HTML is valid here. If null, the popup is effectively disabled."
+				},
+				"pane": {
+					"type": "string",
+					"default": "popupPane",
+					"description": "The map pane where the popup will be added. If the pane does not exist, it will be created the first time it is used."
+				},
+				"offset": {
+					"$ref": "#/definitions/Point",
+					"default": { "x": 0, "z": 7 },
+					"description": "The offset of the popup from the marker point."
+				},
+				"maxWidth": {
+					"type": "integer",
+					"default": 300,
+					"description": "The maximum width of the popup."
+				},
+				"minWidth": {
+					"type": "integer",
+					"default": 50,
+					"description": "The minimum width of the popup."
+				},
+				"maxHeight": {
+					"type": "integer",
+					"description": "The maximum height of the popup. If set, creates a scrollable container of the given height inside the popup if its content exceeds it."
+				},
+				"autoPan": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether the map should automatically pan to fit the opened popup."
+				},
+				"autoPanPaddingTopLeft": {
+					"$ref": "#/definitions/Point",
+					"description": "The margin between the popup and the top left corner of the map view after auto panning was performed. If set, overrides the top left values of autoPanPadding."
+				},
+				"autoPanPaddingBottomRight": {
+					"$ref": "#/definitions/Point",
+					"description": "The margin between the popup and the bottom right corner of the map view after auto panning was performed. If set, overrides the bottom right values of autoPanPadding."
+				},
+				"autoPanPadding": {
+					"$ref": "#/definitions/Point",
+					"default": { "x": 5, "z": 5 },
+					"description": "The margin between the popup and the map view after auto panning was performed."
+				},
+				"keepInView": {
+					"type": "boolean",
+					"default": false,
+					"description": "Whether the popup should stay in view. If set to true, it will prevent users from panning the popup off the screen while it is open."
+				},
+				"closeButton": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether the popup has a close button."
+				},
+				"autoClose": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether the popup automatically closes when another popup is opened."
+				},
+				"closeOnEscapeKey": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether the popup closes with the escape key."
+				},
+				"closeOnClick": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether the popup closes when the map is clicked."
+				}
+			},
+			"title": "Popup"
+		}
+	}
+}
