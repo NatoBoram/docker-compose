@@ -28,6 +28,13 @@ updates:
       timezone: America/Toronto
     commit-message:
       prefix: "⬆️ "
+    groups:
+      actions:
+        patterns:
+          - actions/*
+      docker:
+        patterns:
+          - docker/*
 
   - package-ecosystem: docker-compose
     directory: /corsair
