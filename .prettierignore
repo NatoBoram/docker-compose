@@ -5,3 +5,10 @@ docs/
 node_modules/
 package-lock.json
 pnpm-lock.yaml
+
+*.sqlite
+
+phantom/minecraft/littleroot/volumes/server/config/pl3xmap/web/
+phantom/minecraft/littleroot/volumes/server/showdown/
+phantom/minecraft/littleroot/volumes/server/world.old/
+phantom/minecraft/littleroot/volumes/server/world/
