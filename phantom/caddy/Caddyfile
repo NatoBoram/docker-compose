@@ -109,7 +109,7 @@
 	@authentik host authentik.{$PORKBUN_DOMAIN}
 	handle @authentik {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 
 		reverse_proxy authentik-server:9000
@@ -118,7 +118,7 @@
 	@backrest host backrest.{$PORKBUN_DOMAIN}
 	handle @backrest {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import authentik
 
@@ -128,7 +128,7 @@
 	@beszel host beszel.{$PORKBUN_DOMAIN}
 	handle @beszel {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL ON
+			allow_subdivisions QC ON
 		}
 
 		reverse_proxy beszel:8090
@@ -137,7 +137,7 @@
 	@dozzle host dozzle.{$PORKBUN_DOMAIN}
 	handle @dozzle {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import authentik
 
@@ -147,7 +147,7 @@
 	@forgejo host forgejo.{$PORKBUN_DOMAIN}
 	handle @forgejo {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 
 		reverse_proxy forgejo:3000
@@ -156,7 +156,7 @@
 	@glances host glances.{$PORKBUN_DOMAIN}
 	handle @glances {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import authentik
 
@@ -166,7 +166,7 @@
 	@goaccess host goaccess.{$PORKBUN_DOMAIN}
 	handle @goaccess {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import authentik
 
@@ -183,7 +183,7 @@
 	@jellyfin host jellyfin.{$PORKBUN_DOMAIN}
 	handle @jellyfin {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 
 		reverse_proxy jellyfin:8096
@@ -192,7 +192,7 @@
 	@jellyfin-vue host jellyfin-vue.{$PORKBUN_DOMAIN}
 	handle @jellyfin-vue {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import anubis
 
@@ -223,7 +223,7 @@
 	@littleroot host littleroot.{$PORKBUN_DOMAIN}
 	handle @littleroot {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import anubis
 
@@ -233,7 +233,7 @@
 	@metube host metube.{$PORKBUN_DOMAIN}
 	handle @metube {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import authentik
 
@@ -243,7 +243,7 @@
 	@myspeed host myspeed.{$PORKBUN_DOMAIN}
 	handle @myspeed {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import authentik
 
@@ -253,7 +253,7 @@
 	@nextcloud host nextcloud.{$PORKBUN_DOMAIN}
 	handle @nextcloud {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 
 		reverse_proxy nextcloud:80
@@ -262,7 +262,7 @@
 	@ollama host ollama.{$PORKBUN_DOMAIN}
 	handle @ollama {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 
 		basic_auth {
@@ -276,7 +276,7 @@
 	@qbittorrent host qbittorrent.{$PORKBUN_DOMAIN}
 	handle @qbittorrent {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import authentik
 
@@ -286,7 +286,7 @@
 	@send host send.{$PORKBUN_DOMAIN}
 	handle @send {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import anubis
 
@@ -296,7 +296,7 @@
 	@syncthing host syncthing.{$PORKBUN_DOMAIN}
 	handle @syncthing {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import authentik
 
@@ -306,7 +306,7 @@
 	@tandoor host tandoor.{$PORKBUN_DOMAIN}
 	handle @tandoor {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 
 		reverse_proxy tandoor:80
@@ -315,7 +315,7 @@
 	@uptime-kuma host uptime-kuma.{$PORKBUN_DOMAIN}
 	handle @uptime-kuma {
 		import maxmind_geolocation {
-			allow_subdivisions QC FL
+			allow_subdivisions QC
 		}
 		import authentik
 
