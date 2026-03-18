@@ -31,6 +31,8 @@ services:
       - nextcloud-redis:/userdata/nextcloud-redis:ro
       - nextcloud:/userdata/nextcloud:ro
       - qbittorrent-config:/userdata/qbittorrent-config:ro
+      - synapse-postgres:/userdata/synapse-postgres:ro
+      - synapse:/userdata/synapse:ro
       - tandoor-mediafiles:/userdata/tandoor-mediafiles:ro
       - tandoor-postgres:/userdata/tandoor-postgres:ro
       - tandoor-staticfiles:/userdata/tandoor-staticfiles:ro
