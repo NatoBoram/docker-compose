@@ -13,6 +13,7 @@ include:
   - path: jellyfin/compose.yaml
   - path: kubo/compose.yaml
   - path: leanish/compose.yaml
+  - path: matrix/compose.yaml
   - path: metube/compose.yaml
   - path: minecraft/compose.yaml
   - path: myspeed/compose.yaml

@@ -6,6 +6,7 @@ networks:
   caddy-backrest:
   caddy-beszel:
   caddy-dozzle:
+  caddy-element:
   caddy-forgejo:
   caddy-glances:
   caddy-goaccess:
@@ -20,6 +21,7 @@ networks:
   caddy-ollama:
   caddy-qbittorrent:
   caddy-send:
+  caddy-synapse:
   caddy-syncthing:
   caddy-tandoor:
   caddy-uptime-kuma:
@@ -46,6 +48,7 @@ services:
       - caddy-backrest
       - caddy-beszel
       - caddy-dozzle
+      - caddy-element
       - caddy-forgejo
       - caddy-glances
       - caddy-goaccess
@@ -60,6 +63,7 @@ services:
       - caddy-ollama
       - caddy-qbittorrent
       - caddy-send
+      - caddy-synapse
       - caddy-syncthing
       - caddy-tandoor
       - caddy-uptime-kuma

@@ -144,6 +144,11 @@
 		reverse_proxy dozzle:8080
 	}
 
+	@element host element.{$PORKBUN_DOMAIN}
+	handle @element {
+		reverse_proxy element:80
+	}
+
 	@forgejo host forgejo.{$PORKBUN_DOMAIN}
 	handle @forgejo {
 		import maxmind_geolocation {
@@ -291,6 +296,11 @@
 		import anubis
 
 		reverse_proxy send:1443
+	}
+
+	@synapse host synapse.{$PORKBUN_DOMAIN}
+	handle @synapse {
+		reverse_proxy synapse:8008
 	}
 
 	@syncthing host syncthing.{$PORKBUN_DOMAIN}

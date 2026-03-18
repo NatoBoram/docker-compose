@@ -1,0 +1,89 @@
+networks:
+  synapse-postgres:
+
+secrets:
+  config:
+    file: ./secrets/config.json
+  homeserver:
+    file: ./secrets/homeserver.yaml
+
+services:
+  element:
+    container_name: element
+    depends_on:
+      caddy:
+        condition: service_started
+      synapse:
+        condition: service_healthy
+    environment:
+      TZ: America/Toronto
+    hostname: element
+    image: vectorim/element-web:latest
+    networks:
+      - caddy-element
+    restart: always
+    secrets:
+      - source: config
+        target: /app/config.json
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  synapse:
+    container_name: synapse
+    depends_on:
+      caddy:
+        condition: service_started
+      synapse-postgres:
+        condition: service_healthy
+    environment:
+      TZ: America/Toronto
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    image: matrixdotorg/synapse:latest
+    networks:
+      - caddy-synapse
+      - synapse-postgres
+    restart: always
+    secrets:
+      - source: homeserver
+        target: /data/homeserver.yaml
+    volumes:
+      - synapse:/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  synapse-postgres:
+    container_name: synapse-postgres
+    env_file:
+      - .env.synapse-postgres
+      - .env.synapse-postgres.local
+    environment:
+      POSTGRES_DB: synapse
+      POSTGRES_INITDB_ARGS: --encoding=UTF-8 --lc-collate=C --lc-ctype=C
+      POSTGRES_USER: synapse
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    image: postgres:18-alpine
+    networks:
+      - synapse-postgres
+      - uptime-kuma-synapse-postgres
+    restart: always
+    volumes:
+      - synapse-postgres:/var/lib/postgresql
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  synapse:
+  synapse-postgres:
