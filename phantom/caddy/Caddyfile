@@ -144,6 +144,11 @@
 		reverse_proxy dozzle:8080
 	}
 
+	@element host element.{$PORKBUN_DOMAIN}
+	handle @element {
+		reverse_proxy element:80
+	}
+
 	@forgejo host forgejo.{$PORKBUN_DOMAIN}
 	handle @forgejo {
 		import maxmind_geolocation {
@@ -230,6 +235,11 @@
 		reverse_proxy littleroot:8080
 	}
 
+	@mas host mas.{$PORKBUN_DOMAIN}
+	handle @mas {
+		reverse_proxy mas:8080
+	}
+
 	@metube host metube.{$PORKBUN_DOMAIN}
 	handle @metube {
 		import maxmind_geolocation {
@@ -291,6 +301,11 @@
 		import anubis
 
 		reverse_proxy send:1443
+	}
+
+	@synapse host synapse.{$PORKBUN_DOMAIN}
+	handle @synapse {
+		reverse_proxy synapse:8008
 	}
 
 	@syncthing host syncthing.{$PORKBUN_DOMAIN}

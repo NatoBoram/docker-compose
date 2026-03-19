@@ -1,7 +1,9 @@
 networks:
   uptime-kuma-authentik-postgres:
   uptime-kuma-forgejo-postgres:
+  uptime-kuma-mas-postgres:
   uptime-kuma-nextcloud-postgres:
+  uptime-kuma-synapse-postgres:
   uptime-kuma-tandoor-postgres:
 
   uptime-kuma-nextcloud-redis:
@@ -21,6 +23,7 @@ services:
       - caddy
       - clamav
       - dozzle
+      - element
       - forgejo
       - forgejo-postgres
       - geoipupdate
@@ -30,6 +33,8 @@ services:
       - jellyfin-vue
       - kubo
       - leanish
+      - mas
+      - mas-postgres
       - metube
       - myspeed
       - nextcloud
@@ -40,6 +45,8 @@ services:
       - qbittorrent
       - send
       - send-redis
+      - synapse
+      - synapse-postgres
       - syncthing
       - tandoor
       - tandoor-postgres
@@ -51,7 +58,9 @@ services:
 
       - uptime-kuma-authentik-postgres
       - uptime-kuma-forgejo-postgres
+      - uptime-kuma-mas-postgres
       - uptime-kuma-nextcloud-postgres
+      - uptime-kuma-synapse-postgres
       - uptime-kuma-tandoor-postgres
 
       - uptime-kuma-nextcloud-redis
