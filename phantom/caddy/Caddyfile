@@ -305,6 +305,11 @@
 
 	@synapse host synapse.{$PORKBUN_DOMAIN}
 	handle @synapse {
+		# # https://element-hq.github.io/matrix-authentication-service/setup/reverse-proxy.html#compatibility-layer
+		# reverse_proxy /_matrix/client/*/login mas:8080
+		# reverse_proxy /_matrix/client/*/logout mas:8080
+		# reverse_proxy /_matrix/client/*/refresh mas:8080
+
 		reverse_proxy synapse:8008
 	}
 
