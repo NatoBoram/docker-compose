@@ -22,7 +22,7 @@ services:
     environment:
       TZ: America/Toronto
     hostname: element
-    image: vectorim/element-web:latest
+    image: vectorim/element-web
     networks:
       - caddy-element
     restart: always
@@ -44,7 +44,7 @@ services:
         condition: service_healthy
     environment:
       TZ: America/Toronto
-    image: ghcr.io/element-hq/matrix-authentication-service:latest
+    image: ghcr.io/element-hq/matrix-authentication-service
     networks:
       - caddy-mas
       - mas-postgres
@@ -100,7 +100,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
-    image: matrixdotorg/synapse:latest
+    image: matrixdotorg/synapse
     networks:
       - mas-synapse
       - caddy-synapse

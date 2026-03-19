@@ -23,7 +23,7 @@ services:
       POSTGRES_USER: tandoor
       SECRET_KEY_FILE: /run/secrets/SECRET_KEY
       TZ: America/Toronto
-    image: vabene1111/recipes:latest
+    image: vabene1111/recipes
     networks:
       - caddy-tandoor
       - tandoor-ollama

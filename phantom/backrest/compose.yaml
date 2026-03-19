@@ -1,6 +1,6 @@
 services:
   backrest:
-    image: garethgeorge/backrest:latest
+    image: garethgeorge/backrest
     container_name: backrest
     depends_on:
       - caddy
