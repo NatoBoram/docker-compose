@@ -1,6 +1,7 @@
 networks:
   uptime-kuma-authentik-postgres:
   uptime-kuma-forgejo-postgres:
+  uptime-kuma-mas-postgres:
   uptime-kuma-nextcloud-postgres:
   uptime-kuma-synapse-postgres:
   uptime-kuma-tandoor-postgres:
@@ -32,6 +33,8 @@ services:
       - jellyfin-vue
       - kubo
       - leanish
+      - mas
+      - mas-postgres
       - metube
       - myspeed
       - nextcloud
@@ -55,6 +58,7 @@ services:
 
       - uptime-kuma-authentik-postgres
       - uptime-kuma-forgejo-postgres
+      - uptime-kuma-mas-postgres
       - uptime-kuma-nextcloud-postgres
       - uptime-kuma-synapse-postgres
       - uptime-kuma-tandoor-postgres

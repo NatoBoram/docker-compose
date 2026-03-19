@@ -1,17 +1,23 @@
 networks:
+  mas-postgres:
+  mas-synapse:
   synapse-postgres:
 
 secrets:
-  config:
-    file: ./secrets/config.json
+  element-config:
+    file: ./secrets/element-config.json
   homeserver:
     file: ./secrets/homeserver.yaml
+  mas-config:
+    file: ./secrets/mas-config.yaml
 
 services:
   element:
     container_name: element
     depends_on:
       caddy:
+        condition: service_started
+      mas:
         condition: service_started
       synapse:
         condition: service_healthy
@@ -23,9 +29,57 @@ services:
       - caddy-element
     restart: always
     secrets:
-      - source: config
+      - source: element-config
         target: /app/config.json
     volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  mas:
+    container_name: mas
+    depends_on:
+      caddy:
+        condition: service_started
+      mas-postgres:
+        condition: service_healthy
+    environment:
+      TZ: America/Toronto
+    image: ghcr.io/element-hq/matrix-authentication-service:latest
+    networks:
+      - caddy-mas
+      - mas-postgres
+      - mas-synapse
+    restart: always
+    secrets:
+      - source: mas-config
+        target: /config.yaml
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  mas-postgres:
+    container_name: mas-postgres
+    env_file:
+      - .env.mas-postgres
+      - .env.mas-postgres.local
+    environment:
+      POSTGRES_DB: mas
+      POSTGRES_INITDB_ARGS: --encoding=UTF-8 --lc-collate=C --lc-ctype=C
+      POSTGRES_USER: mas
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    image: postgres:18-alpine
+    networks:
+      - mas-postgres
+      - uptime-kuma-mas-postgres
+    restart: always
+    volumes:
+      - mas-postgres:/var/lib/postgresql
+
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
 
@@ -46,6 +100,7 @@ services:
       start_period: 5s
     image: matrixdotorg/synapse:latest
     networks:
+      - mas-synapse
       - caddy-synapse
       - synapse-postgres
     restart: always
@@ -85,5 +140,6 @@ services:
       - /etc/timezone:/etc/timezone:ro
 
 volumes:
+  mas-postgres:
   synapse:
   synapse-postgres:

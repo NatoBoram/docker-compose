@@ -235,6 +235,11 @@
 		reverse_proxy littleroot:8080
 	}
 
+	@mas host mas.{$PORKBUN_DOMAIN}
+	handle @mas {
+		reverse_proxy mas:8080
+	}
+
 	@metube host metube.{$PORKBUN_DOMAIN}
 	handle @metube {
 		import maxmind_geolocation {

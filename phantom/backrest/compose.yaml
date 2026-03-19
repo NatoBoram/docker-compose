@@ -27,6 +27,7 @@ services:
       - forgejo:/userdata/forgejo:ro
       - jellyfin-config:/userdata/jellyfin-config:ro
       - kubo:/userdata/kubo:ro
+      - mas-postgres:/userdata/mas-postgres:ro
       - nextcloud-postgres:/userdata/nextcloud-postgres:ro
       - nextcloud-redis:/userdata/nextcloud-redis:ro
       - nextcloud:/userdata/nextcloud:ro
