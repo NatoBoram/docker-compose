@@ -51,7 +51,7 @@ services:
       - tandoor
       - tandoor-postgres
       - watchtower
-    image: louislam/uptime-kuma
+    image: louislam/uptime-kuma:2
     networks:
       - authentik-uptime-kuma
       - caddy-uptime-kuma
