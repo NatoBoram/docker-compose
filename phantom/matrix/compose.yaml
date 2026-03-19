@@ -17,8 +17,6 @@ services:
     depends_on:
       caddy:
         condition: service_started
-      mas:
-        condition: service_started
       synapse:
         condition: service_healthy
     environment:
@@ -38,6 +36,8 @@ services:
   mas:
     container_name: mas
     depends_on:
+      authentik-server:
+        condition: service_started
       caddy:
         condition: service_started
       mas-postgres:
@@ -87,6 +87,8 @@ services:
     container_name: synapse
     depends_on:
       caddy:
+        condition: service_started
+      mas:
         condition: service_started
       synapse-postgres:
         condition: service_healthy
