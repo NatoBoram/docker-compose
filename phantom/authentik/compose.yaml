@@ -26,7 +26,7 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__USER: authentik
-    image: ghcr.io/goauthentik/server:2025.12.4
+    image: ghcr.io/goauthentik/server:2026.2
     networks:
       - authentik-dozzle
       - authentik-forgejo
@@ -64,7 +64,7 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__USER: authentik
-    image: ghcr.io/goauthentik/server:2025.12.4
+    image: ghcr.io/goauthentik/server:2026.2
     networks:
       - authentik-postgres
     # ports:
