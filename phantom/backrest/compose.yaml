@@ -20,6 +20,7 @@ services:
       - backrest-tmp:/tmp
 
       - ..:/userdata/phantom:ro
+      - authentik-data:/userdata/authentik-data:ro
       - authentik-media:/userdata/authentik-media:ro
       - authentik-postgres:/userdata/authentik-postgres:ro
       - beszel:/userdata/beszel:ro

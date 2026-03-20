@@ -26,7 +26,7 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__USER: authentik
-    image: ghcr.io/goauthentik/server:2025.10
+    image: ghcr.io/goauthentik/server:2025.12.0
     networks:
       - authentik-dozzle
       - authentik-forgejo
@@ -45,6 +45,7 @@ services:
     restart: always
     volumes:
       - ./volumes/templates:/templates
+      - authentik-data:/data
       - authentik-media:/media
 
       - /etc/localtime:/etc/localtime:ro
@@ -63,7 +64,7 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__USER: authentik
-    image: ghcr.io/goauthentik/server:2025.10
+    image: ghcr.io/goauthentik/server:2025.12.0
     networks:
       - authentik-postgres
     # ports:
@@ -74,6 +75,7 @@ services:
       - ./volumes/certs:/certs
       - ./volumes/templates:/templates
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - authentik-data:/data
       - authentik-media:/media
 
       - /etc/localtime:/etc/localtime:ro
@@ -107,5 +109,6 @@ services:
       - /etc/timezone:/etc/timezone:ro
 
 volumes:
+  authentik-data:
   authentik-media:
   authentik-postgres:
