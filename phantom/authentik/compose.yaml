@@ -46,7 +46,6 @@ services:
     volumes:
       - ./volumes/templates:/templates
       - authentik-data:/data
-      - authentik-media:/media
 
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
@@ -76,7 +75,6 @@ services:
       - ./volumes/templates:/templates
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - authentik-data:/data
-      - authentik-media:/media
 
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
@@ -110,5 +108,4 @@ services:
 
 volumes:
   authentik-data:
-  authentik-media:
   authentik-postgres:
