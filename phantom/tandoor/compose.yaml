@@ -3,6 +3,8 @@ networks:
   tandoor-postgres:
 
 secrets:
+  EMAIL_HOST_PASSWORD:
+    file: ./secrets/EMAIL_HOST_PASSWORD
   SECRET_KEY:
     file: ./secrets/SECRET_KEY
 
@@ -18,6 +20,7 @@ services:
       - path: .env.tandoor.local
     environment:
       DB_ENGINE: django.db.backends.postgresql
+      EMAIL_HOST_PASSWORD_FILE: /run/secrets/EMAIL_HOST_PASSWORD
       POSTGRES_DB: tandoor
       POSTGRES_HOST: tandoor-postgres
       POSTGRES_USER: tandoor
@@ -30,6 +33,7 @@ services:
       - tandoor-postgres
     restart: always
     secrets:
+      - EMAIL_HOST_PASSWORD
       - SECRET_KEY
     volumes:
       - tandoor-staticfiles:/opt/recipes/staticfiles
