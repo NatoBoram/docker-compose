@@ -1,0 +1,28 @@
+services:
+  backrest:
+    container_name: backrest
+    env_file:
+      - .env.backrest
+      - .env.backrest.local
+    image: garethgeorge/backrest
+    ports:
+      - 127.0.0.1:9898:9898
+    restart: always
+    volumes:
+      - backrest-cache:/cache
+      - backrest-config:/config
+      - backrest-data:/data
+      - backrest-rclone:/root/.config/rclone
+      - backrest-repos:/repos
+      - backrest-tmp:/tmp
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  backrest-cache:
+  backrest-config:
+  backrest-data:
+  backrest-rclone:
+  backrest-repos:
+  backrest-tmp:
