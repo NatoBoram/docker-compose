@@ -9,6 +9,10 @@ updates:
     commit-message:
       prefix: "⬆️ "
     groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
       patch:
         update-types:
           - patch
@@ -29,6 +33,10 @@ updates:
     commit-message:
       prefix: "⬆️ "
     groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
       actions:
         patterns:
           - actions/*
@@ -37,23 +45,10 @@ updates:
           - docker/*
 
   - package-ecosystem: docker-compose
-    directory: /corsair
-    schedule:
-      interval: monthly
-      timezone: America/Toronto
-    commit-message:
-      prefix: "⬆️ "
-
-  - package-ecosystem: docker-compose
-    directory: /olea
-    schedule:
-      interval: monthly
-      timezone: America/Toronto
-    commit-message:
-      prefix: "⬆️ "
-
-  - package-ecosystem: docker-compose
-    directory: /phantom
+    directories:
+      - /corsair
+      - /olea
+      - /phantom
     schedule:
       interval: monthly
       timezone: America/Toronto
