@@ -1,0 +1,581 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"$ref": "#/definitions/Config",
+	"definitions": {
+		"Config": {
+			"type": "object",
+			"additionalProperties": true,
+			"description": "Element Web config.json / config.$domain.json",
+			"properties": {
+				"default_server_config": {
+					"description": "The preferred method of setting the homeserver connection information. Simply copy/paste your `/.well-known/matrix/client` into this field.",
+					"$ref": "#/definitions/DefaultServerConfig"
+				},
+				"default_server_name": {
+					"type": "string",
+					"description": "A different method of connecting to the homeserver by looking up the connection information using `.well-known`. When using this option, simply use your server's domain name (the part at the end of user IDs): `\"default_server_name\": \"matrix.org\"`"
+				},
+				"default_hs_url": {
+					"description": "A very deprecated method of defining the connection information. These are the same values seen as `base_url` in the `default_server_config` example, with `default_is_url` being optional.",
+					"$ref": "#/definitions/Uri"
+				},
+				"default_is_url": {
+					"description": "A very deprecated method of defining the connection information. These are the same values seen as `base_url` in the `default_server_config` example, with `default_is_url` being optional.",
+					"$ref": "#/definitions/Uri"
+				},
+				"disable_custom_urls": {
+					"type": "boolean",
+					"description": "Users will be able to use a different homeserver if they like, though this can be disabled with `\"disable_custom_urls\": true` in your config."
+				},
+				"features": {
+					"type": "object",
+					"additionalProperties": { "type": "boolean" }
+				},
+				"show_labs_settings": {
+					"type": "boolean",
+					"description": "If you'd like the user to be able to self-select which labs flags they can turn on, add `\"show_labs_settings\": true` to your config. This will turn on the tab in user settings."
+				},
+				"default_federate": {
+					"type": "boolean",
+					"description": "When `true` (default), rooms will be marked as \"federatable\" during creation. Typically this setting shouldn't be used as the federation capabilities of a room **cannot** be changed after the room is created.",
+					"default": true
+				},
+				"default_country_code": {
+					"type": "string",
+					"description": "An optional ISO 3166 alpha2 country code (eg: `GB`, the default) to use when showing phone number inputs.",
+					"default": "GB",
+					"minLength": 2,
+					"maxLength": 2,
+					"pattern": "^[A-Z]{2}$"
+				},
+				"room_directory": {
+					"description": "Optionally defines how the room directory component behaves. Currently only a single property, `servers` is supported to add additional servers to the dropdown.",
+					"$ref": "#/definitions/RoomDirectory"
+				},
+				"setting_defaults": {
+					"description": "Optional configuration for settings which are not described by this document and support the `config` level.",
+					"$ref": "#/definitions/JsonObject"
+				},
+				"default_theme": {
+					"type": "string",
+					"description": "Typically either `light` (the default) or `dark`, this is the optional name of the colour theme to use. If using custom themes, this can be a theme name from that as well.",
+					"default": "light"
+				},
+				"default_device_display_name": {
+					"type": "string",
+					"description": "Optional public name for devices created by login and registration, instead of the default templated string. Note that this option does not support templating, currently."
+				},
+				"brand": {
+					"type": "string",
+					"description": "Optional name for the app. Defaults to `Element`. This is used throughout the application in various strings/locations.",
+					"default": "Element"
+				},
+				"disable_3pid_login": {
+					"type": "boolean",
+					"description": "When `false` (default), **enables** the options to log in with email address or phone number. Set to `true` to hide these options.",
+					"default": false
+				},
+				"disable_login_language_selector": {
+					"type": "boolean",
+					"description": "When `false` (default), **enables** the language selector on the login pages. Set to `true` to hide this dropdown.",
+					"default": false
+				},
+				"disable_guests": {
+					"type": "boolean",
+					"description": "When `false` (default), enable guest-related functionality (peeking/previewing rooms, etc) for unregistered users. Set to `true` to disable this functionality.",
+					"default": false
+				},
+				"permalink_prefix": {
+					"description": "An optional URL pointing to an Element Web deployment. For example, `https://app.element.io`. This will change all permalinks (via the \"Share\" menus) to point at the Element Web deployment rather than `matrix.to`.",
+					"$ref": "#/definitions/Uri"
+				},
+				"desktop_builds": {
+					"description": "Optional. Where the desktop builds for the application are, if available. This is explained in more detail down below.",
+					"$ref": "#/definitions/DesktopBuilds"
+				},
+				"mobile_builds": {
+					"description": "Optional. Like `desktop_builds`, except for the mobile apps. Also described in more detail down below.",
+					"$ref": "#/definitions/MobileBuilds"
+				},
+				"mobile_guide_toast": {
+					"type": "boolean",
+					"description": "When `true` (default), users accessing the Element Web instance from a mobile device will be prompted to download the app instead.",
+					"default": true
+				},
+				"mobile_guide_app_variant": {
+					"type": "string",
+					"description": "Optional. The mobile app that the user is prompted to download from the `/mobile_guide` page. When omitted the mobile guide will be configured for the new Element X apps.",
+					"enum": ["element", "element-classic", "element-pro"]
+				},
+				"update_base_url": {
+					"description": "For the desktop app only, the URL where to acquire update packages. If specified, must be a path to a directory containing `macos` and `win32` directories, with the update packages within. Defaults to `https://packages.element.io/desktop/update/` in production.",
+					"default": "https://packages.element.io/desktop/update/",
+					"$ref": "#/definitions/Uri"
+				},
+				"web_base_url": {
+					"description": "Specifies the Element Web URL when performing actions such as popout widget. Defaults to `https://app.element.io/`.",
+					"default": "https://app.element.io/",
+					"$ref": "#/definitions/Uri"
+				},
+				"map_style_url": {
+					"description": "Map tile server style URL for location sharing. e.g. `https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE` This setting is ignored if your homeserver provides `/.well-known/matrix/client` in its well-known location, and the JSON file at that location has a key `m.tile_server` (or the unstable version `org.matrix.msc3488.tile_server`). In this case, the configuration found in the well-known location is used instead.",
+					"$ref": "#/definitions/Uri"
+				},
+				"welcome_user_id": {
+					"type": "string",
+					"description": "**DEPRECATED** An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created)."
+				},
+				"custom_translations_url": {
+					"description": "An optional URL to allow overriding of translatable strings. The JSON file must be in a format of `{\"affected|translation|key\": {\"languageCode\": \"new string\"}}`. See <https://github.com/matrix-org/matrix-react-sdk/pull/7886> for details.",
+					"$ref": "#/definitions/Uri"
+				},
+				"branding": {
+					"description": "Options for configuring various assets used within the app. Described in more detail down below.",
+					"$ref": "#/definitions/Branding"
+				},
+				"embedded_pages": {
+					"description": "Further optional URLs for various assets used within the app. Described in more detail down below.",
+					"$ref": "#/definitions/EmbeddedPages"
+				},
+				"user_notice": {
+					"description": "Optional notice to show to the user, e.g. for sunsetting a deployment and pushing users to move in their own time.",
+					"$ref": "#/definitions/UserNotice"
+				},
+				"help_url": {
+					"description": "The URL to point users to for help with the app, defaults to `https://element.io/help`.",
+					"default": "https://element.io/help",
+					"$ref": "#/definitions/Uri"
+				},
+				"help_encryption_url": {
+					"description": "The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.",
+					"default": "https://element.io/help#encryption",
+					"$ref": "#/definitions/Uri"
+				},
+				"help_key_storage_url": {
+					"description": "The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.",
+					"default": "https://element.io/help#encryption5",
+					"$ref": "#/definitions/Uri"
+				},
+				"force_verification": {
+					"type": "boolean",
+					"description": "If true, users must verify new logins (eg. with another device / their recovery key)"
+				},
+				"logout_redirect_url": {
+					"description": "Optional URL to redirect the user to after they have logged out. Some SSO systems support a page that the user can be sent to in order to log them out of that system too, making logout symmetric between Element and the SSO system.",
+					"$ref": "#/definitions/Uri"
+				},
+				"sso_redirect_options": {
+					"description": "Options to define how to handle unauthenticated users.",
+					"$ref": "#/definitions/SsoRedirectOptions"
+				},
+				"oidc_static_clients": {
+					"description": "Static OIDC Client IDs are preferred and can be specified under `oidc_static_clients` as a mapping from `issuer` to configuration object containing `client_id`.",
+					"$ref": "#/definitions/OidcStaticClients"
+				},
+				"enable_presence_by_hs_url": {
+					"description": "To configure whether presence UI is shown for a given homeserver, set `enable_presence_by_hs_url`.",
+					"$ref": "#/definitions/EnablePresenceByHsUrl"
+				},
+				"oidc_metadata": {
+					"description": "If a matching static client is not found, the app will attempt to dynamically register a client using metadata specified under `oidc_metadata`.",
+					"$ref": "#/definitions/OidcMetadata"
+				},
+				"jitsi": {
+					"description": "Optional configuration for how to start Jitsi conferences. Currently can only contain a single `preferred_domain` value which points at the domain of the Jitsi instance. Defaults to `meet.element.io`.",
+					"$ref": "#/definitions/Jitsi"
+				},
+				"jitsi_widget": {
+					"description": "Optional configuration for the built-in Jitsi widget. Currently can only contain a single `skip_built_in_welcome_screen` value, denoting whether the \"Join Conference\" button should be shown. When `true` (default `false`), Jitsi calls will skip to the call instead of having a screen with a single button on it.",
+					"$ref": "#/definitions/JitsiWidget"
+				},
+				"voip": {
+					"description": "Optional configuration for various VoIP features. Currently can only contain a single `obey_asserted_identity` value to send MSC3086-style asserted identity messages during VoIP calls in the room corresponding to the asserted identity. This _must_ only be set in trusted environments. The option defaults to `false`.",
+					"$ref": "#/definitions/Voip"
+				},
+				"widget_build_url": {
+					"description": "Optional URL to have Element make a request to when a user presses the voice/video call buttons in the app, if a call would normally be started by the action.",
+					"$ref": "#/definitions/Uri"
+				},
+				"widget_build_url_ignore_dm": { "type": "boolean" },
+				"audio_stream_url": {
+					"description": "Optional URL to pass to Jitsi to enable live streaming. This option is considered experimental and may be removed at any time without notice.",
+					"$ref": "#/definitions/Uri"
+				},
+				"element_call": {
+					"description": "Optional configuration for native group calls using Element Call",
+					"$ref": "#/definitions/ElementCall"
+				},
+				"bug_report_endpoint_url": {
+					"description": "URL for where to submit rageshake logs to. Rageshakes include feedback submissions and bug reports. When not present in the config, the app will disable all rageshake functionality. Set to `https://rageshakes.element.io/api/submit` to submit rageshakes to us, or use your own rageshake server. You may also set the value to `\"local\"` if you wish to only store logs locally, in order to download them for debugging.",
+					"oneOf": [
+						{ "$ref": "#/definitions/Uri" },
+						{ "type": "string", "enum": ["local"] }
+					]
+				},
+				"existing_issues_url": {
+					"description": "URL for where to find existing issues.",
+					"$ref": "#/definitions/Uri"
+				},
+				"new_issue_url": {
+					"description": "URL for where to submit new issues.",
+					"$ref": "#/definitions/Uri"
+				},
+				"sentry": { "$ref": "#/definitions/Sentry" },
+				"integrations_ui_url": {
+					"description": "The UI URL for the integration manager.",
+					"$ref": "#/definitions/NullableUri"
+				},
+				"integrations_rest_url": {
+					"description": "The REST interface URL for the integration manager.",
+					"$ref": "#/definitions/NullableUri"
+				},
+				"integrations_widgets_urls": {
+					"description": "A list of URLs the integration manager uses to host widgets.",
+					"oneOf": [
+						{ "type": "array", "items": { "$ref": "#/definitions/Uri" } },
+						{ "type": "null" }
+					]
+				},
+				"default_widget_container_height": {
+					"type": "number",
+					"description": "This controls the height that the top widget panel initially appears as and is the height in pixels, default 280.",
+					"default": 280
+				},
+				"report_event": { "$ref": "#/definitions/ReportEvent" },
+				"posthog": { "$ref": "#/definitions/Posthog" },
+				"analytics_owner": {
+					"type": "string",
+					"description": "the company name used in dialogs talking about analytics - this defaults to `brand`, and is useful when the provider of analytics is different from the provider of the Element instance."
+				},
+				"privacy_policy_url": {
+					"description": "URL to the privacy policy including the analytics collection policy.",
+					"$ref": "#/definitions/Uri"
+				},
+				"modules": {
+					"description": "An optional array of module paths to load at runtime. Each entry is a URL or path to a JavaScript module entry point that will be dynamically imported when Element Web starts.",
+					"type": "array",
+					"items": { "type": "string", "minLength": 1 }
+				},
+				"fallback_hs_url": { "$ref": "#/definitions/Uri" },
+				"sync_timeline_limit": { "type": "integer", "minimum": 1 },
+				"dangerously_allow_unsafe_and_insecure_passwords": {
+					"type": "boolean"
+				},
+				"latex_maths_delims": { "$ref": "#/definitions/JsonValue" },
+				"terms_and_conditions_links": {
+					"type": "array",
+					"items": { "$ref": "#/definitions/TermsAndConditionsLink" },
+					"description": "To add additional \"terms and conditions\" links throughout the app."
+				}
+			},
+			"anyOf": [
+				{ "required": ["default_server_config"] },
+				{ "required": ["default_server_name"] },
+				{ "required": ["default_hs_url"] }
+			],
+			"title": "Config"
+		},
+		"Uri": { "type": "string", "format": "uri", "qt-uri-protocols": ["https"] },
+		"NullableUri": {
+			"oneOf": [{ "$ref": "#/definitions/Uri" }, { "type": "null" }]
+		},
+		"DefaultServerConfig": {
+			"type": "object",
+			"additionalProperties": true,
+			"properties": {
+				"m.homeserver": { "$ref": "#/definitions/Server" },
+				"m.identity_server": { "$ref": "#/definitions/Server" }
+			},
+			"required": ["m.homeserver"],
+			"title": "DefaultServerConfig"
+		},
+		"Server": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": { "base_url": { "$ref": "#/definitions/Uri" } },
+			"required": ["base_url"],
+			"title": "Server"
+		},
+		"EnablePresenceByHsUrl": {
+			"type": "object",
+			"additionalProperties": { "type": "boolean" },
+			"propertyNames": { "type": "string", "format": "uri" },
+			"title": "EnablePresenceByHsUrl"
+		},
+		"OidcMetadata": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"client_uri": {
+					"description": "This is the base URI for the OIDC client registration, typically `logo_uri`, `tos_uri`, and `policy_uri` must be either on the same domain or a subdomain of this URI.",
+					"$ref": "#/definitions/Uri"
+				},
+				"logo_uri": {
+					"description": "Optional URI for the client logo.",
+					"$ref": "#/definitions/Uri"
+				},
+				"policy_uri": {
+					"description": "Optional URI for the client's privacy policy.",
+					"$ref": "#/definitions/Uri"
+				},
+				"tos_uri": {
+					"description": "Optional URI for the client's terms of service.",
+					"$ref": "#/definitions/Uri"
+				},
+				"contacts": {
+					"description": "Optional list of contact emails for the client.",
+					"type": "array",
+					"items": { "type": "string", "format": "email" }
+				}
+			},
+			"title": "OidcMetadata"
+		},
+		"OidcStaticClient": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": { "client_id": { "type": "string" } },
+			"required": ["client_id"]
+		},
+		"OidcStaticClients": {
+			"type": "object",
+			"additionalProperties": false,
+			"patternProperties": {
+				"^https://.+/$": { "$ref": "#/definitions/OidcStaticClient" }
+			}
+		},
+		"RoomDirectory": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"servers": { "type": "array", "items": { "type": "string" } }
+			}
+		},
+		"DesktopBuilds": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"available": {
+					"type": "boolean",
+					"description": "Required. When `true`, the desktop app can be downloaded from somewhere."
+				},
+				"logo": {
+					"description": "Required. A URL to a logo (SVG), intended to be shown at 24x24 pixels.",
+					"$ref": "#/definitions/Uri"
+				},
+				"url": {
+					"description": "Required. The download URL for the app. This is used as a hyperlink.",
+					"$ref": "#/definitions/Uri"
+				},
+				"url_macos": {
+					"description": "Optional. Direct link to download macOS desktop app.",
+					"$ref": "#/definitions/Uri"
+				},
+				"url_win64": {
+					"description": "Optional. Direct link to download Windows x86 64-bit desktop app.",
+					"$ref": "#/definitions/Uri"
+				},
+				"url_win64arm": {
+					"description": "Optional. Direct link to download Windows ARM 64-bit desktop app.",
+					"$ref": "#/definitions/Uri"
+				},
+				"url_linux": {
+					"description": "Optional. Direct link to download Linux desktop app.",
+					"$ref": "#/definitions/Uri"
+				}
+			},
+			"required": ["available", "logo", "url"]
+		},
+		"MobileBuilds": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"ios": {
+					"description": "The URL for where to download the iOS app, such as an App Store link. When explicitly `null`, the app will assume the iOS app cannot be downloaded. When not provided, the default Element app will be assumed available.",
+					"$ref": "#/definitions/NullableUri"
+				},
+				"android": {
+					"description": "The same as `ios`, except for Android instead.",
+					"$ref": "#/definitions/NullableUri"
+				},
+				"fdroid": {
+					"description": "The same as `android`, except for FDroid instead.",
+					"$ref": "#/definitions/NullableUri"
+				}
+			}
+		},
+		"Branding": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"welcome_background_url": {
+					"description": "When a string, the URL for the full-page image background of the login, registration, and welcome pages. This property can additionally be an array to have the app choose an image at random from the selections.",
+					"oneOf": [
+						{ "$ref": "#/definitions/Uri" },
+						{ "type": "array", "items": { "$ref": "#/definitions/Uri" } }
+					]
+				},
+				"auth_header_logo_url": {
+					"description": "A URL to the logo used on the login, registration, etc pages.",
+					"$ref": "#/definitions/Uri"
+				},
+				"auth_footer_links": {
+					"description": "A list of links to add to the footer during login, registration, etc. Each entry must have a `text` and `url` property.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/TermsAndConditionsLink" }
+				}
+			}
+		},
+		"EmbeddedPages": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"welcome_url": {
+					"description": "A URL to an HTML page to show as a welcome page (landing on `#/welcome`). When not specified, the default `welcome.html` that ships with Element will be used instead.",
+					"$ref": "#/definitions/Uri"
+				},
+				"home_url": {
+					"description": "A URL to an HTML page to show within the app as the \"home\" page. When the app doesn't have a room/screen to show the user, it will use the home page instead. The home page is additionally accessible from the user menu. By default, no home page is set and therefore a hardcoded landing screen is used. More documentation and examples are [here](./custom-home.md).",
+					"$ref": "#/definitions/Uri"
+				},
+				"login_for_welcome": {
+					"type": "boolean",
+					"description": "When `true` (default `false`), the app will use the login form as a welcome page instead of the welcome page itself. This disables use of `welcome_url` and all welcome page functionality.",
+					"default": false
+				}
+			}
+		},
+		"UserNotice": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"title": {
+					"type": "string",
+					"description": "Required. Title to show at the top of the notice."
+				},
+				"description": {
+					"type": "string",
+					"description": "Required. The description to use for the notice."
+				},
+				"show_once": {
+					"type": "boolean",
+					"description": "Optional. If true then the notice will only be shown once per device."
+				}
+			},
+			"required": ["title", "description"]
+		},
+		"SsoRedirectOptions": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"immediate": { "type": "boolean" },
+				"on_welcome_page": { "type": "boolean" },
+				"on_login_page": { "type": "boolean" }
+			}
+		},
+		"Jitsi": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": { "preferred_domain": { "type": "string" } }
+		},
+		"JitsiWidget": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": { "skip_built_in_welcome_screen": { "type": "boolean" } }
+		},
+		"Voip": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": { "obey_asserted_identity": { "type": "boolean" } }
+		},
+		"ElementCall": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"url": { "$ref": "#/definitions/Uri" },
+				"use_exclusively": {
+					"type": "boolean",
+					"description": "A boolean specifying whether Element Call should be used exclusively as the only VoIP stack in the app, removing the ability to start legacy 1:1 calls or Jitsi calls. Defaults to `false`.",
+					"default": false
+				},
+				"brand": {
+					"type": "string",
+					"description": "Optional name for the app. Defaults to `Element Call`. This is used throughout the application in various strings/locations.",
+					"default": "Element Call"
+				},
+				"guest_spa_url": {
+					"description": "Optional URL for an Element Call single-page app (SPA), for guest links. If this is set, Element Web will expose a \"join\" link for public video rooms, which can then be shared to non-matrix users. The target Element Call SPA is typically set up to use a homeserver that allows users to register without email (\"passwordless guest users\") and to federate.",
+					"$ref": "#/definitions/Uri"
+				}
+			}
+		},
+		"Sentry": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"dsn": {
+					"type": "string",
+					"description": "The Sentry [DSN](https://docs.sentry.io/product/sentry-basics/dsn-explainer/)."
+				},
+				"environment": {
+					"type": "string",
+					"description": "Optional [environment](https://docs.sentry.io/product/sentry-basics/environments/) to pass to Sentry."
+				}
+			},
+			"required": ["dsn"]
+		},
+		"ReportEvent": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"admin_message_md": {
+					"type": "string",
+					"description": "If you would like to include a custom message when someone is reporting an event, set the following Markdown-capable field:"
+				}
+			}
+		},
+		"Posthog": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"api_host": {
+					"description": "The hostname of the posthog server.",
+					"$ref": "#/definitions/Uri"
+				},
+				"project_api_key": {
+					"type": "string",
+					"description": "The API key from posthog."
+				}
+			},
+			"required": ["api_host", "project_api_key"]
+		},
+		"JsonValue": {
+			"oneOf": [
+				{ "type": "string" },
+				{ "type": "number" },
+				{ "type": "integer" },
+				{ "type": "boolean" },
+				{ "type": "null" },
+				{ "$ref": "#/definitions/JsonObject" },
+				{ "$ref": "#/definitions/JsonArray" }
+			]
+		},
+		"JsonObject": {
+			"type": "object",
+			"additionalProperties": { "$ref": "#/definitions/JsonValue" }
+		},
+		"JsonArray": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/JsonValue" }
+		},
+		"TermsAndConditionsLink": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"text": { "type": "string" },
+				"url": { "$ref": "#/definitions/Uri" }
+			},
+			"required": ["text", "url"],
+			"title": "TermsAndConditionsLink"
+		}
+	}
+}
