@@ -41,9 +41,10 @@ sudo chown git:git -Rc /var/lib/docker/volumes/phantom_forgejo/_data/gitea/conf/
 
    ```sh
    cat <<"EOF" | sudo tee /home/git/ssh-shell
-   #!/bin/sh
+   #!/bin/bash
    shift
-   ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $@"
+   SAFE_COMMAND=$(printf '%q' "$SSH_ORIGINAL_COMMAND")
+   ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=$SAFE_COMMAND $@"
    EOF
    sudo chmod +x /home/git/ssh-shell
    sudo usermod -s /home/git/ssh-shell git
