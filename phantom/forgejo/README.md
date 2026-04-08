@@ -15,7 +15,7 @@
    echo "USER_GID=$(id -g git)" >> .env.forgejo.local
    ```
 
-3. Generate a SSH key
+3. Generate an SSH key
 
    ```sh
    sudo -u git ssh-keygen -t ed25519 -C "Forgejo"
