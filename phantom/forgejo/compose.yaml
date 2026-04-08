@@ -1,6 +1,10 @@
 networks:
   forgejo-postgres:
 
+secrets:
+  app:
+    file: ./secrets/app.ini
+
 services:
   forgejo:
     container_name: forgejo
@@ -49,8 +53,14 @@ services:
       - authentik-forgejo
       - caddy-forgejo
       - forgejo-postgres
+    ports:
+      - 127.0.0.1:2222:22
     restart: always
+    secrets:
+      - source: app
+        target: /data/gitea/conf/app.ini
     volumes:
+      - /home/git/.ssh/:/data/git/.ssh
       - forgejo:/data
 
       - /etc/localtime:/etc/localtime:ro
