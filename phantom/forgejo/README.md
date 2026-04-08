@@ -1,5 +1,19 @@
 # Forgejo
 
+## `app.ini`
+
+It's easier to view the `app.ini` file locally.
+
+```sh
+# Export
+sudo cp /var/lib/docker/volumes/phantom_forgejo/_data/gitea/conf/app.ini ./forgejo/secrets/app.ini
+sudo chown $USER:$USER -Rc ./forgejo/secrets/app.ini
+
+# Import
+sudo cp ./forgejo/secrets/app.ini /var/lib/docker/volumes/phantom_forgejo/_data/gitea/conf/app.ini
+sudo chown git:git -Rc /var/lib/docker/volumes/phantom_forgejo/_data/gitea/conf/app.ini
+```
+
 ## Setup SSH Passthrough
 
 1. Create a user
