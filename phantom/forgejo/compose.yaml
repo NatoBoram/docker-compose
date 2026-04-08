@@ -1,10 +1,6 @@
 networks:
   forgejo-postgres:
 
-secrets:
-  app:
-    file: ./secrets/app.ini
-
 services:
   forgejo:
     container_name: forgejo
@@ -56,9 +52,6 @@ services:
     ports:
       - 127.0.0.1:2222:22
     restart: always
-    secrets:
-      - source: app
-        target: /data/gitea/conf/app.ini
     volumes:
       - /home/git/.ssh/:/data/git/.ssh
       - forgejo:/data
