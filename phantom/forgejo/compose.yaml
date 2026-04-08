@@ -49,8 +49,11 @@ services:
       - authentik-forgejo
       - caddy-forgejo
       - forgejo-postgres
+    ports:
+      - 127.0.0.1:2222:22
     restart: always
     volumes:
+      - /home/git/.ssh/:/data/git/.ssh
       - forgejo:/data
 
       - /etc/localtime:/etc/localtime:ro
