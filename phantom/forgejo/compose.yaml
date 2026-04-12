@@ -44,7 +44,7 @@ services:
       FORGEJO__service__ENABLE_INTERNAL_SIGNIN: false
 
       FORGEJO__ui__SHOW_USER_EMAIL: false
-    image: codeberg.org/forgejo/forgejo:13
+    image: codeberg.org/forgejo/forgejo:14
     networks:
       - authentik-forgejo
       - caddy-forgejo
