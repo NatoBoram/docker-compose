@@ -40,7 +40,7 @@ It's managed entirely via Docker Compose. It uses Caddy as a reverse proxy for i
 
 ## Hardware
 
-[PCPartPicker Part List](https://ca.pcpartpicker.com/list/VPDrt3)
+[PCPartPicker Part List](https://ca.pcpartpicker.com/user/NatoBoram/saved/Y6gcMp)
 
 | Type               | Item                                                                                                                                                                                                                 |
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -49,6 +49,7 @@ It's managed entirely via Docker Compose. It uses Caddy as a reverse proxy for i
 | **Motherboard**    | [MSI MPG X670E CARBON WIFI ATX AM5 Motherboard](https://ca.pcpartpicker.com/product/rmbTwP/msi-mpg-x670e-carbon-wifi-atx-am5-motherboard-mpg-x670e-carbon-wifi)                                                      |
 | **Memory**         | [Kingston FURY Beast 64 GB (2 x 32 GB) DDR5-4800 CL38 Memory](https://ca.pcpartpicker.com/product/7YxRsY/kingston-fury-beast-64-gb-2-x-32-gb-ddr5-4800-cl38-memory-kf548c38bbk2-64)                                  |
 | **Memory**         | [Kingston FURY Beast 64 GB (2 x 32 GB) DDR5-4800 CL38 Memory](https://ca.pcpartpicker.com/product/7YxRsY/kingston-fury-beast-64-gb-2-x-32-gb-ddr5-4800-cl38-memory-kf548c38bbk2-64)                                  |
+| **Storage**        | [Samsung 990 Pro 4 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive](https://ca.pcpartpicker.com/product/RKYmP6/samsung-990-pro-4-tb-m2-2280-pcie-40-x4-nvme-solid-state-drive-mz-v9p4t0bw)                            |
 | **Storage**        | [Samsung 990 Pro 4 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive](https://ca.pcpartpicker.com/product/RKYmP6/samsung-990-pro-4-tb-m2-2280-pcie-40-x4-nvme-solid-state-drive-mz-v9p4t0bw)                            |
 | **Storage**        | [Samsung 990 Pro 4 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive](https://ca.pcpartpicker.com/product/RKYmP6/samsung-990-pro-4-tb-m2-2280-pcie-40-x4-nvme-solid-state-drive-mz-v9p4t0bw)                            |
 | **Video Card**     | [Gigabyte GAMING OC Radeon RX 7700 XT 12 GB Video Card](https://ca.pcpartpicker.com/product/VTFmP6/gigabyte-gaming-oc-radeon-rx-7700-xt-12-gb-video-card-gv-r77xtgaming-oc-12gd)                                     |
