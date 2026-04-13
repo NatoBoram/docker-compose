@@ -76,6 +76,40 @@ env_file:
 
 **Cross-service dependencies**: Use dedicated networks (e.g., `authentik-server` connects to multiple service-specific networks like `authentik-dozzle`, `authentik-metube`).
 
+**Network declaration rules**:
+
+- Do not declare caddy networks in service files; they're already defined in `caddy/compose.yaml`
+- Do not use `external: true`; Docker Compose automatically finds networks from merged files
+- Every connection gets its own dedicated network
+
+```yaml
+# ✅ Correct
+networks:
+  peertube-postgres:
+  peertube-postfix:
+  peertube-redis:
+
+services:
+  peertube:
+    networks:
+      - caddy-peertube # No redeclaration, just referenced
+      - peertube-postgres
+      - peertube-postfix
+      - peertube-redis
+
+  peertube-postgres:
+    networks:
+      - peertube-postgres
+```
+
+```yaml
+# ❌ Wrong patterns
+networks:
+  peertube: # Generic network name
+  caddy-peertube:
+    external: true # Never redeclare caddy networks
+```
+
 ### Dependencies
 
 ```yaml
@@ -84,6 +118,9 @@ depends_on:
   - anubis # Protected by Anubis
   - authentik-server # Protected by Authentik
 ```
+
+> [!WARNING]
+> Services exposed via Caddy must explicitly depend on `caddy` and their protection service (e.g., `anubis` or `authentik-server`). If a service cannot possibly be reached, then there's no use in starting it.
 
 ### Volumes
 
@@ -137,6 +174,36 @@ services:
 Secrets are mounted at `/run/secrets/SECRET_NAME` inside containers.
 
 ## Common Patterns
+
+### No Exposed Ports (Reverse Proxy Only)
+
+**Don't expose service ports** - only Caddy exposes ports 80/443. All internal services communicate through Docker networks:
+
+```yaml
+# ❌ Wrong - don't expose service ports
+services:
+  peertube:
+    ports:
+      - "1935:1935"
+    volumes: ...
+
+# ✅ Correct - no ports, only Caddy exposes
+services:
+  peertube:
+    networks:
+      - caddy-peertube
+      - peertube-postgres
+    volumes: ...
+
+# Only Caddy in caddy/compose.yaml exposes ports:
+services:
+  caddy:
+    ports:
+      - 80:80
+      - 443:443
+```
+
+Reverse proxy configuration happens in `Caddyfile`, not in compose ports.
 
 ### Database Health Checks (PostgreSQL)
 
