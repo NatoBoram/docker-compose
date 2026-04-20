@@ -4,6 +4,9 @@ services:
     env_file:
       - .env.beszel-agent
       - .env.beszel-agent.local
+    healthcheck:
+      interval: 120s
+      test: ["CMD", "/agent", "health"]
     image: henrygd/beszel-agent
     network_mode: host
     restart: always

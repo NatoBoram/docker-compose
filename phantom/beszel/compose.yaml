@@ -9,6 +9,10 @@ services:
       - .env.beszel.local
     extra_hosts:
       - host.docker.internal:host-gateway
+    healthcheck:
+      interval: 120s
+      start_period: 5s
+      test: ["CMD", "/beszel", "health", "--url", "http://localhost:8090"]
     image: henrygd/beszel
     networks:
       - caddy-beszel
@@ -26,6 +30,9 @@ services:
     env_file:
       - .env.beszel-agent
       - .env.beszel-agent.local
+    healthcheck:
+      interval: 120s
+      test: ["CMD", "/agent", "health"]
     image: henrygd/beszel-agent
     network_mode: host
     restart: always
