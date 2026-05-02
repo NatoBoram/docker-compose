@@ -274,11 +274,7 @@
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
-
-		basic_auth {
-			LAME {$OLLAMA_LAME_PASSWORD}
-			Nextcloud {$OLLAMA_NEXTCLOUD_PASSWORD}
-		}
+		import authentik
 
 		reverse_proxy ollama:11434
 	}
