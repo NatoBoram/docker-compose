@@ -279,6 +279,13 @@
 		reverse_proxy ollama:11434
 	}
 
+	@peertube host peertube.{$PORKBUN_DOMAIN}
+	handle @peertube {
+		import anubis
+
+		reverse_proxy peertube:9000
+	}
+
 	@qbittorrent host qbittorrent.{$PORKBUN_DOMAIN}
 	handle @qbittorrent {
 		import maxmind_geolocation {

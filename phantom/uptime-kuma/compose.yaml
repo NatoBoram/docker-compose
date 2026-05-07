@@ -3,10 +3,12 @@ networks:
   uptime-kuma-forgejo-postgres:
   uptime-kuma-mas-postgres:
   uptime-kuma-nextcloud-postgres:
+  uptime-kuma-peertube-postgres:
   uptime-kuma-synapse-postgres:
   uptime-kuma-tandoor-postgres:
 
   uptime-kuma-nextcloud-redis:
+  uptime-kuma-peertube-redis:
   uptime-kuma-send-redis:
 
 services:
@@ -60,10 +62,12 @@ services:
       - uptime-kuma-forgejo-postgres
       - uptime-kuma-mas-postgres
       - uptime-kuma-nextcloud-postgres
+      - uptime-kuma-peertube-postgres
       - uptime-kuma-synapse-postgres
       - uptime-kuma-tandoor-postgres
 
       - uptime-kuma-nextcloud-redis
+      - uptime-kuma-peertube-redis
       - uptime-kuma-send-redis
     # ports:
     #   - 3001:3001

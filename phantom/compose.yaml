@@ -19,6 +19,7 @@ include:
   - path: myspeed/compose.yaml
   - path: nextcloud/compose.yaml
   - path: ollama/compose.yaml
+  - path: peertube/compose.yaml
   - path: qbittorrent/compose.yaml
   - path: send/compose.yaml
   - path: syncthing/compose.yaml

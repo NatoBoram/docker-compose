@@ -1,0 +1,78 @@
+networks:
+  peertube-postgres:
+  peertube-redis:
+
+services:
+  peertube:
+    container_name: peertube
+    depends_on:
+      - anubis
+      - caddy
+      - peertube-postgres
+      - peertube-redis
+    env_file:
+      - .env.peertube
+      - .env.peertube.local
+    environment:
+      PEERTUBE_DB_HOSTNAME: peertube-postgres
+      PEERTUBE_DB_NAME: peertube
+      PEERTUBE_DB_USERNAME: peertube
+      PEERTUBE_REDIS_HOSTNAME: peertube-redis
+    image: chocobozzz/peertube:production
+    networks:
+      - caddy-peertube
+      - peertube-postgres
+      - peertube-redis
+    restart: unless-stopped
+    volumes:
+      - peertube-config:/config
+      - peertube-data:/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  peertube-postgres:
+    container_name: peertube-postgres
+    env_file:
+      - .env.peertube-postgres
+      - .env.peertube-postgres.local
+    environment:
+      POSTGRES_DB: peertube
+      POSTGRES_USER: peertube
+    healthcheck:
+      interval: 30s
+      retries: 5
+      start_period: 20s
+      test:
+        - CMD-SHELL
+        - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
+      timeout: 5s
+    image: postgres:18-alpine
+    networks:
+      - peertube-postgres
+      - uptime-kuma-peertube-postgres
+    restart: always
+    volumes:
+      - peertube-postgres:/var/lib/postgresql
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  peertube-redis:
+    container_name: peertube-redis
+    image: redis:8-alpine
+    networks:
+      - peertube-redis
+      - uptime-kuma-peertube-redis
+    restart: always
+    volumes:
+      - peertube-redis:/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  peertube-config:
+  peertube-data:
+  peertube-postgres:
+  peertube-redis:

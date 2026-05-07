@@ -20,6 +20,7 @@ networks:
   caddy-myspeed:
   caddy-nextcloud:
   caddy-ollama:
+  caddy-peertube:
   caddy-qbittorrent:
   caddy-send:
   caddy-synapse:
@@ -63,6 +64,7 @@ services:
       - caddy-myspeed
       - caddy-nextcloud
       - caddy-ollama
+      - caddy-peertube
       - caddy-qbittorrent
       - caddy-send
       - caddy-synapse
