@@ -31,6 +31,10 @@ services:
       - nextcloud-postgres:/userdata/nextcloud-postgres:ro
       - nextcloud-redis:/userdata/nextcloud-redis:ro
       - nextcloud:/userdata/nextcloud:ro
+      - peertube-config:/userdata/peertube-config:ro
+      - peertube-data:/userdata/peertube-data:ro
+      - peertube-postgres:/userdata/peertube-postgres:ro
+      - peertube-redis:/userdata/peertube-redis:ro
       - qbittorrent-config:/userdata/qbittorrent-config:ro
       - synapse-postgres:/userdata/synapse-postgres:ro
       - synapse:/userdata/synapse:ro
