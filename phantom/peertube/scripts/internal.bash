@@ -56,7 +56,7 @@ while :; do
 				-H "Authorization: Bearer $ACCESS_TOKEN" \
 				-H "Content-Type: application/json" \
 				-d '{"privacy": 4}'
-		else
+		elif [ "$DEBUG" == true ]; then
 			echo "Skipping \"$NAME\"."
 		fi
 	done
