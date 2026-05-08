@@ -28,18 +28,18 @@ if [ "$ACCESS_TOKEN" == "null" ] || [ -z "$ACCESS_TOKEN" ]; then
 fi
 
 # Iterate through videos
+echo "Scanning $HANDLE..."
+
 START=0
 COUNT=100
-
-echo "Scanning $HANDLE for non-internal videos..."
-
 while :; do
-	VIDEOS_JSON=$(curl -s -G "$BASE/api/v1/video-channels/$HANDLE/videos" \
+	VIDEOS=$(curl -s -G "$BASE/api/v1/video-channels/$HANDLE/videos" \
 		-H "Authorization: Bearer $ACCESS_TOKEN" \
+		-d "include=1" \
 		-d "start=$START" \
 		-d "count=$COUNT")
 
-	DATA=$(echo "$VIDEOS_JSON" | jq -c '.data[]')
+	DATA=$(echo "$VIDEOS" | jq -c '.data[]')
 	if [ -z "$DATA" ]; then
 		break
 	fi
@@ -47,19 +47,22 @@ while :; do
 	echo "$DATA" | while read -r video; do
 		NAME=$(echo "$video" | jq -r '.name')
 		UUID=$(echo "$video" | jq -r '.uuid')
-		PRIVACY=$(echo "$video" | jq -r '.privacy.id')
+		PRIVACY_ID=$(echo "$video" | jq -r '.privacy.id')
+		PRIVACY_LABEL=$(echo "$video" | jq -r '.privacy.label')
 
-		if [ "$PRIVACY" != "4" ]; then
-			echo "Updating \"$NAME\" ($UUID) to internal..."
+		if [ "$PRIVACY_ID" != "4" ]; then
+			echo "Updating \"$NAME\" from $PRIVACY_LABEL to Internal..."
 			curl -s -X PUT "$BASE/api/v1/videos/$UUID" \
 				-H "Authorization: Bearer $ACCESS_TOKEN" \
 				-H "Content-Type: application/json" \
 				-d '{"privacy": 4}'
+		else
+			echo "Skipping \"$NAME\"."
 		fi
 	done
 
-	# Check if we should continue to the next page
-	TOTAL=$(echo "$VIDEOS_JSON" | jq -r '.total')
+	# Pagination
+	TOTAL=$(echo "$VIDEOS" | jq -r '.total')
 	START=$((START + COUNT))
 	if [ "$START" -ge "$TOTAL" ]; then
 		break
