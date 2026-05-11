@@ -99,8 +99,10 @@ For service `potato` exposed via Caddy:
 
 ## Development Workflow
 
-**Linting**: `pnpm lint` (Prettier + MarkdownLint via `.prettierrc.yaml`)
+**Linting**: `pnpm lint:fix` (preferred over `pnpm lint`)
 **Format**: `pnpm format`
+
+Always prefer pre-established scripts from `package.json`. Do not run `pnpm exec` directly.
 
 **Deployment**: Push to `main` → GitHub Actions calls Watchtower webhook → Watchtower pulls/restarts containers
 
