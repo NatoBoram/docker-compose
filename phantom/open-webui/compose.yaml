@@ -1,0 +1,29 @@
+networks:
+  open-webui-ollama:
+
+services:
+  open-webui:
+    container_name: open-webui
+    depends_on:
+      - authentik-server
+      - caddy
+      - ollama
+    env_file:
+      - .env.open-webui
+      - .env.open-webui.local
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+    image: ghcr.io/open-webui/open-webui:main
+    networks:
+      - authentik-open-webui
+      - caddy-open-webui
+      - open-webui-ollama
+    restart: always
+    volumes:
+      - open-webui:/app/backend/data
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  open-webui:

@@ -31,6 +31,7 @@ services:
       - nextcloud-postgres:/userdata/nextcloud-postgres:ro
       - nextcloud-redis:/userdata/nextcloud-redis:ro
       - nextcloud:/userdata/nextcloud:ro
+      - open-webui:/userdata/open-webui:ro
       - peertube-config:/userdata/peertube-config:ro
       - peertube-data:/userdata/peertube-data:ro
       - peertube-postgres:/userdata/peertube-postgres:ro

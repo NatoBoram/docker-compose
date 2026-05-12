@@ -279,6 +279,15 @@
 		reverse_proxy ollama:11434
 	}
 
+	@open-webui host open-webui.{$PORKBUN_DOMAIN}
+	handle @open-webui {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+
+		reverse_proxy open-webui:8080
+	}
+
 	@peertube host peertube.{$PORKBUN_DOMAIN}
 	handle @peertube {
 		import anubis
