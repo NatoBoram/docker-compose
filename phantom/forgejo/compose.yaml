@@ -84,6 +84,31 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
 
+  forgejo-runner-1:
+    build:
+      dockerfile: ./Dockerfile
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    container_name: forgejo-runner-1
+    depends_on:
+      - forgejo
+    devices:
+      - /dev/kvm:/dev/kvm
+      - /dev/net/tun:/dev/net/tun
+    env_file:
+      - path: .env.forgejo-runner-1
+      - path: .env.forgejo-runner-1.local
+    restart: always
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - forgejo-runner:/vm/images
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
 volumes:
   forgejo:
   forgejo-postgres:
+  forgejo-runner:
