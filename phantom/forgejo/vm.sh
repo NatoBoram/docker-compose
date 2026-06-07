@@ -5,7 +5,6 @@ set -e
 mkdir -p /vm/storage
 DISK_IMG="/vm/storage/runner.qcow2"
 SEED_ISO="/vm/storage/seed.iso"
-rm -f "$DISK_IMG" "$SEED_ISO"
 
 # Download cloud image
 mkdir -p /vm/images
@@ -17,7 +16,8 @@ fi
 # Create disk for virtual machine
 qemu-img create -f qcow2 -b "/vm/images/$IMAGE_NAME" -F qcow2 "$DISK_IMG" "$VM_STORAGE"
 
-cat <<EOF >/tmp/user-data
+USER_DATA="$(mktemp)"
+cat <<EOF >"$USER_DATA"
 #cloud-config
 users:
   - name: runner
@@ -65,9 +65,11 @@ runcmd:
   - systemctl poweroff
 EOF
 
-echo "local-hostname: $VM_HOSTNAME" >/tmp/meta-data
+META_DATA="$(mktemp)"
+echo "local-hostname: $VM_HOSTNAME" >"$META_DATA"
 
-cloud-localds "$SEED_ISO" /tmp/user-data /tmp/meta-data
+cloud-localds "$SEED_ISO" "$USER_DATA" "$META_DATA"
+rm -f "$USER_DATA" "$META_DATA"
 
 exec qemu-system-x86_64 \
   -enable-kvm \
@@ -80,3 +82,4 @@ exec qemu-system-x86_64 \
   -netdev user,id=vmnic,hostfwd=tcp::22-:22 \
   -nographic \
   -snapshot
+rm -f "$DISK_IMG" "$SEED_ISO"
