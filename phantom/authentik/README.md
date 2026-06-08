@@ -33,3 +33,5 @@ Some services have an API that is protected by Authentik. To configure personal 
 
 6. Change back your _Token validity_ to something more reasonable, like `days=1`.
 7. Use the `access_token` as your Bearer token. If your application only supports basic auth, then use `goauthentik.io/token` as the username.
+
+For more information, see <https://docs.goauthentik.io/add-secure-apps/providers/proxy/header_authentication>.
