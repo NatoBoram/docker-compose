@@ -90,6 +90,7 @@ services:
     container_name: forgejo-runner-1
     depends_on:
       - forgejo
+      - registry
     devices:
       - /dev/kvm:/dev/kvm
     env_file:
