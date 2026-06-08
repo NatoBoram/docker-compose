@@ -51,7 +51,7 @@ write_files:
 
 runcmd:
   # Docker
-  - docker login --password-stdin --username="$DOCKER_USERNAME" "$DOCKER_REGISTRY" <<<"$DOCKER_PASSWORD"
+  - printf '%s\n' "$DOCKER_PASSWORD" | docker login --password-stdin --username="$DOCKER_USERNAME" "$DOCKER_REGISTRY"
 
   # Forgejo Runner: https://forgejo.org/docs/latest/admin/actions/installation/binary
   - export ARCH=\$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
