@@ -8,6 +8,8 @@ services:
     env_file:
       - .env.registry
       - .env.registry.local
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: true
     networks:
       - caddy-registry
     volumes:
