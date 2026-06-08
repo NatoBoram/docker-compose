@@ -4,10 +4,10 @@
 
 Some services have an API that is protected by Authentik. To configure personal applications with those services, you'll need a JWT that can be used as a Bearer token.
 
-1. Obtain the _Client ID_ from the _Proxy Provider_ at _Applications / Providers / Provider / Authentication_
-2. Use your username or a service account's username
-3. Create an _App Password_ at <https://authentik.example.org/if/user/#/settings;%7B%22page%22%3A%22page-tokens%22%7D>
-4. Update the _Token validity_ of the _Proxy Provider_ at _Applications / Providers / Provider / Edit_ to something like `days=36524`
+1. Obtain the _Client ID_ from the _Proxy Provider_ at _Applications / Providers / Provider / Authentication_.
+2. Use your username or a service account's username.
+3. Create an _App Password_ at <https://authentik.example.org/if/user/#/settings;%7B%22page%22%3A%22page-tokens%22%7D>.
+4. Update the _Token validity_ of the _Proxy Provider_ at _Applications / Providers / Provider / Edit_ to something like `days=36524`.
 5. Request your new JWT:
 
    ```sh
@@ -31,5 +31,5 @@ Some services have an API that is protected by Authentik. To configure personal 
    }
    ```
 
-6. Change back your _Token validity_ to something more reasonable, like `days=91`
-7. Use the `access_token` as your Bearer token.
+6. Change back your _Token validity_ to something more reasonable, like `days=1`.
+7. Use the `access_token` as your Bearer token. If your application only supports basic auth, then use `goauthentik.io/token` as the username.
