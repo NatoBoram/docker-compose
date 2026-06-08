@@ -1,0 +1,22 @@
+services:
+  registry:
+    container_name: registry
+    image: registry:3
+    depends_on:
+      - authentik-server
+      - caddy
+    env_file:
+      - .env.registry
+      - .env.registry.local
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: true
+    networks:
+      - caddy-registry
+    volumes:
+      - registry:/var/lib/registry
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  registry:

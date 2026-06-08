@@ -22,6 +22,7 @@ include:
   - path: open-webui/compose.yaml
   - path: peertube/compose.yaml
   - path: qbittorrent/compose.yaml
+  - path: registry/compose.yaml
   - path: send/compose.yaml
   - path: syncthing/compose.yaml
   - path: tandoor/compose.yaml

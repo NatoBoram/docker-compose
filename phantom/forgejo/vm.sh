@@ -50,6 +50,9 @@ write_files:
             token: "$FORGEJO_RUNNER_TOKEN"
 
 runcmd:
+  # Docker
+  - printf '%s\n' "$DOCKER_PASSWORD" | docker login --password-stdin --username="$DOCKER_USERNAME" "$DOCKER_REGISTRY"
+
   # Forgejo Runner: https://forgejo.org/docs/latest/admin/actions/installation/binary
   - export ARCH=\$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
   - export RUNNER_VERSION=\$(curl -X 'GET' https://data.forgejo.org/api/v1/repos/forgejo/runner/releases/latest | jq .name -r | cut -c 2-)
