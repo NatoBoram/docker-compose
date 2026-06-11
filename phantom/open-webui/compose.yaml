@@ -13,6 +13,7 @@ services:
       - .env.open-webui.local
     environment:
       OLLAMA_BASE_URL: http://ollama:11434
+      AUDIO_STT_OPENAI_API_BASE_URL: http://ollama:11434/v1
     image: ghcr.io/open-webui/open-webui:main
     networks:
       - authentik-open-webui
