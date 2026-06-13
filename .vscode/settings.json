@@ -4,7 +4,8 @@
 	},
 	"files.associations": {
 		"*.compose.override.yaml": "dockercompose",
-		"*.compose.yaml": "dockercompose"
+		"*.compose.yaml": "dockercompose",
+		"**/forgejo/**/*.conf": "ssh_config"
 	},
 	"remote.autoForwardPorts": false
 }

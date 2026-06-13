@@ -9,12 +9,14 @@
 	],
 	"homepage": "https://github.com/NatoBoram/docker-compose",
 	"bugs": {
-		"url": "https://github.com/NatoBoram/docker-compose/issues"
+		"url": "https://github.com/NatoBoram/docker-compose/issues",
+		"email": "10495562+NatoBoram@users.noreply.github.com"
 	},
 	"license": "AGPL-3.0-or-later",
 	"author": {
 		"name": "Nato Boram",
-		"url": "https://github.com/NatoBoram"
+		"url": "https://github.com/NatoBoram",
+		"email": "10495562+NatoBoram@users.noreply.github.com"
 	},
 	"funding": [
 		{
