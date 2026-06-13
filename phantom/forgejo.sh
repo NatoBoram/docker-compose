@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker compose exec -u 33 forgejo forgejo "$@"
+docker compose exec -u git forgejo forgejo "$@"
