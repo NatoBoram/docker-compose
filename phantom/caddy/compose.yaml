@@ -7,6 +7,7 @@ networks:
   caddy-beszel:
   caddy-dozzle:
   caddy-element:
+  caddy-forgejo-cache:
   caddy-forgejo:
   caddy-glances:
   caddy-goaccess:
@@ -54,6 +55,7 @@ services:
       - caddy-dozzle
       - caddy-element
       - caddy-forgejo
+      - caddy-forgejo-cache
       - caddy-glances
       - caddy-goaccess
       - caddy-jellyfin

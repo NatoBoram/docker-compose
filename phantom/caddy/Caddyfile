@@ -158,6 +158,15 @@
 		reverse_proxy forgejo:3000
 	}
 
+	@forgejo-cache host forgejo-cache.{$PORKBUN_DOMAIN}
+	handle @forgejo-cache {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+
+		reverse_proxy forgejo-cache:3000
+	}
+
 	@glances host glances.{$PORKBUN_DOMAIN}
 	handle @glances {
 		import maxmind_geolocation {
@@ -305,15 +314,15 @@
 		reverse_proxy qbittorrent:8080
 	}
 
-  @registry host registry.{$PORKBUN_DOMAIN}
-  handle @registry {
-    import maxmind_geolocation {
-      allow_subdivisions QC
-    }
-    import authentik
+	@registry host registry.{$PORKBUN_DOMAIN}
+	handle @registry {
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+		import authentik
 
-    reverse_proxy registry:5000
-  }
+		reverse_proxy registry:5000
+	}
 
 	@send host send.{$PORKBUN_DOMAIN}
 	handle @send {

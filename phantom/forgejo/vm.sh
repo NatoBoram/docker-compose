@@ -38,6 +38,11 @@ write_files:
           - docker:docker://node:lts
           - ubuntu-latest:docker://node:lts
 
+      cache:
+        enabled: true
+        external_server: "$FORGEJO_CACHE_URL"
+        secret: "$FORGEJO_CACHE_SECRET"
+
       container:
         enable_ipv6: true
         privileged: true

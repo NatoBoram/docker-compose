@@ -1,0 +1,5 @@
+cache:
+  dir: /data/cache
+  enabled: true
+  port: 3000
+  secret_url: file:$CREDENTIALS_DIRECTORY/secret.txt

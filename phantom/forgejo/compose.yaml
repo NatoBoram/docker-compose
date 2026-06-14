@@ -1,5 +1,10 @@
 networks:
   forgejo-postgres:
+  forgejo-runner-cache:
+
+secrets:
+  FORGEJO_CACHE_SECRET:
+    file: secrets/forgejo_cache_secret.txt
 
 services:
   forgejo:
@@ -90,12 +95,15 @@ services:
     container_name: forgejo-runner-1
     depends_on:
       - forgejo
+      - forgejo-cache
       - registry
     devices:
       - /dev/kvm:/dev/kvm
     env_file:
       - path: .env.forgejo-runner-1
       - path: .env.forgejo-runner-1.local
+    networks:
+      - forgejo-runner-cache
     restart: always
     volumes:
       - forgejo-runner:/vm/images
@@ -103,7 +111,30 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
 
+  forgejo-cache:
+    command: forgejo-runner --config /data/config.yaml cache-server
+    container_name: forgejo-cache
+    depends_on:
+      - forgejo
+    environment:
+      CREDENTIALS_DIRECTORY: /run/secrets
+    image: data.forgejo.org/forgejo/runner:12
+    networks:
+      - caddy-forgejo-cache
+      - forgejo-runner-cache
+    restart: always
+    secrets:
+      - source: FORGEJO_CACHE_SECRET
+        target: /run/secrets/secret.txt
+    volumes:
+      - forgejo-cache:/data
+      - ./volumes/forgejo_cache.yaml:/data/config.yaml
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
 volumes:
   forgejo:
+  forgejo-cache:
   forgejo-postgres:
   forgejo-runner:
