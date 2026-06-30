@@ -90,6 +90,18 @@
 		resolvers 2606:4700:4700::1111 1.1.1.1 2606:4700:4700::1001 1.0.0.1 2001:4860:4860::8888 8.8.8.8 2001:4860:4860::8844 8.8.4.4
 	}
 
+	@h1 {
+		protocol http/1.1
+		not header Connection *Upgrade*
+	}
+	handle @h1 {
+		header Connection "Upgrade"
+		header Upgrade "HTTP/3.0"
+		respond 426 {
+			close
+		}
+	}
+
 	@www host www.{$PORKBUN_DOMAIN}
 	handle @www {
 		redir https://{$PORKBUN_DOMAIN}{uri} permanent
