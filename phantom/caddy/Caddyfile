@@ -101,6 +101,7 @@
 	@h1 {
 		protocol http/1.1
 		not header Connection *Upgrade*
+		not header User-Agent matrix-authentication-service/*
 	}
 	handle @h1 {
 		header Connection "Upgrade"
