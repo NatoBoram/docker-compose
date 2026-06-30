@@ -70,6 +70,14 @@
 	}
 }
 
+(log) {
+	log {args[0]}.{$PORKBUN_DOMAIN} {
+		output file /var/log/caddy/{args[0]}.{$PORKBUN_DOMAIN}.log {
+			roll_local_time
+		}
+	}
+}
+
 {$PORKBUN_DOMAIN} *.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN} *.kubo.{$PORKBUN_DOMAIN} {
 	encode
 	header Strict-Transport-Security "max-age=63072000"
@@ -102,8 +110,10 @@
 		}
 	}
 
+	import log www
 	@www host www.{$PORKBUN_DOMAIN}
 	handle @www {
+		log_name www
 		redir https://{$PORKBUN_DOMAIN}{uri} permanent
 	}
 
@@ -113,13 +123,18 @@
 		root /var/www/html
 	}
 
+	import log anubis
 	@anubis host anubis.{$PORKBUN_DOMAIN}
 	handle @anubis {
+		log_name anubis
 		reverse_proxy anubis:8923
 	}
 
+	import log authentik
 	@authentik host authentik.{$PORKBUN_DOMAIN}
 	handle @authentik {
+		log_name authentik
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -127,8 +142,11 @@
 		reverse_proxy authentik-server:9000
 	}
 
+	import log backrest
 	@backrest host backrest.{$PORKBUN_DOMAIN}
 	handle @backrest {
+		log_name backrest
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -137,8 +155,11 @@
 		reverse_proxy backrest:9898
 	}
 
+	import log beszel
 	@beszel host beszel.{$PORKBUN_DOMAIN}
 	handle @beszel {
+		log_name beszel
+
 		import maxmind_geolocation {
 			allow_subdivisions QC ON
 		}
@@ -146,8 +167,11 @@
 		reverse_proxy beszel:8090
 	}
 
+	import log dozzle
 	@dozzle host dozzle.{$PORKBUN_DOMAIN}
 	handle @dozzle {
+		log_name dozzle
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -156,13 +180,18 @@
 		reverse_proxy dozzle:8080
 	}
 
+	import log element
 	@element host element.{$PORKBUN_DOMAIN}
 	handle @element {
+		log_name element
 		reverse_proxy element:80
 	}
 
+	import log forgejo
 	@forgejo host forgejo.{$PORKBUN_DOMAIN}
 	handle @forgejo {
+		log_name forgejo
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -170,8 +199,11 @@
 		reverse_proxy forgejo:3000
 	}
 
+	import log forgejo-cache
 	@forgejo-cache host forgejo-cache.{$PORKBUN_DOMAIN}
 	handle @forgejo-cache {
+		log_name forgejo-cache
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -179,8 +211,11 @@
 		reverse_proxy forgejo-cache:3000
 	}
 
+	import log glances
 	@glances host glances.{$PORKBUN_DOMAIN}
 	handle @glances {
+		log_name glances
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -189,8 +224,11 @@
 		reverse_proxy glances:61208
 	}
 
+	import log goaccess
 	@goaccess host goaccess.{$PORKBUN_DOMAIN}
 	handle @goaccess {
+		log_name goaccess
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -206,8 +244,11 @@
 		root /var/www/goaccess
 	}
 
+	import log jellyfin
 	@jellyfin host jellyfin.{$PORKBUN_DOMAIN}
 	handle @jellyfin {
+		log_name jellyfin
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -215,8 +256,11 @@
 		reverse_proxy jellyfin:8096
 	}
 
+	import log jellyfin-vue
 	@jellyfin-vue host jellyfin-vue.{$PORKBUN_DOMAIN}
 	handle @jellyfin-vue {
+		log_name jellyfin-vue
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -225,13 +269,18 @@
 		reverse_proxy jellyfin-vue:80
 	}
 
+	import log kubo
 	@kubo host kubo.{$PORKBUN_DOMAIN} ipfs.kubo.{$PORKBUN_DOMAIN} ipns.kubo.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN}
 	handle @kubo {
+		log_name kubo
 		reverse_proxy kubo:8080
 	}
 
+	import log rpc.kubo
 	@kubo-rpc host rpc.kubo.{$PORKBUN_DOMAIN}
 	handle @kubo-rpc {
+		log_name rpc.kubo
+
 		import maxmind_geolocation {
 			allow_countries US
 			allow_subdivisions QC
@@ -240,14 +289,19 @@
 		reverse_proxy kubo:5001
 	}
 
+	import log leanish
 	@leanish host leanish.{$PORKBUN_DOMAIN}
 	handle @leanish {
+		log_name leanish
 		import anubis
 		reverse_proxy leanish:3000
 	}
 
+	import log littleroot
 	@littleroot host littleroot.{$PORKBUN_DOMAIN}
 	handle @littleroot {
+		log_name littleroot
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -256,13 +310,18 @@
 		reverse_proxy littleroot:8080
 	}
 
+	import log mas
 	@mas host mas.{$PORKBUN_DOMAIN}
 	handle @mas {
+		log_name mas
 		reverse_proxy mas:8080
 	}
 
+	import log metube
 	@metube host metube.{$PORKBUN_DOMAIN}
 	handle @metube {
+		log_name metube
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -271,8 +330,11 @@
 		reverse_proxy metube:8081
 	}
 
+	import log myspeed
 	@myspeed host myspeed.{$PORKBUN_DOMAIN}
 	handle @myspeed {
+		log_name myspeed
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -281,8 +343,11 @@
 		reverse_proxy myspeed:5216
 	}
 
+	import log nextcloud
 	@nextcloud host nextcloud.{$PORKBUN_DOMAIN}
 	handle @nextcloud {
+		log_name nextcloud
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -290,8 +355,11 @@
 		reverse_proxy nextcloud:80
 	}
 
+	import log ollama
 	@ollama host ollama.{$PORKBUN_DOMAIN}
 	handle @ollama {
+		log_name ollama
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -300,8 +368,11 @@
 		reverse_proxy ollama:11434
 	}
 
+	import log open-webui
 	@open-webui host open-webui.{$PORKBUN_DOMAIN}
 	handle @open-webui {
+		log_name open-webui
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -309,15 +380,20 @@
 		reverse_proxy open-webui:8080
 	}
 
+	import log peertube
 	@peertube host peertube.{$PORKBUN_DOMAIN}
 	handle @peertube {
+		log_name peertube
 		import anubis
 
 		reverse_proxy peertube:9000
 	}
 
+	import log qbittorrent
 	@qbittorrent host qbittorrent.{$PORKBUN_DOMAIN}
 	handle @qbittorrent {
+		log_name qbittorrent
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -326,8 +402,11 @@
 		reverse_proxy qbittorrent:8080
 	}
 
+	import log registry
 	@registry host registry.{$PORKBUN_DOMAIN}
 	handle @registry {
+		log_name registry
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -336,8 +415,11 @@
 		reverse_proxy registry:5000
 	}
 
+	import log send
 	@send host send.{$PORKBUN_DOMAIN}
 	handle @send {
+		log_name send
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -346,13 +428,18 @@
 		reverse_proxy send:1443
 	}
 
+	import log synapse
 	@synapse host synapse.{$PORKBUN_DOMAIN}
 	handle @synapse {
+		log_name synapse
 		reverse_proxy synapse:8008
 	}
 
+	import log syncthing
 	@syncthing host syncthing.{$PORKBUN_DOMAIN}
 	handle @syncthing {
+		log_name syncthing
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -361,8 +448,11 @@
 		reverse_proxy syncthing:8384
 	}
 
+	import log tandoor
 	@tandoor host tandoor.{$PORKBUN_DOMAIN}
 	handle @tandoor {
+		log_name tandoor
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -370,8 +460,11 @@
 		reverse_proxy tandoor:80
 	}
 
+	import log uptime-kuma
 	@uptime-kuma host uptime-kuma.{$PORKBUN_DOMAIN}
 	handle @uptime-kuma {
+		log_name uptime-kuma
+
 		import maxmind_geolocation {
 			allow_subdivisions QC
 		}
@@ -380,8 +473,11 @@
 		reverse_proxy uptime-kuma:3001
 	}
 
+	import log watchtower
 	@watchtower host watchtower.{$PORKBUN_DOMAIN}
 	handle @watchtower {
+		log_name watchtower
+
 		import maxmind_geolocation {
 			allow_countries US
 			allow_subdivisions QC

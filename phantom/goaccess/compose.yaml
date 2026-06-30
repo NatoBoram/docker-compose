@@ -1,13 +1,17 @@
+secrets:
+  # Sets `log-file` and `ws-url`.
+  conf:
+    file: ./secrets/goaccess.conf
+
 services:
   goaccess:
-    # This attribute has to be overridden in `compose.override.yaml`.
     command:
-      - /srv/logs/caddy/$$DOMAIN.log
       - --agent-list
+      - --config-file=/srv/config/goaccess.conf
       - --db-path=/srv/db
       - --external-assets
-      - --geoip-database=/srv/mmdb/GeoLite2-City.mmdb
       - --geoip-database=/srv/mmdb/GeoLite2-ASN.mmdb
+      - --geoip-database=/srv/mmdb/GeoLite2-City.mmdb
       - --geoip-database=/srv/mmdb/GeoLite2-Country.mmdb
       - --jobs=6
       - --keep-last=90
@@ -19,7 +23,6 @@ services:
       - --real-time-html
       - --restore
       - --tz=America/Toronto
-      - --ws-url=wss://goaccess.$$DOMAIN:443
     container_name: goaccess
     depends_on:
       - authentik-server
@@ -30,6 +33,9 @@ services:
       - authentik-goaccess
       - caddy-goaccess
     restart: always
+    secrets:
+      - source: conf
+        target: /srv/config/goaccess.conf
     volumes:
       - /var/log/caddy:/srv/logs/caddy:ro
       - geoipupdate:/srv/mmdb:ro
