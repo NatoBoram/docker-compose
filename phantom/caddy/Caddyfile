@@ -16,6 +16,7 @@
 	}
 
 	email {env.EMAIL}
+	order log_name before reverse_proxy
 
 	servers {
 		trusted_proxies static private_ranges
