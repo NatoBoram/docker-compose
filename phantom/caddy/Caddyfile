@@ -105,9 +105,7 @@
 	handle @h1 {
 		header Connection "Upgrade"
 		header Upgrade "HTTP/3.0"
-		respond 426 {
-			close
-		}
+		error 426
 	}
 
 	import log www
