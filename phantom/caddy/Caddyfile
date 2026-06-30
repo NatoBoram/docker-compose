@@ -71,7 +71,8 @@
 }
 
 (log) {
-	log {args[0]}.{$PORKBUN_DOMAIN} {
+	log {args[0]} {
+		no_hostname
 		output file /var/log/caddy/{args[0]}.{$PORKBUN_DOMAIN}.log {
 			roll_local_time
 		}
