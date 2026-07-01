@@ -16,6 +16,7 @@
 	}
 
 	email {env.EMAIL}
+	order log_name before redir
 	order log_name before reverse_proxy
 
 	servers {
@@ -102,9 +103,10 @@
 
 	@h1 {
 		protocol http/1.1
-		not header Connection *Upgrade*
+		not header Connection "Upgrade"
 		not header User-Agent "Element X/*"
 		not header User-Agent "matrix-authentication-service/*"
+		not header User-Agent "PeerTube/*"
 	}
 	handle @h1 {
 		header Connection "Upgrade"
@@ -116,11 +118,13 @@
 	@www host www.{$PORKBUN_DOMAIN}
 	handle @www {
 		log_name www
+		import anubis
 		redir https://{$PORKBUN_DOMAIN}{uri} permanent
 	}
 
 	@root host {$PORKBUN_DOMAIN}
 	handle @root {
+		import anubis
 		file_server
 		root /var/www/html
 	}
@@ -501,4 +505,8 @@
 			}
 		}
 	}
+}
+
+http:// {
+	redir https://{$PORKBUN_DOMAIN}{uri} permanent
 }
