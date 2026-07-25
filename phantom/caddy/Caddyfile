@@ -104,9 +104,10 @@
 	@h1 {
 		protocol http/1.1
 		not header Connection "Upgrade"
-		not header User-Agent "Element X/*"
-		not header User-Agent "matrix-authentication-service/*"
-		not header User-Agent "PeerTube/*"
+		not header User-Agent "Element X/*" # https://github.com/element-hq/element-x-android/issues/6728
+		not header User-Agent "matrix-authentication-service/*" # https://github.com/element-hq/matrix-authentication-service/issues/5757
+		not header User-Agent "PeerTube/*" # https://github.com/Chocobozzz/PeerTube/issues/7702
+		not header User-Agent "python-requests/2.33.0" # https://github.com/TandoorRecipes/recipes/issues/4759
 	}
 	handle @h1 {
 		header Connection "Upgrade"
