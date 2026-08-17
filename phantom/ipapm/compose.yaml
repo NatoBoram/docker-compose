@@ -1,0 +1,28 @@
+networks:
+  ipapm-kubo:
+
+services:
+  ipapm:
+    container_name: ipapm
+    depends_on:
+      - kubo
+    env_file:
+      - .env.ipapm
+      - .env.ipapm.local
+    environment:
+      GO_ENV: production
+      KUBO_API_URL: http://kubo:5001
+    healthcheck:
+      test:
+        - CMD
+        - /usr/local/bin/readyz
+    image: natoboram/ipapm
+    networks:
+      - ipapm-kubo
+    restart: always
+    volumes:
+      - ./volumes/config/:/home/nonroot/.config/ipapm/
+      - /usr/share/keyrings/:/usr/share/keyrings/:ro
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro

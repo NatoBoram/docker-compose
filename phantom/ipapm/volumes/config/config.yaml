@@ -1,0 +1,22 @@
+Kubo:
+  MFS: /ipapm
+Port: 9090
+Sources:
+  - URIs:
+      - https://packages.termux.dev/apt/termux-main
+    Suites:
+      - stable
+      - staging
+    Signed-By: /usr/share/keyrings/termux-autobuilds.gpg
+  - URIs:
+      - https://packages.termux.dev/apt/termux-root
+    Suites:
+      - root
+      - staging
+    Signed-By: /usr/share/keyrings/termux-autobuilds.gpg
+  - URIs:
+      - https://packages.termux.dev/apt/termux-x11
+    Suites:
+      - staging
+      - x11
+    Signed-By: /usr/share/keyrings/termux-autobuilds.gpg

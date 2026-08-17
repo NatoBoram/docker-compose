@@ -31,6 +31,7 @@ services:
       - geoipupdate
       - glances
       - goaccess
+      - ipapm
       - jellyfin
       - jellyfin-vue
       - kubo
