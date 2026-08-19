@@ -1,9 +1,14 @@
 services:
   kubo:
     container_name: kubo
+    depends_on:
+      - caddy
     env_file:
       - .env.kubo
       - .env.kubo.local
+    environment:
+      GOLOG_LOG_FMT: json
+      GOLOG_LOG_LEVEL: info
     healthcheck:
       test:
         - CMD-SHELL
@@ -14,8 +19,6 @@ services:
       start_period: 5s
     hostname: phantom
     image: ipfs/kubo
-    depends_on:
-      - caddy
     networks:
       - caddy-kubo
       - ipapm-kubo
