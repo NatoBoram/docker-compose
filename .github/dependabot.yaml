@@ -47,7 +47,6 @@ updates:
   - package-ecosystem: docker-compose
     directories:
       - /corsair
-      - /olea
       - /phantom
     schedule:
       interval: monthly

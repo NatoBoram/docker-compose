@@ -9,7 +9,6 @@ Each top-level directory = physical machine:
 - `phantom/` - Current production server (subdirectory structure)
 - `helion/` - Decommissioned (flat `.compose.yaml` files, reference only)
 - `corsair/` - Dev machine
-- `olea/` - Cloud server
 
 **Structure evolution**: `phantom/` uses service subdirectories (`jellyfin/compose.yaml`), while legacy `helion/` uses flat naming (`jellyfin.compose.yaml`). Main `compose.yaml` includes all services via `include:` directive.
 

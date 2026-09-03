@@ -20,7 +20,6 @@ The machines are:
 
 - [Corsair](./corsair) (dev machine)
 - [Helion](./helion) (decommissioned)
-- [Olea](./olea) (cloud server)
 - [Phantom](./phantom) (current)
 
 Each folder contains a `compose.yaml` that orchestrates the services running on that machine. The `compose.yaml` file loads services at `${service}/compose.yaml` and may expect overrides at `compose.override.yaml`. You'll have to read service definitions to see what needs to be overridden.

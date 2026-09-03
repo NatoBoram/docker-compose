@@ -46,5 +46,4 @@ jobs:
         host:
           - corsair
           - helion
-          - olea
           - phantom
