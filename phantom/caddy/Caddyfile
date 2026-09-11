@@ -13,6 +13,8 @@
 		domains {
 			{$PORKBUN_DOMAIN} @ * *.ipfs.kubo *.ipns.kubo
 		}
+
+		check_interval 10m
 	}
 
 	email {env.EMAIL}
