@@ -96,7 +96,6 @@ services:
     depends_on:
       - forgejo
       - forgejo-cache
-      - registry
     devices:
       - /dev/kvm:/dev/kvm
     env_file:

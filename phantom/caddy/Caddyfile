@@ -412,19 +412,6 @@
 		reverse_proxy qbittorrent:8080
 	}
 
-	import log registry
-	@registry host registry.{$PORKBUN_DOMAIN}
-	handle @registry {
-		log_name registry
-
-		import maxmind_geolocation {
-			allow_subdivisions QC
-		}
-		import authentik
-
-		reverse_proxy registry:5000
-	}
-
 	import log send
 	@send host send.{$PORKBUN_DOMAIN}
 	handle @send {

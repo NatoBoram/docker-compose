@@ -24,7 +24,6 @@ networks:
   caddy-open-webui:
   caddy-peertube:
   caddy-qbittorrent:
-  caddy-registry:
   caddy-send:
   caddy-synapse:
   caddy-syncthing:
@@ -71,7 +70,6 @@ services:
       - caddy-open-webui
       - caddy-peertube
       - caddy-qbittorrent
-      - caddy-registry
       - caddy-send
       - caddy-synapse
       - caddy-syncthing

@@ -47,7 +47,6 @@ services:
       - ollama
       - open-webui
       - qbittorrent
-      - registry
       - send
       - send-redis
       - synapse
