@@ -99,6 +99,7 @@
 			api_key {env.PORKBUN_API_KEY}
 			api_secret_key {env.PORKBUN_API_SECRET_KEY}
 		}
+		key_type p384
 		protocols tls1.3
 		resolvers 2606:4700:4700::1111 1.1.1.1 2606:4700:4700::1001 1.0.0.1 2001:4860:4860::8888 8.8.8.8 2001:4860:4860::8844 8.8.4.4
 	}
