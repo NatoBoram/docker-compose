@@ -85,7 +85,7 @@
 
 {$PORKBUN_DOMAIN} *.{$PORKBUN_DOMAIN} *.ipfs.kubo.{$PORKBUN_DOMAIN} *.ipns.kubo.{$PORKBUN_DOMAIN} *.kubo.{$PORKBUN_DOMAIN} {
 	encode
-	header Strict-Transport-Security "max-age=63072000"
+	header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
 
 	log {$PORKBUN_DOMAIN} {
 		output file /var/log/caddy/{$PORKBUN_DOMAIN}.log {
