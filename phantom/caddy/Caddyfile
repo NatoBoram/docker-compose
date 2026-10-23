@@ -107,8 +107,6 @@
 	@h1 {
 		protocol http/1.1
 		not header Connection "Upgrade"
-		not header User-Agent "Authlib/1.7.2 (+https://authlib.org)" # https://github.com/open-webui/open-webui/issues/29012
-		not header User-Agent "Conduit/*" # https://github.com/cogwheel0/conduit/issues/542
 		not header User-Agent "openid-client/v6.8.4" # https://github.com/panva/openid-client/discussions/619
 		not header User-Agent "PeerTube/*" # https://github.com/Chocobozzz/PeerTube/issues/7702
 		not header User-Agent "python-requests/2.33.0" # https://github.com/TandoorRecipes/recipes/issues/4759
@@ -365,18 +363,6 @@
 		import authentik
 
 		reverse_proxy ollama:11434
-	}
-
-	import log open-webui
-	@open-webui host open-webui.{$PORKBUN_DOMAIN}
-	handle @open-webui {
-		log_name open-webui
-
-		import maxmind_geolocation {
-			allow_subdivisions QC
-		}
-
-		reverse_proxy open-webui:8080
 	}
 
 	import log peertube

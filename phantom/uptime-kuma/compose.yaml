@@ -45,7 +45,6 @@ services:
       - nextcloud-postgres
       - nextcloud-redis
       - ollama
-      - open-webui
       - qbittorrent
       - send
       - send-redis
