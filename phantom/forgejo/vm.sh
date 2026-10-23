@@ -56,9 +56,8 @@ if [ ! -f "$BASE_IMAGE" ]; then
   curl --fail --location --output "$BASE_IMAGE" --silent "$IMAGE_URL"
 fi
 
-# Resolve Docker's service name outside QEMU, which has its own DNS resolver.
-REGISTRY_ADDRESS="$(getent ahostsv4 registry | awk 'NR == 1 {print $1}')"
-: "${REGISTRY_ADDRESS:?Could not resolve the local registry}"
+# The firewall resolves and allows this address before starting the launcher.
+: "${REGISTRY_ADDRESS:?Start the runner through egress.sh}"
 curl --fail --silent --show-error --connect-timeout 10 --max-time 30 --retry 5 --retry-connrefused \
   --output /dev/null "http://$REGISTRY_ADDRESS:5000/v2/"
 

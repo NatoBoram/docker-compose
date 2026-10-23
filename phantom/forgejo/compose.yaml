@@ -91,6 +91,8 @@ services:
   forgejo-runner-1:
     build:
       dockerfile: ./Dockerfile
+    cap_add:
+      - NET_ADMIN
     container_name: forgejo-runner-1
     depends_on:
       - forgejo
@@ -105,6 +107,8 @@ services:
     restart: always
     secrets:
       - FORGEJO_RUNNER_API_TOKEN
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - forgejo-runner:/vm/images
 
