@@ -2,6 +2,11 @@
 
 set -e
 
+# Compose file secrets retain host ownership; prepare a private, root-owned copy.
+install --directory --mode=0700 /run/forgejo
+install --mode=0600 --owner=root --group=root \
+  /run/secrets/FORGEJO_RUNNER_API_TOKEN /run/forgejo/api-token
+
 : "${FORGEJO_INSTANCE_URL:?Set FORGEJO_INSTANCE_URL}"
 FORGEJO_HOST="$(printf '%s' "$FORGEJO_INSTANCE_URL" | jq --raw-input --exit-status --raw-output '
   [capture("^https://(?<host>[a-zA-Z0-9.-]+)(:443)?(/.*)?$")] |

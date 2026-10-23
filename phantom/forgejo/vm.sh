@@ -62,7 +62,7 @@ curl --fail --silent --show-error --connect-timeout 10 --max-time 30 --retry 5 -
   --output /dev/null "http://$REGISTRY_ADDRESS:5000/v2/"
 
 # Keep the provisioning token out of process arguments and guest cloud-init.
-API_TOKEN="$(cat /run/secrets/FORGEJO_RUNNER_API_TOKEN)"
+API_TOKEN="$(cat /run/forgejo/api-token)"
 case "$API_TOKEN" in
 '' | *[!a-zA-Z0-9]*)
   printf 'Invalid Forgejo runner API token.\n' >&2
