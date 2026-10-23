@@ -46,6 +46,7 @@ services:
       - nextcloud-redis
       - ollama
       - qbittorrent
+      - registry
       - send
       - send-redis
       - synapse

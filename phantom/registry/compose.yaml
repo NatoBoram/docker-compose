@@ -1,0 +1,24 @@
+networks:
+  forgejo-runner-registry:
+
+services:
+  registry:
+    container_name: registry
+    env_file:
+      - path: .env.registry
+      - path: .env.registry.local
+    environment:
+      REGISTRY_PROXY_REMOTEURL: https://registry-1.docker.io
+      REGISTRY_STORAGE_DELETE_ENABLED: true
+    image: registry:3
+    networks:
+      - forgejo-runner-registry
+    restart: always
+    volumes:
+      - registry-cache:/var/lib/registry
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  registry-cache:

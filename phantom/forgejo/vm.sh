@@ -56,6 +56,12 @@ if [ ! -f "$BASE_IMAGE" ]; then
   curl --fail --location --output "$BASE_IMAGE" --silent "$IMAGE_URL"
 fi
 
+# Resolve Docker's service name outside QEMU, which has its own DNS resolver.
+REGISTRY_ADDRESS="$(getent ahostsv4 registry | awk 'NR == 1 {print $1}')"
+: "${REGISTRY_ADDRESS:?Could not resolve the local registry}"
+curl --fail --silent --show-error --connect-timeout 10 --max-time 30 --retry 5 --retry-connrefused \
+  --output /dev/null "http://$REGISTRY_ADDRESS:5000/v2/"
+
 # Keep the provisioning token out of process arguments and guest cloud-init.
 API_TOKEN="$(cat /run/secrets/FORGEJO_RUNNER_API_TOKEN)"
 case "$API_TOKEN" in
@@ -93,6 +99,15 @@ packages:
   - jq
 
 write_files:
+  - path: /etc/docker/daemon.json
+    permissions: "0644"
+    owner: root:root
+    content: |
+      {
+        "registry-mirrors": ["http://$REGISTRY_ADDRESS:5000"],
+        "insecure-registries": ["$REGISTRY_ADDRESS:5000"]
+      }
+
   - path: /vm/storage/config.yaml
     permissions: "0600"
     owner: root:root
@@ -119,7 +134,9 @@ write_files:
 
 runcmd:
   # Docker
-  - printf '%s\n' "$DOCKER_PASSWORD" | docker login --password-stdin --username="$DOCKER_USERNAME" "$DOCKER_REGISTRY"
+  # The mirror's address can overlap Docker's default bridge subnet in the guest.
+  - ip route replace "$REGISTRY_ADDRESS/32" via 10.0.2.2
+  - systemctl restart docker
 
   # Forgejo Runner: https://forgejo.org/docs/latest/admin/actions/installation/binary
   - export ARCH=\$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')

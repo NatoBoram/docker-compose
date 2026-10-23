@@ -1,6 +1,5 @@
 networks:
   forgejo-postgres:
-  forgejo-runner:
 
 secrets:
   FORGEJO_RUNNER_API_TOKEN:
@@ -95,13 +94,14 @@ services:
     container_name: forgejo-runner-1
     depends_on:
       - forgejo
+      - registry
     devices:
       - /dev/kvm:/dev/kvm
     env_file:
       - path: .env.forgejo-runner-1
       - path: .env.forgejo-runner-1.local
     networks:
-      - forgejo-runner
+      - forgejo-runner-registry
     restart: always
     secrets:
       - FORGEJO_RUNNER_API_TOKEN

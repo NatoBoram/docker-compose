@@ -55,3 +55,20 @@ sudo chown git:git -Rc /var/lib/docker/volumes/phantom_forgejo/_data/gitea/conf/
    ```sh
    sudo chown git:git -Rc /home/git
    ```
+
+## Runners
+
+You'll need an administrator token to register ephemereal runners.
+
+1. Create an administrator account and a token
+
+   ```sh
+   docker exec --user git forgejo forgejo admin user generate-access-token \
+     --username forgejo-runner \
+     --token-name ephemeral-runner-provisioning \
+     --scopes write:admin \
+     --raw
+   ```
+
+2. Save its value in `forgejo/secrets/FORGEJO_RUNNER_API_TOKEN`.
+3. Register that account with Authentik
