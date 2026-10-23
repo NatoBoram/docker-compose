@@ -210,18 +210,6 @@
 		reverse_proxy forgejo:3000
 	}
 
-	import log forgejo-cache
-	@forgejo-cache host forgejo-cache.{$PORKBUN_DOMAIN}
-	handle @forgejo-cache {
-		log_name forgejo-cache
-
-		import maxmind_geolocation {
-			allow_subdivisions QC
-		}
-
-		reverse_proxy forgejo-cache:3000
-	}
-
 	import log glances
 	@glances host glances.{$PORKBUN_DOMAIN}
 	handle @glances {

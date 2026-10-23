@@ -1,20 +1,85 @@
 #!/bin/sh
 
 set -e
+umask 077
 
-# Download cloud image
-mkdir -p /vm/images
-if [ ! -f "/vm/images/$IMAGE_NAME" ]; then
-  echo "Downloading $IMAGE_NAME..."
-  curl --fail --location --output "/vm/images/$IMAGE_NAME" --silent "$IMAGE_URL"
+# Cleanup runs when the script exits.
+cleanup() {
+  EXIT_STATUS="$1"
+  WORK_DIR="$2"
+  RUNNERS_URL="$3"
+  RUNNER_ID="$4"
+  QEMU_PID="$5"
+  trap - EXIT INT TERM
+
+  if [ -n "$QEMU_PID" ]; then
+    kill "$QEMU_PID" 2>/dev/null || true
+    wait "$QEMU_PID" 2>/dev/null || true
+  fi
+
+  if [ -n "$RUNNER_ID" ]; then
+    if HTTP_STATUS="$(curl --silent --show-error --connect-timeout 10 --max-time 30 --header "@$WORK_DIR/authorization" --request DELETE --output /dev/null --write-out '%{http_code}' "$RUNNERS_URL/$RUNNER_ID")"; then
+      case "$HTTP_STATUS" in
+      204 | 404) ;;
+      *)
+        printf 'Failed to revoke runner %s: HTTP %s\n' "$RUNNER_ID" "$HTTP_STATUS" >&2
+        EXIT_STATUS=1
+        ;;
+      esac
+    else
+      printf 'Failed to revoke runner %s; remove it in Forgejo before restarting.\n' "$RUNNER_ID" >&2
+      EXIT_STATUS=1
+    fi
+  fi
+
+  rm --force "$WORK_DIR/authorization" "$WORK_DIR/registration.json" "$WORK_DIR/user-data" "$WORK_DIR/meta-data" "$WORK_DIR/disk.qcow2" "$WORK_DIR/seed.img"
+  rmdir "$WORK_DIR"
+  exit "$EXIT_STATUS"
+}
+
+: "${FORGEJO_INSTANCE_URL:?Set FORGEJO_INSTANCE_URL}"
+: "${VM_HOSTNAME:?Set VM_HOSTNAME}"
+
+WORK_DIR="$(mktemp --directory)"
+RUNNERS_URL="${FORGEJO_INSTANCE_URL%/}/api/v1/admin/actions/runners"
+RUNNER_ID=''
+QEMU_PID=''
+trap 'cleanup "$?" "$WORK_DIR" "$RUNNERS_URL" "$RUNNER_ID" "$QEMU_PID"' EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+# Download cloud image.
+BASE_IMAGE="/vm/images/$IMAGE_NAME"
+mkdir --parents /vm/images
+if [ ! -f "$BASE_IMAGE" ]; then
+  printf 'Downloading %s...\n' "$IMAGE_NAME"
+  curl --fail --location --output "$BASE_IMAGE" --silent "$IMAGE_URL"
 fi
 
-# Create disk for virtual machine
-DISK_IMG="$(mktemp)"
-qemu-img create -f qcow2 -b "/vm/images/$IMAGE_NAME" -F qcow2 "$DISK_IMG" "$VM_STORAGE"
+# Keep the provisioning token out of process arguments and guest cloud-init.
+API_TOKEN="$(cat /run/secrets/FORGEJO_RUNNER_API_TOKEN)"
+case "$API_TOKEN" in
+'' | *[!a-zA-Z0-9]*)
+  printf 'Invalid Forgejo runner API token.\n' >&2
+  exit 1
+  ;;
+esac
+printf 'Authorization: token %s\n' "$API_TOKEN" >"$WORK_DIR/authorization"
+unset API_TOKEN
 
-USER_DATA="$(mktemp)"
-cat <<EOF >"$USER_DATA"
+# Register a single-use runner for this VM.
+printf 'Registering an ephemeral runner for %s...\n' "$VM_HOSTNAME"
+jq --null-input --arg name "$VM_HOSTNAME" '{name: $name, ephemeral: true}' |
+  curl --fail --silent --show-error --connect-timeout 10 --max-time 30 --header "@$WORK_DIR/authorization" --header 'Content-Type: application/json' --data-binary @- --output "$WORK_DIR/registration.json" "$RUNNERS_URL"
+
+# Read the ID first so cleanup can revoke a registration with invalid credentials.
+RUNNER_ID="$(jq --exit-status --raw-output '.id | select(type == "number" and . > 0 and . == floor)' "$WORK_DIR/registration.json")"
+FORGEJO_RUNNER_UUID="$(jq --exit-status --raw-output '.uuid | select(type == "string") | select(test("^[a-fA-F0-9-]{36}$"))' "$WORK_DIR/registration.json")"
+FORGEJO_RUNNER_TOKEN="$(jq --exit-status --raw-output '.token | select(type == "string") | select(test("^[a-zA-Z0-9_-]+$"))' "$WORK_DIR/registration.json")"
+rm --force "$WORK_DIR/registration.json"
+
+# Configure the guest.
+cat <<EOF >"$WORK_DIR/user-data"
 #cloud-config
 users:
   - name: runner
@@ -33,19 +98,17 @@ write_files:
     owner: root:root
     content: |
       runner:
-        capacity: $VM_CPU
+        capacity: 1
         labels:
           - docker:docker://node:lts
           - ubuntu-latest:docker://node:lts
 
       cache:
         enabled: true
-        external_server: "$FORGEJO_CACHE_URL"
-        secret: "$FORGEJO_CACHE_SECRET"
+        dir: /vm/storage/cache
 
       container:
         enable_ipv6: true
-        privileged: true
 
       server:
         connections:
@@ -70,18 +133,20 @@ runcmd:
   - systemctl poweroff
 EOF
 
-META_DATA="$(mktemp)"
-echo "local-hostname: $VM_HOSTNAME" >"$META_DATA"
+printf 'local-hostname: %s\n' "$VM_HOSTNAME" >"$WORK_DIR/meta-data"
 
-SEED_ISO="$(mktemp)"
-cloud-localds "$SEED_ISO" "$USER_DATA" "$META_DATA"
-rm -f "$USER_DATA" "$META_DATA"
+# Create disposable VM disks.
+qemu-img create -f qcow2 -b "$BASE_IMAGE" -F qcow2 "$WORK_DIR/disk.qcow2" "$VM_STORAGE"
+cloud-localds "$WORK_DIR/seed.img" "$WORK_DIR/user-data" "$WORK_DIR/meta-data"
+rm --force "$WORK_DIR/user-data" "$WORK_DIR/meta-data"
 
-exec 3<>"$DISK_IMG"
-exec 4<>"$SEED_ISO"
-rm -f "$DISK_IMG" "$SEED_ISO"
+# QEMU retains the open files, but their paths cannot survive the VM's lifetime.
+exec 3<>"$WORK_DIR/disk.qcow2"
+exec 4<>"$WORK_DIR/seed.img"
+rm --force "$WORK_DIR/disk.qcow2" "$WORK_DIR/seed.img"
 
-exec qemu-system-x86_64 \
+# Wait for QEMU so the exit trap can revoke the runner afterwards.
+qemu-system-x86_64 \
   -enable-kvm \
   -cpu host \
   -smp "$VM_CPU" \
@@ -91,4 +156,7 @@ exec qemu-system-x86_64 \
   -device virtio-net-pci,netdev=vmnic \
   -netdev user,id=vmnic,hostfwd=tcp::22-:22 \
   -nographic \
-  -snapshot
+  -snapshot &
+QEMU_PID="$!"
+wait "$QEMU_PID"
+QEMU_PID=''
