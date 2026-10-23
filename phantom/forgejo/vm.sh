@@ -32,7 +32,7 @@ cleanup() {
     fi
   fi
 
-  rm --force "$WORK_DIR/authorization" "$WORK_DIR/registration.json" "$WORK_DIR/user-data" "$WORK_DIR/meta-data" "$WORK_DIR/disk.qcow2" "$WORK_DIR/seed.img"
+  rm --force "$WORK_DIR/authorization" "$WORK_DIR/registration.json" "$WORK_DIR/runners.json" "$WORK_DIR/stale-runners" "$WORK_DIR/user-data" "$WORK_DIR/meta-data" "$WORK_DIR/disk.qcow2" "$WORK_DIR/seed.img"
   rmdir "$WORK_DIR"
   exit "$EXIT_STATUS"
 }
@@ -72,6 +72,40 @@ case "$API_TOKEN" in
 esac
 printf 'Authorization: token %s\n' "$API_TOKEN" >"$WORK_DIR/authorization"
 unset API_TOKEN
+
+# Collect before deleting: removing runners while paging could skip entries.
+PAGE=1
+: >"$WORK_DIR/stale-runners"
+while :; do
+  curl --fail --silent --show-error --connect-timeout 10 --max-time 30 \
+    --header "@$WORK_DIR/authorization" --output "$WORK_DIR/runners.json" "$RUNNERS_URL?page=$PAGE&limit=50"
+  PAGE_SIZE="$(jq --exit-status 'if type == "array" then length else error("Expected a runner list") end' "$WORK_DIR/runners.json")"
+  [ "$PAGE_SIZE" -gt 0 ] || break
+
+  jq --raw-output --arg name "$VM_HOSTNAME" '
+    .[] | select(.name == $name and .owner_id == 0 and .repo_id == 0) |
+    if .status != "offline" then error("A matching runner is still online; stop it before restarting")
+    elif (.id | type == "number" and . > 0 and . == floor) then .id
+    else error("Invalid stale runner ID")
+    end
+  ' "$WORK_DIR/runners.json" >>"$WORK_DIR/stale-runners"
+  PAGE="$((PAGE + 1))"
+done
+
+while IFS= read -r STALE_RUNNER_ID; do
+  printf 'Revoking stale runner %s for %s...\n' "$STALE_RUNNER_ID" "$VM_HOSTNAME"
+  HTTP_STATUS="$(curl --silent --show-error --connect-timeout 10 --max-time 30 \
+    --header "@$WORK_DIR/authorization" --request DELETE \
+    --output /dev/null --write-out '%{http_code}' "$RUNNERS_URL/$STALE_RUNNER_ID")"
+  case "$HTTP_STATUS" in
+  204 | 404) ;;
+  *)
+    printf 'Failed to revoke stale runner %s: HTTP %s\n' "$STALE_RUNNER_ID" "$HTTP_STATUS" >&2
+    exit 1
+    ;;
+  esac
+done <"$WORK_DIR/stale-runners"
+rm --force "$WORK_DIR/runners.json" "$WORK_DIR/stale-runners"
 
 # Register a single-use runner for this VM.
 printf 'Registering an ephemeral runner for %s...\n' "$VM_HOSTNAME"
