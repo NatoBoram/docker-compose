@@ -58,7 +58,7 @@ sudo chown git:git -Rc /var/lib/docker/volumes/phantom_forgejo/_data/gitea/conf/
 
 ## Runners
 
-You'll need an administrator token to register ephemereal runners.
+You'll need an administrator token to register ephemeral runners.
 
 1. Create an administrator account and a token
 
