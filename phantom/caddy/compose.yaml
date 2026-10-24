@@ -17,12 +17,12 @@ networks:
   caddy-littleroot:
   caddy-mas:
   caddy-metube:
-  caddy-myspeed:
+  # caddy-myspeed:
   caddy-nextcloud:
   caddy-ollama:
   caddy-peertube:
   caddy-qbittorrent:
-  caddy-send:
+  # caddy-send:
   caddy-synapse:
   caddy-syncthing:
   caddy-tandoor:
@@ -61,12 +61,12 @@ services:
       - caddy-littleroot
       - caddy-mas
       - caddy-metube
-      - caddy-myspeed
+      # - caddy-myspeed
       - caddy-nextcloud
       - caddy-ollama
       - caddy-peertube
       - caddy-qbittorrent
-      - caddy-send
+      # - caddy-send
       - caddy-synapse
       - caddy-syncthing
       - caddy-tandoor

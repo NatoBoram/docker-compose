@@ -4,7 +4,6 @@ networks:
   authentik-glances:
   authentik-goaccess:
   authentik-metube:
-  authentik-myspeed:
   authentik-postgres:
   authentik-qbittorrent:
   authentik-syncthing:
@@ -33,7 +32,6 @@ services:
       - authentik-glances
       - authentik-goaccess
       - authentik-metube
-      - authentik-myspeed
       - authentik-postgres
       - authentik-qbittorrent
       - authentik-syncthing
