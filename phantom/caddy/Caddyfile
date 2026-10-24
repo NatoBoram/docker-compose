@@ -314,18 +314,18 @@
 		reverse_proxy mas:8080
 	}
 
-	import log metube
-	@metube host metube.{$PORKBUN_DOMAIN}
-	handle @metube {
-		log_name metube
+	# import log metube
+	# @metube host metube.{$PORKBUN_DOMAIN}
+	# handle @metube {
+	# 	log_name metube
 
-		import maxmind_geolocation {
-			allow_subdivisions QC
-		}
-		import authentik
+	# 	import maxmind_geolocation {
+	# 		allow_subdivisions QC
+	# 	}
+	# 	import authentik
 
-		reverse_proxy metube:8081
-	}
+	# 	reverse_proxy metube:8081
+	# }
 
 	# import log myspeed
 	# @myspeed host myspeed.{$PORKBUN_DOMAIN}
@@ -340,17 +340,17 @@
 	# 	reverse_proxy myspeed:5216
 	# }
 
-	import log nextcloud
-	@nextcloud host nextcloud.{$PORKBUN_DOMAIN}
-	handle @nextcloud {
-		log_name nextcloud
+	# import log nextcloud
+	# @nextcloud host nextcloud.{$PORKBUN_DOMAIN}
+	# handle @nextcloud {
+	# 	log_name nextcloud
 
-		import maxmind_geolocation {
-			allow_subdivisions QC
-		}
+	# 	import maxmind_geolocation {
+	# 		allow_subdivisions QC
+	# 	}
 
-		reverse_proxy nextcloud:80
-	}
+	# 	reverse_proxy nextcloud:80
+	# }
 
 	import log ollama
 	@ollama host ollama.{$PORKBUN_DOMAIN}

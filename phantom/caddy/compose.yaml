@@ -16,9 +16,9 @@ networks:
   caddy-leanish:
   caddy-littleroot:
   caddy-mas:
-  caddy-metube:
+  # caddy-metube:
   # caddy-myspeed:
-  caddy-nextcloud:
+  # caddy-nextcloud:
   caddy-ollama:
   caddy-peertube:
   caddy-qbittorrent:
@@ -60,9 +60,9 @@ services:
       - caddy-leanish
       - caddy-littleroot
       - caddy-mas
-      - caddy-metube
+      # - caddy-metube
       # - caddy-myspeed
-      - caddy-nextcloud
+      # - caddy-nextcloud
       - caddy-ollama
       - caddy-peertube
       - caddy-qbittorrent
@@ -85,7 +85,7 @@ services:
       - caddy-data:/data/caddy
       - geoipupdate:/data/geoip:ro
       - goaccess-report:/var/www/goaccess:ro
-      - nextcloud:/var/www/nextcloud:ro
+      # - nextcloud:/var/www/nextcloud:ro
 
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro

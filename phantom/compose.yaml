@@ -15,10 +15,10 @@ include:
   - path: kubo/compose.yaml
   - path: leanish/compose.yaml
   - path: matrix/compose.yaml
-  - path: metube/compose.yaml
+  # - path: metube/compose.yaml
   - path: minecraft/compose.yaml
   # - path: myspeed/compose.yaml Node2Shell
-  - path: nextcloud/compose.yaml
+  # - path: nextcloud/compose.yaml
   - path: ollama/compose.yaml
   - path: peertube/compose.yaml
   - path: qbittorrent/compose.yaml

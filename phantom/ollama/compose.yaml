@@ -12,7 +12,7 @@ services:
     image: ollama/ollama:rocm
     networks:
       - caddy-ollama
-      - nextcloud-ollama
+      # - nextcloud-ollama
       - tandoor-ollama
     ports:
       - 11434:11434

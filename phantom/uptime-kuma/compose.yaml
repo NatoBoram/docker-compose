@@ -2,12 +2,12 @@ networks:
   uptime-kuma-authentik-postgres:
   uptime-kuma-forgejo-postgres:
   uptime-kuma-mas-postgres:
-  uptime-kuma-nextcloud-postgres:
+  # uptime-kuma-nextcloud-postgres:
   uptime-kuma-peertube-postgres:
   uptime-kuma-synapse-postgres:
   uptime-kuma-tandoor-postgres:
 
-  uptime-kuma-nextcloud-redis:
+  # uptime-kuma-nextcloud-redis:
   uptime-kuma-peertube-redis:
   # uptime-kuma-send-redis:
 
@@ -23,7 +23,7 @@ services:
       - beszel
       - beszel-agent
       - caddy
-      - clamav
+      # - clamav
       - dozzle
       - element
       - forgejo
@@ -38,12 +38,12 @@ services:
       - leanish
       - mas
       - mas-postgres
-      - metube
+      # - metube
       # - myspeed
-      - nextcloud
-      - nextcloud-cron
-      - nextcloud-postgres
-      - nextcloud-redis
+      # - nextcloud
+      # - nextcloud-cron
+      # - nextcloud-postgres
+      # - nextcloud-redis
       - ollama
       - qbittorrent
       - registry
@@ -63,12 +63,12 @@ services:
       - uptime-kuma-authentik-postgres
       - uptime-kuma-forgejo-postgres
       - uptime-kuma-mas-postgres
-      - uptime-kuma-nextcloud-postgres
+      # - uptime-kuma-nextcloud-postgres
       - uptime-kuma-peertube-postgres
       - uptime-kuma-synapse-postgres
       - uptime-kuma-tandoor-postgres
 
-      - uptime-kuma-nextcloud-redis
+      # - uptime-kuma-nextcloud-redis
       - uptime-kuma-peertube-redis
       # - uptime-kuma-send-redis
     # ports:

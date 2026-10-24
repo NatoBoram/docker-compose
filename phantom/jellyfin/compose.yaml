@@ -27,7 +27,7 @@ services:
       - jellyfin-config:/config
       - jellyfin-media:/media
 
-      - metube:/metube:ro
+      # - metube:/metube:ro
       - qbittorrent-downloads:/qbittorrent
       - syncthing-jellyfin:/syncthing
 

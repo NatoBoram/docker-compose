@@ -3,7 +3,6 @@ networks:
   authentik-forgejo:
   authentik-glances:
   authentik-goaccess:
-  authentik-metube:
   authentik-postgres:
   authentik-qbittorrent:
   authentik-syncthing:
@@ -25,13 +24,12 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__USER: authentik
-    image: ghcr.io/goauthentik/server:2026.5
+    image: ghcr.io/goauthentik/server:2026.8
     networks:
       - authentik-dozzle
       - authentik-forgejo
       - authentik-glances
       - authentik-goaccess
-      - authentik-metube
       - authentik-postgres
       - authentik-qbittorrent
       - authentik-syncthing
@@ -61,7 +59,7 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__USER: authentik
-    image: ghcr.io/goauthentik/server:2026.5
+    image: ghcr.io/goauthentik/server:2026.8
     networks:
       - authentik-postgres
     # ports:
