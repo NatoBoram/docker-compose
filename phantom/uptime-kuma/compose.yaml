@@ -31,7 +31,7 @@ services:
       - geoipupdate
       - glances
       - goaccess
-      - ipapm
+      # - ipapm
       - jellyfin
       - jellyfin-vue
       - kubo
@@ -45,8 +45,8 @@ services:
       - nextcloud-postgres
       - nextcloud-redis
       - ollama
-      - open-webui
       - qbittorrent
+      - registry
       - send
       - send-redis
       - synapse

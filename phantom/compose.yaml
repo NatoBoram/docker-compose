@@ -9,7 +9,7 @@ include:
   - path: geoipupdate/compose.yaml
   - path: glances/compose.yaml
   - path: goaccess/compose.yaml
-  - path: ipapm/compose.yaml
+  # - path: ipapm/compose.yaml
   - path: jellyfin-vue/compose.yaml
   - path: jellyfin/compose.yaml
   - path: kubo/compose.yaml
@@ -20,9 +20,9 @@ include:
   - path: myspeed/compose.yaml
   - path: nextcloud/compose.yaml
   - path: ollama/compose.yaml
-  - path: open-webui/compose.yaml
   - path: peertube/compose.yaml
   - path: qbittorrent/compose.yaml
+  - path: registry/compose.yaml
   - path: send/compose.yaml
   - path: syncthing/compose.yaml
   - path: tandoor/compose.yaml

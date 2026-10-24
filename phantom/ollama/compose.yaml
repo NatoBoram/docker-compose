@@ -13,7 +13,6 @@ services:
     networks:
       - caddy-ollama
       - nextcloud-ollama
-      - open-webui-ollama
       - tandoor-ollama
     ports:
       - 11434:11434

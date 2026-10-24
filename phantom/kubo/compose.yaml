@@ -21,7 +21,7 @@ services:
     image: ipfs/kubo
     networks:
       - caddy-kubo
-      - ipapm-kubo
+      # - ipapm-kubo
     ports:
       - 127.0.0.1:5001:5001
       - 4001:4001/tcp

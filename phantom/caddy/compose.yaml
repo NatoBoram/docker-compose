@@ -7,7 +7,6 @@ networks:
   caddy-beszel:
   caddy-dozzle:
   caddy-element:
-  caddy-forgejo-cache:
   caddy-forgejo:
   caddy-glances:
   caddy-goaccess:
@@ -21,7 +20,6 @@ networks:
   caddy-myspeed:
   caddy-nextcloud:
   caddy-ollama:
-  caddy-open-webui:
   caddy-peertube:
   caddy-qbittorrent:
   caddy-send:
@@ -54,7 +52,6 @@ services:
       - caddy-dozzle
       - caddy-element
       - caddy-forgejo
-      - caddy-forgejo-cache
       - caddy-glances
       - caddy-goaccess
       - caddy-jellyfin
@@ -67,7 +64,6 @@ services:
       - caddy-myspeed
       - caddy-nextcloud
       - caddy-ollama
-      - caddy-open-webui
       - caddy-peertube
       - caddy-qbittorrent
       - caddy-send
