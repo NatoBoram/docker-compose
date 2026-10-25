@@ -9,7 +9,7 @@ networks:
 
   # uptime-kuma-nextcloud-redis:
   uptime-kuma-peertube-redis:
-  # uptime-kuma-send-redis:
+  uptime-kuma-send-redis:
 
 services:
   uptime-kuma:
@@ -47,8 +47,8 @@ services:
       - ollama
       - qbittorrent
       - registry
-      # - send
-      # - send-redis
+      - send
+      - send-redis
       - synapse
       - synapse-postgres
       - syncthing
@@ -70,7 +70,7 @@ services:
 
       # - uptime-kuma-nextcloud-redis
       - uptime-kuma-peertube-redis
-      # - uptime-kuma-send-redis
+      - uptime-kuma-send-redis
     # ports:
     #   - 3001:3001
     restart: always

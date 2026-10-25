@@ -387,18 +387,18 @@
 		reverse_proxy qbittorrent:8080
 	}
 
-	# import log send
-	# @send host send.{$PORKBUN_DOMAIN}
-	# handle @send {
-	# 	log_name send
+	import log send
+	@send host send.{$PORKBUN_DOMAIN}
+	handle @send {
+		log_name send
 
-	# 	import maxmind_geolocation {
-	# 		allow_subdivisions QC
-	# 	}
-	# 	import anubis
+		import maxmind_geolocation {
+			allow_subdivisions QC
+		}
+		import anubis
 
-	# 	reverse_proxy send:1443
-	# }
+		reverse_proxy send:1443
+	}
 
 	import log synapse
 	@synapse host synapse.{$PORKBUN_DOMAIN}

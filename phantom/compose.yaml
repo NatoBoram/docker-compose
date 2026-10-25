@@ -15,15 +15,15 @@ include:
   - path: kubo/compose.yaml
   - path: leanish/compose.yaml
   - path: matrix/compose.yaml
-  # - path: metube/compose.yaml
+  # - path: metube/compose.yaml Node2Shell (https://github.com/alexta69/metube/issues/1109)
   - path: minecraft/compose.yaml
-  # - path: myspeed/compose.yaml Node2Shell
-  # - path: nextcloud/compose.yaml
+  # - path: myspeed/compose.yaml Node2Shell (https://github.com/gnmyt/MySpeed/issues/1653)
+  # - path: nextcloud/compose.yaml Node2Shell (https://github.com/nextcloud/whiteboard/issues/1427)
   - path: ollama/compose.yaml
   - path: peertube/compose.yaml
   - path: qbittorrent/compose.yaml
   - path: registry/compose.yaml
-  # - path: send/compose.yaml Node2Shell
+  - path: send/compose.yaml
   - path: syncthing/compose.yaml
   - path: tandoor/compose.yaml
   - path: uptime-kuma/compose.yaml

@@ -22,7 +22,7 @@ networks:
   caddy-ollama:
   caddy-peertube:
   caddy-qbittorrent:
-  # caddy-send:
+  caddy-send:
   caddy-synapse:
   caddy-syncthing:
   caddy-tandoor:
@@ -66,7 +66,7 @@ services:
       - caddy-ollama
       - caddy-peertube
       - caddy-qbittorrent
-      # - caddy-send
+      - caddy-send
       - caddy-synapse
       - caddy-syncthing
       - caddy-tandoor
