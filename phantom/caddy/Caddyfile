@@ -107,8 +107,11 @@
 	@h1 {
 		protocol http/1.1
 		not header Connection "Upgrade"
+		not header User-Agent "docker/*" # `docker login`
+		not header User-Agent "node" # VSCode's Container Tools extension
 		not header User-Agent "openid-client/v6.8.4" # https://github.com/panva/openid-client/discussions/619
 		not header User-Agent "PeerTube/*" # https://github.com/Chocobozzz/PeerTube/issues/7702
+		not header User-Agent "pnpm/*" # https://github.com/pnpm/pnpm/issues/88
 		not header User-Agent "python-requests/2.33.0" # https://github.com/TandoorRecipes/recipes/issues/4759
 	}
 	handle @h1 {
@@ -372,6 +375,13 @@
 		import anubis
 
 		reverse_proxy peertube:9000
+	}
+
+	import log pnpr
+	@pnpr host pnpr.{$PORKBUN_DOMAIN}
+	handle @pnpr {
+		log_name pnpr
+		reverse_proxy pnpr:7677
 	}
 
 	import log qbittorrent

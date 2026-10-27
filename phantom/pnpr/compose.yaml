@@ -1,0 +1,27 @@
+secrets:
+  config:
+    file: ./secrets/pnpr.yaml
+
+services:
+  pnpr:
+    container_name: pnpr
+    depends_on:
+      - caddy
+    env_file:
+      - .env.pnpr
+      - .env.pnpr.local
+    image: ghcr.io/pnpm/pnpr:0.1.0-alpha.17
+    secrets:
+      - source: config
+        target: /home/pnpr/.config/pnpr/config.yaml
+    networks:
+      - caddy-pnpr
+    restart: always
+    volumes:
+      - pnpr-storage:/pnpr/storage
+
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+volumes:
+  pnpr-storage:

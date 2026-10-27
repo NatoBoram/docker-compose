@@ -21,6 +21,7 @@ include:
   # - path: nextcloud/compose.yaml Node2Shell (https://github.com/nextcloud/whiteboard/issues/1427)
   - path: ollama/compose.yaml
   - path: peertube/compose.yaml
+  - path: pnpr/compose.yaml
   - path: qbittorrent/compose.yaml
   - path: registry/compose.yaml
   - path: send/compose.yaml
