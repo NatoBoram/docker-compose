@@ -72,3 +72,18 @@ You'll need an administrator token to register ephemeral runners.
 
 2. Save its value in `forgejo/secrets/FORGEJO_RUNNER_API_TOKEN`.
 3. Register that account with Authentik
+
+## Upgrade
+
+1. Backup
+
+   ```sh
+   ./forgejo_dump.sh
+   ```
+
+2. Upgrade major version of `image: codeberg.org/forgejo/forgejo` in `compose.yaml`
+3. Restart
+
+   ```sh
+   docker compose up -d --force-recreate forgejo
+   ```
