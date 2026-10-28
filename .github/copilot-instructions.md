@@ -7,10 +7,9 @@ Multi-environment Docker Compose homelab with reverse-proxy architecture and lay
 Each top-level directory = physical machine:
 
 - `phantom/` - Current production server (subdirectory structure)
-- `helion/` - Decommissioned (flat `.compose.yaml` files, reference only)
 - `corsair/` - Dev machine
 
-**Structure evolution**: `phantom/` uses service subdirectories (`jellyfin/compose.yaml`), while legacy `helion/` uses flat naming (`jellyfin.compose.yaml`). Main `compose.yaml` includes all services via `include:` directive.
+**Service structure**: `phantom/` uses service subdirectories (`jellyfin/compose.yaml`), while `corsair/` uses flat naming (`jellyfin.compose.yaml`). Each machine's main `compose.yaml` includes its services via the `include:` directive.
 
 ## Security Layers
 
@@ -115,7 +114,7 @@ Always prefer pre-established scripts from `package.json`. Do not run `pnpm exec
 
 **Service structure comparison**:
 
-- Legacy `helion/`: `include: - path: jellyfin.compose.yaml`
+- Corsair `corsair/`: `include: - path: ollama.compose.yaml`
 - Current `phantom/`: `include: - path: jellyfin/compose.yaml`
 
 ## Key Files

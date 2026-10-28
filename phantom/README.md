@@ -1,6 +1,6 @@
 # Phantom
 
-Phantom is my newest homelab server. It replaces Helion.
+Phantom is my current homelab server.
 
 It's managed entirely via Docker Compose. It uses Caddy as a reverse proxy for its simplicity and it's protected by Anubis, Authentik and Fail2Ban. Some parts are open to the public, such as Kubo, Leanish and Send.
 
