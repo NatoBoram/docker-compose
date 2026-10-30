@@ -93,7 +93,7 @@
 
 	header @h1 {
 		Connection "Upgrade"
-		Upgrade "HTTP/3.0"
+		Upgrade "h2"
 	}
 	error @h1 426
 }
