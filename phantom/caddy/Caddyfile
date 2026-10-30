@@ -112,6 +112,7 @@
 		not header User-Agent "ollama-js/*" # https://github.com/ollama/ollama-vscode
 		not header User-Agent "openid-client/v6.8.4" # https://github.com/panva/openid-client/discussions/619
 		not header User-Agent "PeerTube/*" # https://github.com/Chocobozzz/PeerTube/issues/7702
+		not header User-Agent "pnpm" # https://github.com/pnpm/pnpm/issues/88
 		not header User-Agent "pnpm/*" # https://github.com/pnpm/pnpm/issues/88
 		not header User-Agent "python-requests/2.33.0" # https://github.com/TandoorRecipes/recipes/issues/4759
 	}
