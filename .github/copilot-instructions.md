@@ -65,6 +65,8 @@ For service `potato` exposed via Caddy:
 
 6. **Add to Uptime Kuma monitoring** - Update `uptime-kuma/compose.yaml`:
 
+   Some services need to be connected to Uptime Kuma, such as PostgreSQL and Redis.
+
    ```yaml
    networks:
      uptime-kuma-potato-postgres: # Declare monitoring networks
@@ -88,34 +90,41 @@ For service `potato` exposed via Caddy:
          - uptime-kuma-potato-postgres # Reference network declared by uptime-kuma
    ```
 
+7. Add it to GoAccess at `phantom/goaccess/secrets/goaccess.conf`
+
+   ```txt
+   log-file /srv/logs/caddy/potato.example.org.log
+   ```
+
 ### Protection Patterns
 
 - **Public**: `import anubis` only (Kubo, Leanish, Send)
 - **Internal**: `import authentik` + geolocation (Jellyfin, Dozzle, Glances)
 - **Admin**: Authentik + strict geolocation `QC` only (Authentik itself, Dozzle)
 - **APIs**: Basic auth + geolocation (Ollama, Kubo RPC)
+- **HTTP/1.1**: Blocked everywhere
 
 ## Development Workflow
 
-**Linting**: `pnpm lint:fix` (preferred over `pnpm lint`)
-**Format**: `pnpm format`
+- **Linting**: `pnpm lint:fix` (preferred over `pnpm lint`)
+- **Format**: `pnpm format`
 
-Always prefer pre-established scripts from `package.json`. Do not run `pnpm exec` directly.
+  Always prefer pre-established scripts from `package.json`. Do not run `pnpm exec` directly.
 
-**Deployment**: Push to `main` → GitHub Actions calls Watchtower webhook → Watchtower pulls/restarts containers
+- **Deployment**: Push to `main` → GitHub Actions calls Watchtower webhook → Watchtower pulls/restarts containers
 
-**Common scripts** (in `phantom/`):
+- **Common scripts** (in `phantom/`):
 
-- `./reload_caddy.sh` - Reload Caddy config without restart
-- `./reload_docker.sh` - Restart all services
-- `./occ.sh [command]` - Run Nextcloud OCC commands as user 33
-- `./add_missing_indices.sh` - Add missing Nextcloud database indices
-- `./caddy_logs.sh` - Follow Caddy logs
+  - `./reload_caddy.sh` - Reload Caddy config without restart
+  - `./reload_docker.sh` - Restart all services
+  - `./occ.sh [command]` - Run Nextcloud OCC commands as user 33
+  - `./add_missing_indices.sh` - Add missing Nextcloud database indices
+  - `./caddy_logs.sh` - Follow Caddy logs
 
-**Service structure comparison**:
+- **Service structure comparison**:
 
-- Corsair `corsair/`: `include: - path: ollama.compose.yaml`
-- Current `phantom/`: `include: - path: jellyfin/compose.yaml`
+  - Corsair `corsair/`: `include: - path: ollama.compose.yaml`
+  - Current `phantom/`: `include: - path: jellyfin/compose.yaml`
 
 ## Key Files
 
